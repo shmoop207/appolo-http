@@ -5,7 +5,7 @@ import {Response} from "../app/response";
 import {NextFn} from "../app/app";
 import {StaticController} from "./staticController";
 
-export class Controller extends StaticController {
+export abstract class Controller extends StaticController {
 
     protected req: Request;
     protected res: Response;
@@ -41,7 +41,7 @@ export class Controller extends StaticController {
 
     public sendError(error?, code?) {
 
-        super.sendServerError(this.res, error, code);
+        super.sendError(this.res, error, code);
     }
 
     public sendBadRequest(error?, code?) {

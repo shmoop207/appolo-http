@@ -6,7 +6,7 @@ import {Response} from "../app/response";
 import {NextFn} from "../app/app";
 import {IController} from "./IController";
 
-export class StaticController implements IController{
+export abstract class StaticController implements IController{
 
     public invoke(req: Request, res: Response, next: NextFn,route: IRouteOptions, action: string | ((c: IController)=>Function)) {
 
@@ -45,7 +45,7 @@ export class StaticController implements IController{
         res.status(204).send();
     }
 
-    public sendServerError(res: Response, error?, code?) {
+    public sendError(res: Response, error?, code?) {
         res.status(500).json({
             status: 500,
             statusText: "Internal Server Error",

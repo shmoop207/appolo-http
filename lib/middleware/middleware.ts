@@ -1,16 +1,13 @@
 "use strict";
-
-import path = require('path');
-import _= require('lodash');
 import {IRouteOptions} from "../interfaces/IRouteOptions";
-import {IMiddleware} from "../interfaces/IMiddleware";
 import {Request} from "../app/request";
 import {Response} from "../app/response";
 import {NextFn} from "../app/app";
 import {HttpError} from "../common/error/httpError";
+import {StaticMiddleware} from "./staticMiddleware";
 
 
-export class Middleware implements IMiddleware {
+export abstract class Middleware extends StaticMiddleware {
 
     protected req: Request;
     protected res: Response;
@@ -18,46 +15,41 @@ export class Middleware implements IMiddleware {
     protected route: IRouteOptions;
 
     constructor(req: Request, res: Response, next: NextFn, route: IRouteOptions) {
-
+        super();
         this.req = req;
         this.res = res;
         this.next = next;
         this.route = route;
     }
 
-    public getModel<T>(req?: Request): T {
-        return (req || this.req).model as T;
+    public getModel<T>(): T {
+        return (this.req).model as T;
     }
 
-    public run(req: Request, res: Response, next: NextFn, route: IRouteOptions) {
+    public sendError(error?: Error, code?: number) {
 
-        next();
-    }
-
-    public sendError(error?: Error, code?: number, next?: NextFn) {
-
-        this._callNext(500, "Internal Server Error", error, code, next);
+        this._callNext(500, "Internal Server Error", error, code);
 
     }
 
-    public sendBadRequest(error?, code?, next?: NextFn) {
+    public sendBadRequest(error?, code?) {
 
-        this._callNext(400, "Bad Request", error, code, next);
+        this._callNext(400, "Bad Request", error, code);
     }
 
-    public sendUnauthorized(error?, code?, next?: NextFn) {
+    public sendUnauthorized(error?, code?) {
 
-        this._callNext(401, "Unauthorized", error, code, next);
+        this._callNext(401, "Unauthorized", error, code);
 
     }
 
-    public sendNotFound(error?, code?, next?: NextFn) {
+    public sendNotFound(error?, code?) {
 
-        this._callNext(404, "Not Found", error, code, next);
+        this._callNext(404, "Not Found", error, code);
     }
 
-    private _callNext(status: number, statusText: string, error: Error, code: number, next?: NextFn) {
-        (next || this.next)(new HttpError(status, statusText, {
+    protected _callNext(status: number, statusText: string, error: Error, code: number) {
+        this.next(new HttpError(status, statusText, {
             status: status,
             statusText: statusText,
             error: error,

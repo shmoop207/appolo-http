@@ -4,6 +4,7 @@ const tslib_1 = require("tslib");
 const appolo = require("../../../../index");
 const decorators_1 = require("../../../../decorators");
 const middleware_1 = require("../middleware/middleware");
+const authMiddleware_1 = require("../middleware/authMiddleware");
 let TestController = class TestController extends appolo.Controller {
     test(req, res) {
         res.json({ working: true });
@@ -44,6 +45,11 @@ appolo.route(TestController)
     .method('get')
     .action('test')
     .middleware(middleware_1.TestMiddleware);
+appolo.route(TestController)
+    .path('/test/middleware/static')
+    .method('get')
+    .action('test')
+    .middleware(authMiddleware_1.AuthMiddleware);
 appolo.route(TestController)
     .path('/test/gzip')
     .method('get')

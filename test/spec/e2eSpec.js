@@ -178,6 +178,13 @@ describe('Appolo Express', () => {
             res.body.working.should.be.ok;
             res.body.middleware.should.be.ok;
         }));
+        it('should  call static middleware before controller', () => tslib_1.__awaiter(this, void 0, void 0, function* () {
+            let res = yield request(appolo.launcher.handleRequest)
+                .get('/test/middleware/static/');
+            res.should.to.have.status(403);
+            should.exist(res.text);
+            res.text.should.be.eq("Error: NOT AUTHORIZED");
+        }));
         it('should  call middleware before controller with class', () => tslib_1.__awaiter(this, void 0, void 0, function* () {
             let res = yield request(appolo.launcher.handleRequest)
                 .get('/test/middleware/');
@@ -188,15 +195,13 @@ describe('Appolo Express', () => {
             res.body.middleware.should.be.ok;
             res.body.name.should.be.eq("Manager");
         }));
-        it.only('should  call call controller with gzip', () => tslib_1.__awaiter(this, void 0, void 0, function* () {
+        it('should  call call controller with gzip', () => tslib_1.__awaiter(this, void 0, void 0, function* () {
             let res = yield request(appolo.launcher.handleRequest)
                 .get('/test/gzip/');
             res.should.to.have.status(200);
             res.should.to.be.json;
             should.exist(res.body);
             res.body.working.should.be.ok;
-            res.body.middleware.should.be.ok;
-            res.body.name.should.be.eq("Manager");
         }));
         it('should call validations error', () => tslib_1.__awaiter(this, void 0, void 0, function* () {
             let res = yield request(appolo.launcher.handleRequest)

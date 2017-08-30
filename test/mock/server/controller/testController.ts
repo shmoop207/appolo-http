@@ -2,6 +2,7 @@
 import appolo = require('../../../../index');
 import {define, inject} from '../../../../decorators';
 import {TestMiddleware} from "../middleware/middleware";
+import {AuthMiddleware} from "../middleware/authMiddleware";
 
 @define()
 class TestController extends appolo.Controller {
@@ -47,6 +48,12 @@ appolo.route<TestController>(TestController)
     .method('get')
     .action('test')
     .middleware(TestMiddleware)
+
+appolo.route<TestController>(TestController)
+    .path('/test/middleware/static')
+    .method('get')
+    .action('test')
+    .middleware(AuthMiddleware)
 
 
 appolo.route<TestController>(TestController)

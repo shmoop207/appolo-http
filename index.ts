@@ -23,6 +23,7 @@ export {Controller} from './lib/controller/controller';
 export {StaticController} from './lib/controller/staticController';
 
 export {Middleware} from './lib/middleware/middleware';
+export {StaticMiddleware} from './lib/middleware/staticMiddleware';
 export {default as router, Router} from './lib/routes/router';
 
 export {default as launcher} from './lib/launcher/launcher';

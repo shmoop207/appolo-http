@@ -297,6 +297,22 @@ describe('Appolo Express', () => {
             res.body.middleware.should.be.ok
         });
 
+
+        it('should  call static middleware before controller', async () => {
+
+            let res = await request(appolo.launcher.handleRequest)
+                .get('/test/middleware/static/')
+
+
+            res.should.to.have.status(403);
+
+            should.exist(res.text)
+
+            res.text.should.be.eq("Error: NOT AUTHORIZED")
+
+
+        });
+
         it('should  call middleware before controller with class', async () => {
 
             let res = await request(appolo.launcher.handleRequest)
@@ -315,7 +331,7 @@ describe('Appolo Express', () => {
         });
 
 
-        it.only('should  call call controller with gzip', async () => {
+        it('should  call call controller with gzip', async () => {
 
             let res = await request(appolo.launcher.handleRequest)
                 .get('/test/gzip/')
@@ -327,9 +343,6 @@ describe('Appolo Express', () => {
             should.exist(res.body)
 
             res.body.working.should.be.ok;
-
-            res.body.middleware.should.be.ok
-            res.body.name.should.be.eq("Manager")
         });
 
 

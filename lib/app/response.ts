@@ -24,6 +24,8 @@ export interface Response extends http.ServerResponse {
 
     send(data?: string | Buffer)
 
+    gzip(): Response
+
 }
 
 export let response = <Partial<Response>>{
@@ -80,13 +82,13 @@ export let response = <Partial<Response>>{
         }
 
         if (!hasContentType) {
-            if (typeof data === 'string' || this.getHeader("Content-Encoding") != "gzip") {
-                contentType = "text/plain;charset=utf-8";
+            if (typeof data === 'string' || this.getHeader("Content-Encoding") == "gzip") {
+                this.setHeader("Content-Type", "text/plain;charset=utf-8");
             } else if (isBuffer) {
-                contentType = "application/octet-stream";
+                this.setHeader("Content-Type", "application/octet-stream");
             } else {
                 data = JSON.stringify(data);
-                contentType = "application/json; charset=utf-8";
+                this.setHeader("Content-Type", "application/json; charset=utf-8");
             }
         }
 
