@@ -1,7 +1,4 @@
 "use strict";
-
-import path = require('path');
-import    _ = require('lodash');
 import {IRouteOptions} from "../interfaces/IRouteOptions";
 import {Request} from "../app/request";
 import {Response} from "../app/response";
@@ -42,7 +39,7 @@ export class Controller extends StaticController {
         super.sendNoContent(this.res);
     }
 
-    public sendServerError(error?, code?) {
+    public sendError(error?, code?) {
 
         super.sendServerError(this.res, error, code);
     }

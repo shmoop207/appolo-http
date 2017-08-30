@@ -297,6 +297,42 @@ describe('Appolo Express', () => {
             res.body.middleware.should.be.ok
         });
 
+        it('should  call middleware before controller with class', async () => {
+
+            let res = await request(appolo.launcher.handleRequest)
+                .get('/test/middleware/')
+
+
+            res.should.to.have.status(200);
+            res.should.to.be.json;
+
+            should.exist(res.body)
+
+            res.body.working.should.be.ok;
+
+            res.body.middleware.should.be.ok
+            res.body.name.should.be.eq("Manager")
+        });
+
+
+        it.only('should  call call controller with gzip', async () => {
+
+            let res = await request(appolo.launcher.handleRequest)
+                .get('/test/gzip/')
+
+
+            res.should.to.have.status(200);
+            res.should.to.be.json;
+
+            should.exist(res.body)
+
+            res.body.working.should.be.ok;
+
+            res.body.middleware.should.be.ok
+            res.body.name.should.be.eq("Manager")
+        });
+
+
         it('should call validations error', async () => {
 
             let res = await request(appolo.launcher.handleRequest)

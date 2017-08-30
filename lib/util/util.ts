@@ -22,6 +22,10 @@ export class Util extends appolo.Util {
         return props;
     }
 
+    public static isClass(v: any): boolean {
+        return typeof v === 'function' && v.name && /^\s*class\s+/.test(v.toString());
+    }
+
 
     public static decodeParam(val: string): string {
         if (typeof val !== 'string' || val.length === 0) {
@@ -46,7 +50,7 @@ export class Util extends appolo.Util {
         for (let i = 0, l = keys.length; i < l; i++) {
             let prop = keys[i];
             obj[prop] = proto[prop];
-            
+
         }
 
         return obj;

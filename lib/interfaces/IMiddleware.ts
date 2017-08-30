@@ -8,3 +8,8 @@ import {Request} from "../app/request";
 export interface IMiddleware{
  run(req:Request, res:Response, next:NextFn,route:IRouteOptions)
 }
+
+
+export interface IMiddlewareCtr {
+    new (...args: any[]): IMiddleware
+}

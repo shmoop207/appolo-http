@@ -9,6 +9,7 @@ import    fs = require('fs');
 import    Q = require('bluebird');
 import    _ = require('lodash');
 import {IOptions} from "../interfaces/IOptions";
+import ErrnoException = NodeJS.ErrnoException;
 
 
 export class Launcher extends appolo.Launcher {
@@ -75,8 +76,8 @@ export class Launcher extends appolo.Launcher {
     }
 
     protected bindProcessEvents() {
-        process.on('uncaughtException', (err) => {
-            if (err.errno !== 'EADDRINUSE') {
+        process.on('uncaughtException', (err:ErrnoException) => {
+            if (err.code !== 'EADDRINUSE') {
                 console.error(err.stack || err.toString())
                 return;
             }

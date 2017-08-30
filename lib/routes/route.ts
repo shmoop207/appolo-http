@@ -6,17 +6,17 @@ import router from './router';
 import {IRouteOptions} from "../interfaces/IRouteOptions";
 import pathToRegexp = require('path-to-regexp');
 import {MiddlewareHandler, NextFn} from "../app/app";
-import {IMiddleware} from "../interfaces/IMiddleware";
+import {IMiddleware, IMiddlewareCtr} from "../interfaces/IMiddleware";
 import {Response} from "../app/response";
 import {Request} from "../app/request";
-import {StaticController} from "../controller/staticController";
-import {Controller} from "../controller/controller";
+import {IController, IControllerCtr} from "../controller/IController";
+import {Util} from "../util/util";
 
 
-export class Route<T> {
+export class Route<T extends IController> {
     protected _route: IRouteOptions;
 
-    constructor(controller: string | typeof StaticController |typeof Controller) {
+    constructor(controller: string | { new(): IController }) {
 
         this._route = <IRouteOptions>{
             controller: _.isFunction(controller) && controller.name ? _.camelCase(controller.name) : controller,
@@ -47,7 +47,7 @@ export class Route<T> {
         if (pathPattern == "/") {
             this.order(999998)
         } else if (pathPattern == "*") {
-            this.order(999999)
+            this.order(999999);
             this._route.regExp = new RegExp(".*")
         }
 
@@ -131,39 +131,44 @@ export class Route<T> {
         return this
     }
 
-    public middleware(middleware: string | string[] | MiddlewareHandler | MiddlewareHandler[]): this {
+    public middleware(middleware: string | MiddlewareHandler | IMiddlewareCtr): this {
 
         if (_.isArray(middleware)) {
             return this.middlewares(middleware)
         }
 
-        if (!_.isString(middleware)) {
+        if (Util.isClass(middleware)) {
+            middleware = _.camelCase((middleware as IMiddlewareCtr).name)
+        } else if (typeof middleware == "function") {
             this._route.middleware.push(middleware as MiddlewareHandler);
-            return this;
         }
 
-        middleware = (function (middlewareId): MiddlewareHandler {
 
-            return function (req: Request, res: Response, next: NextFn) {
+        if (typeof middleware == "string") {
 
-                let middleware: IMiddleware = appolo.inject.getObject<IMiddleware>(middlewareId, [req, res, next, req.$route]);
+            middleware = (function (middlewareId): MiddlewareHandler {
 
-                if (!middleware) {
-                    throw new Error("failed to find middleware " + middleware);
+                return function (req: Request, res: Response, next: NextFn) {
+
+                    let middleware: IMiddleware = appolo.inject.getObject<IMiddleware>(middlewareId, [req, res, next, req.$route]);
+
+                    if (!middleware) {
+                        throw new Error("failed to find middleware " + middleware);
+                    }
+
+                    middleware.run(req, res, next, req.$route);
                 }
+            })(middleware);
 
-                middleware.run(req, res, next, req.$route);
-            }
-        })(middleware);
+            this._route.middleware.push(middleware as MiddlewareHandler);
 
-        this._route.middleware.push(middleware as MiddlewareHandler);
-
-        return this;
+            return this;
+        }
     }
 
-    public middlewares(middleware: string | string[] | MiddlewareHandler | MiddlewareHandler[]): this {
+    public middlewares(middlewares: string[] | MiddlewareHandler[] | IMiddlewareCtr[]): this {
 
-        _.forEach(_.isArray(middleware) ? middleware : [middleware], fn => this.middleware(middleware));
+        _.forEach(_.isArray(middlewares) ? middlewares : [middlewares], fn => this.middleware(fn));
 
         return this;
     }
@@ -187,11 +192,11 @@ export class Route<T> {
         return this;
     }
 
-    route<T>(controller: string | typeof StaticController): Route<T> {
+    route<T extends IController>(controller: string | IControllerCtr): Route<T> {
         return new Route<T>(controller || this._route.controller);
     }
 }
 
-export default function <T>(controller: string | typeof StaticController | typeof Controller): Route<T> {
+export default function <T extends IController>(controller: string | IControllerCtr): Route<T> {
     return new Route<T>(controller)
 }

@@ -1,4 +1,6 @@
 import    http = require('http');
+import    zlib = require('zlib');
+
 import {Request} from "./request";
 
 const statusEmpty = {
@@ -10,6 +12,7 @@ const statusEmpty = {
 
 export interface Response extends http.ServerResponse {
     req: Request
+    useGzip: boolean;
 
     status(code: number): Response
 
@@ -49,51 +52,62 @@ export let response = <Partial<Response>>{
         return this
     },
 
+    gzip(): Response {
+        this.useGzip = true;
+        return this;
+    },
+
     send(data?: string | Buffer) {
-        let contentType: string, len: number, statusCode = this.statusCode,
+
+        if (this.useGzip) {
+            gzipResponse(this, data);
+            return;
+        }
+
+        let contentType: string, statusCode = this.statusCode || (this.statusCode = 200),
             isEmptyStatusCode = !!statusEmpty[statusCode],
-            hasContentType = this.getHeader("Content-Type");
+            hasContentType = this.getHeader("Content-Type"), isBuffer = Buffer.isBuffer(data);
 
-        if (data === undefined) {
-            data = "";
-        }
-
-        if (typeof data === 'string') {
-
-            contentType = "text/plain;charset=utf-8";
-
-            len = Buffer.byteLength(data, 'utf8');
-
-        } else if (Buffer.isBuffer(data)) {
-            contentType = "application/octet-stream";
-
-            len = data.length;
-
-        } else {
-            data = JSON.stringify(data);
-
-            contentType = "application/json; charset=utf-8";
-
-            len = Buffer.byteLength(data, 'utf8');
-        }
-
+        //send empty
         if (isEmptyStatusCode) {
             this.setHeader('Content-Length', '0');
             this.end();
             return
         }
 
-        if (!hasContentType) {
-            this.setHeader("Content-Type", contentType);
+        if (data === undefined) {
+            data = "";
         }
 
-        this.setHeader('Content-Length', len);
+        if (!hasContentType) {
+            if (typeof data === 'string' || this.getHeader("Content-Encoding") != "gzip") {
+                contentType = "text/plain;charset=utf-8";
+            } else if (isBuffer) {
+                contentType = "application/octet-stream";
+            } else {
+                data = JSON.stringify(data);
+                contentType = "application/json; charset=utf-8";
+            }
+        }
 
+        this.setHeader('Content-Length', isBuffer ? data.length : Buffer.byteLength(data as string, 'utf8'));
 
         (this.req.method === 'HEAD') ? this.end() : this.end(data);
-
-
     }
+};
+
+function gzipResponse(res: Response, data: any) {
+    zlib.gzip(data, (err, gziped) => {
+        res.useGzip = false;
+
+        if (err) {
+            res.send(data);
+            return;
+        }
+
+        res.setHeader('Content-Encoding', "gzip");
+        res.send(gziped)
+    });
 }
 
 export let ResponseKeys = Object.keys(response);

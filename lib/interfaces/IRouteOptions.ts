@@ -2,6 +2,8 @@ import appolo = require('appolo');
 import    joi = require('joi');
 import {Controller} from "./../controller/controller";
 import {MiddlewareHandler} from "../app/app";
+import {StaticController} from "../controller/staticController";
+import {IController} from "../controller/IController";
 
 export type Method = 'get' | 'post' | 'delete' | 'patch' | 'head' | 'put'
 
@@ -9,7 +11,7 @@ export type Method = 'get' | 'post' | 'delete' | 'patch' | 'head' | 'put'
 export interface IRouteOptions {
     controller?: string
     controllerName?: string
-    action?: Function | string
+    action?: ((c: IController)=>Function) | string
     actionName?: string
     environments?: string[]
     roles?: string[]

@@ -1,15 +1,14 @@
 "use strict";
-
-import path = require('path');
 import    _ = require('lodash');
 import {IRouteOptions} from "../interfaces/IRouteOptions";
 import {Request} from "../app/request";
 import {Response} from "../app/response";
 import {NextFn} from "../app/app";
+import {IController} from "./IController";
 
-export class StaticController {
+export class StaticController implements IController{
 
-    public invoke(req: Request, res: Response, next: NextFn,route: IRouteOptions, action: string | Function) {
+    public invoke(req: Request, res: Response, next: NextFn,route: IRouteOptions, action: string | ((c: IController)=>Function)) {
 
         let fnName: string = route.actionName;
 

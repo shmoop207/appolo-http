@@ -1,14 +1,14 @@
 "use strict";
 import appolo = require('../../../../index');
+import {define, inject, singleton, lazy} from '../../../../decorators';
+import {Manager} from "../manager/manager";
 
 
-
-class Middleware extends appolo.Middleware {
+@define()
+export class TestMiddleware extends appolo.Middleware {
+    @inject() manager: Manager;
 
     run(req, res, next) {
-        res.send({working: true, middleware: true})
+        res.send({working: true, middleware: true, name: this.manager.name})
     }
 }
-
-
-module.exports = appolo.define('testMiddleware',Middleware).inject('manager')

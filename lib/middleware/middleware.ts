@@ -34,7 +34,7 @@ export class Middleware implements IMiddleware {
         next();
     }
 
-    public sendServerError(error?: Error, code?: number, next?: NextFn) {
+    public sendError(error?: Error, code?: number, next?: NextFn) {
 
         this._callNext(500, "Internal Server Error", error, code, next);
 
