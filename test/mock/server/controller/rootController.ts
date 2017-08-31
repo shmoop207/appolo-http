@@ -3,12 +3,7 @@ import appolo = require('../../../../index');
 import {define, inject} from '../../../../decorators';
 
 @define()
-class RouteStaticController extends appolo.Controller {
-
-
-    test(req, res) {
-        res.json({working: true, controllerName: this.route.controller, model: req.model})
-    }
+export class RootController extends appolo.Controller {
 
     all(req, res) {
         res.json({name: this.route.actionName})
@@ -20,13 +15,6 @@ class RouteStaticController extends appolo.Controller {
 
 }
 
-appolo.route<RouteStaticController>(RouteStaticController)
-    .path("/test/route/static")
-    .method("get")
-    .action(c => c.test)
-    .validation("user_name",appolo.validator.string().required())
-
-
 
 //
 // appolo.route<RouteStaticController>(RouteStaticController)
@@ -34,7 +22,7 @@ appolo.route<RouteStaticController>(RouteStaticController)
 //     .method("get")
 //     .action(c => c.all)
 
-appolo.route<RouteStaticController>(RouteStaticController)
+appolo.route<RootController>(RootController)
     .path("/")
     .method("get")
     .action(c => c.root)

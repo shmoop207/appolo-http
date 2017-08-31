@@ -5,7 +5,7 @@ import {define, inject} from '../../../../decorators';
 
 
 @define()
-class RouteEnvController extends appolo.Controller {
+class EnvController extends appolo.Controller {
 
     test(req, res) {
         res.json({working: true, controllerName: this.route.controller})
@@ -14,13 +14,13 @@ class RouteEnvController extends appolo.Controller {
 }
 
 
-appolo.route<RouteEnvController>(RouteEnvController)
-.path("/test/route/not_in_env/")
+appolo.route<EnvController>(EnvController)
+.path("/test/env/not_in_env/")
 .action(c=>c.test)
-.environment("test")
+.environment("test");
 
 
-appolo.route<RouteEnvController>(RouteEnvController)
-    .path("/test/route/env/")
+appolo.route<EnvController>(EnvController)
+    .path("/test/env/")
     .action(c=>c.test)
-    .environment("testing")
+    .environment("testing");

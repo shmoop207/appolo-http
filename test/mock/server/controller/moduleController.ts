@@ -3,7 +3,7 @@ import appolo = require('../../../../index');
 import {IDefinition} from "../../../../lib/interfaces/IDefinition";
 
 
-export class Controller extends appolo.Controller {
+export class ModuleController extends appolo.Controller {
     logger2: any
 
     test(req, res) {
@@ -12,7 +12,10 @@ export class Controller extends appolo.Controller {
 
 }
 
-appolo.define('moduleController', Controller).inject("logger2");
+appolo.define('moduleController', ModuleController)
+    .inject("logger2");
 
 
-appolo.route('moduleController').path("/test/module/").action("test")
+appolo.route('moduleController')
+    .path("/test/module/")
+    .action("test");

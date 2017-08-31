@@ -6,7 +6,7 @@ import {define, inject, singleton, lazy} from '../../../../decorators';
 @singleton()
 @lazy()
 class StaticController extends appolo.StaticController {
-    @inject() manager: any
+    @inject() manager: any;
 
     test(req, res) {
         res.json({model: this.getModel(req)})
@@ -16,19 +16,22 @@ class StaticController extends appolo.StaticController {
 }
 
 appolo.route<StaticController>(StaticController)
-    .path('/test/static/controller/:name')
+    .path('/test/static/controller/:name/:name2')
     .method('get')
     .action('test')
     .validation("test", appolo.validator.string())
     .validation("name", appolo.validator.string())
+    .validation("user_name", appolo.validator.string())
+    .validation("name2", appolo.validator.string())
+    .validation("name", appolo.validator.string());
 
 appolo.route<StaticController>(StaticController)
-    .path('/test/static/controller/:name/post')
+    .path('/test/static/controller/:name/:bbb/post')
     .method('post')
     .action('test')
     .validation("test", appolo.validator.string())
     .validation("name", appolo.validator.string())
-    .validation("testPost", appolo.validator.boolean().required())
+    .validation("testPost", appolo.validator.boolean().required());
 
 
 

@@ -66,7 +66,7 @@ export let response = <Partial<Response>>{
             return;
         }
 
-        let contentType: string, statusCode = this.statusCode || (this.statusCode = 200),
+        let  statusCode = this.statusCode || (this.statusCode = 200),
             isEmptyStatusCode = !!statusEmpty[statusCode],
             hasContentType = this.getHeader("Content-Type"), isBuffer = Buffer.isBuffer(data);
 

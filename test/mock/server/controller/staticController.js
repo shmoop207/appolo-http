@@ -17,13 +17,16 @@ StaticController = tslib_1.__decorate([
     decorators_1.lazy()
 ], StaticController);
 appolo.route(StaticController)
-    .path('/test/static/controller/:name')
+    .path('/test/static/controller/:name/:name2')
     .method('get')
     .action('test')
     .validation("test", appolo.validator.string())
+    .validation("name", appolo.validator.string())
+    .validation("user_name", appolo.validator.string())
+    .validation("name2", appolo.validator.string())
     .validation("name", appolo.validator.string());
 appolo.route(StaticController)
-    .path('/test/static/controller/:name/post')
+    .path('/test/static/controller/:name/:bbb/post')
     .method('post')
     .action('test')
     .validation("test", appolo.validator.string())
