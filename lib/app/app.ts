@@ -148,7 +148,7 @@ export class App {
         try {
             fn(req, res, (err) => this._handleMiddleware(req, res, num + 1, middlewares, err));
         } catch (e) {
-            this._handleError(err, res);
+            this._handleError(e, res);
         }
 
     }
