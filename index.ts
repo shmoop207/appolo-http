@@ -6,7 +6,8 @@ export {
     EventDispatcher,
     Util,
     module,
-    inject,
+    inject as injector,
+    inject as container,
     loader,
     environment,
     use,
@@ -15,16 +16,17 @@ export {
     IFactory,
     Injector
 } from 'appolo';
-export {Define} from './lib/define/define'
-export {define} from './lib/define/defineFn'
+export {Register,register} from './lib/register/register'
 export {default as route, Route} from './lib/routes/route';
-
 export {Controller} from './lib/controller/controller';
 export {StaticController} from './lib/controller/staticController';
+export  * from './lib/decorators/decorators'
 
 export {Middleware} from './lib/middleware/middleware';
 export {StaticMiddleware} from './lib/middleware/staticMiddleware';
 export {default as router, Router} from './lib/routes/router';
+export {Methods} from './lib/common/enums/methods'
+export {HttpError} from './lib/common/error/httpError'
 
 export {default as launcher} from './lib/launcher/launcher';
 

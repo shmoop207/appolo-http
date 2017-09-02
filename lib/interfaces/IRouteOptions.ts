@@ -4,8 +4,9 @@ import {Controller} from "./../controller/controller";
 import {MiddlewareHandler} from "../app/app";
 import {StaticController} from "../controller/staticController";
 import {IController} from "../controller/IController";
+import {Methods} from "../common/enums/methods";
 
-export type Method = 'get' | 'post' | 'delete' | 'patch' | 'head' | 'put'
+export type Method = 'get' | 'post' | 'delete' | 'patch' | 'head' | 'put' | Methods
 
 
 export interface IRouteOptions {

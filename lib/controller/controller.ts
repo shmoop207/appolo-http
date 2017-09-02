@@ -2,61 +2,58 @@
 import {IRouteOptions} from "../interfaces/IRouteOptions";
 import {Request} from "../app/request";
 import {Response} from "../app/response";
-import {NextFn} from "../app/app";
 import {StaticController} from "./staticController";
 
 export abstract class Controller extends StaticController {
 
     protected req: Request;
     protected res: Response;
-    protected next: NextFn;
     protected route: IRouteOptions;
     protected action: string | Function;
 
-    constructor(req: Request, res: Response, next: NextFn, route: IRouteOptions) {
+    constructor(req: Request, res: Response, route: IRouteOptions) {
 
         super();
         this.req = req;
         this.res = res;
-        this.next = next;
         this.route = route;
     }
 
-    public send(statusCode?, data?) {
+    public send(statusCode?:number, data?:any) {
 
-        super.send(this.res, statusCode, data)
+        Controller.send(this.res, statusCode, data)
     }
 
     public sendOk(data?: any) {
-        super.sendOk(this.res, data);
+        Controller.sendOk(this.res, data);
     }
 
     public sendCreated(data?: any) {
-        super.sendCreated(this.res, data)
+        Controller.sendCreated(this.res, data)
     }
 
     public sendNoContent() {
-        super.sendNoContent(this.res);
+        Controller.sendNoContent(this.res);
     }
 
     public sendError(error?, code?) {
 
-        super.sendError(this.res, error, code);
+        Controller.sendError(this.res, error, code);
     }
 
     public sendBadRequest(error?, code?) {
 
-        super.sendBadRequest(this.res, error, code);
+        Controller.sendBadRequest(this.res, error, code);
     }
 
     public sendUnauthorized(error?, code?) {
 
-        super.sendUnauthorized(this.res, error, code);
+        Controller.sendUnauthorized(this.res, error, code);
     }
 
     public sendNotFound(error?, code?) {
 
-        super.sendNotFound(this.res, error, code);
+        Controller.sendNotFound(this.res, error, code);
     }
 
     public getName(): string {

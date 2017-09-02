@@ -11,6 +11,7 @@ import {Response} from "../app/response";
 import {Request} from "../app/request";
 import {IController, IControllerCtr} from "../controller/IController";
 import {Util} from "../util/util";
+import {Methods} from "../common/enums/methods";
 
 
 export class Route<T extends IController> {
@@ -101,7 +102,7 @@ export class Route<T extends IController> {
         return this;
     }
 
-    public method(method: 'get' | 'post' | 'delete' | 'patch' | 'head' | 'put'): this {
+    public method(method: 'get' | 'post' | 'delete' | 'patch' | 'head' | 'put' | Methods): this {
 
         this._route.method = method;
         this._route.methodUpperCase = method.toUpperCase();

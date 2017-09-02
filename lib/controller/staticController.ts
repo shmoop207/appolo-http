@@ -8,7 +8,7 @@ import {IController} from "./IController";
 
 export abstract class StaticController implements IController{
 
-    public invoke(req: Request, res: Response, next: NextFn,route: IRouteOptions, action: string | ((c: IController)=>Function)) {
+    public invoke(req: Request, res: Response,route: IRouteOptions, action: string | ((c: IController)=>Function)) {
 
         let fnName: string = route.actionName;
 
@@ -21,10 +21,10 @@ export abstract class StaticController implements IController{
             route.actionName = fnName;
         }
 
-        this[fnName](req, res, next, route);
+        this[fnName](req, res, route);
     }
 
-    public send(res: Response, statusCode?: number, data?: any) {
+    public static send(res: Response, statusCode?: number, data?: any) {
 
         if (arguments.length === 1) {
             this.sendOk(arguments[0])
@@ -33,19 +33,19 @@ export abstract class StaticController implements IController{
         }
     }
 
-    public sendOk(res: Response, data?: any) {
+    public static sendOk(res: Response, data?: any) {
         res.status(200).json(data);
     }
 
-    public sendCreated(res: Response, data?: any) {
-        res.status(201).send();
+    public static sendCreated(res: Response, data?: any) {
+        res.status(201).send(data);
     }
 
-    public sendNoContent(res: Response) {
+    public static sendNoContent(res: Response) {
         res.status(204).send();
     }
 
-    public sendError(res: Response, error?, code?) {
+    public static sendError(res: Response, error?, code?) {
         res.status(500).json({
             status: 500,
             statusText: "Internal Server Error",
@@ -54,7 +54,7 @@ export abstract class StaticController implements IController{
         });
     }
 
-    public sendBadRequest(res: Response, error?, code?) {
+    public static sendBadRequest(res: Response, error?, code?) {
         res.status(400).json({
             status: 400,
             statusText: "Bad Request",
@@ -63,7 +63,7 @@ export abstract class StaticController implements IController{
         });
     }
 
-    public sendUnauthorized(res: Response, error?, code?) {
+    public static sendUnauthorized(res: Response, error?, code?) {
         res.status(401).json({
             status: 401,
             statusText: "Unauthorized",
@@ -72,7 +72,7 @@ export abstract class StaticController implements IController{
         });
     }
 
-    public sendNotFound(res: Response, error?, code?) {
+    public static sendNotFound(res: Response, error?, code?) {
         res.status(404).json({
             status: 404,
             statusText: "Not Found",
@@ -82,7 +82,7 @@ export abstract class StaticController implements IController{
     }
 
 
-    public getModel<T>(req: Request): T {
+    public static getModel<T>(req: Request): T {
         return (req as any).model;
     }
 }

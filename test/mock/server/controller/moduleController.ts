@@ -12,7 +12,7 @@ export class ModuleController extends appolo.Controller {
 
 }
 
-appolo.define('moduleController', ModuleController)
+appolo.register('moduleController', ModuleController)
     .inject("logger2");
 
 

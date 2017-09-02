@@ -18,7 +18,7 @@ export class Manager {
     }
 }
 
- appolo.define('manager')
+ appolo.register('manager')
      .type(Manager)
      .inject('manager2 manager3')
      .singleton();

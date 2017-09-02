@@ -29,6 +29,7 @@ describe('Appolo Http e2e', () => {
             res.body.working.should.be.ok;
             res.body.controllerName.should.be.eq('defineController');
             res.body.model.userName.should.ok;
+            res.body.manager5.should.be.eq("Manager53");
         }));
         it('should  call define controller from linq', () => tslib_1.__awaiter(this, void 0, void 0, function* () {
             let res = yield request(appolo.launcher.handleRequest)
@@ -97,7 +98,7 @@ describe('Appolo Http e2e', () => {
                 .get('/test/middleware/auth/');
             res.should.to.have.status(403);
             should.exist(res.text);
-            res.text.should.be.eq("Error: NOT AUTHORIZED");
+            res.text.should.be.eq('{"status":403,"statusText":"Unauthorized","error":"NOT AUTHORIZED","code":11}');
         }));
         it('should  call middleware before controller with class', () => tslib_1.__awaiter(this, void 0, void 0, function* () {
             let res = yield request(appolo.launcher.handleRequest)
@@ -182,6 +183,17 @@ describe('Appolo Http e2e', () => {
             res.should.to.have.status(404);
             should.exist(res.text);
             res.text.should.contain("/test/route2222/");
+        }));
+    });
+    describe('decorator route controller', function () {
+        it('should call decorator route controller ', () => tslib_1.__awaiter(this, void 0, void 0, function* () {
+            let res = yield request(appolo.launcher.handleRequest)
+                .get(`/test/decorator/route/aaa/bbb?test=${encodeURIComponent("http://www.cnn.com")}`);
+            res.should.to.have.status(200);
+            res.should.to.be.json;
+            should.exist(res.body);
+            res.body.model.test.should.be.eq("http://www.cnn.com");
+            res.body.model.name.should.be.eq("aaa");
         }));
     });
     describe('static controller', function () {

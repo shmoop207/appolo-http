@@ -68,13 +68,13 @@ export class Router {
 
     protected static _invokeAction(req: Request, res: Response, next: NextFn) {
 
-        let controller: StaticController = appolo.inject.getObject<StaticController>(req.$route.controller, [req, res, next, req.$route]);
+        let controller: StaticController = appolo.inject.getObject<StaticController>(req.$route.controller, [req, res, req.$route]);
 
         if (!controller) {
             throw new Error("failed to find controller " + req.$route.controller);
         }
 
-        controller.invoke(req, res, next, req.$route, req.$route.action);
+        controller.invoke(req, res, req.$route, req.$route.action);
 
         next();
     }

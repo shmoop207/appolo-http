@@ -4,7 +4,7 @@ import {NextFn} from "../app/app";
 import {IRouteOptions} from "../interfaces/IRouteOptions";
 
 export interface IController{
-    invoke(req: Request, res: Response, next: NextFn,route: IRouteOptions, action: string | ((c: IController)=>Function))
+    invoke(req: Request, res: Response,route: IRouteOptions, action: string | ((c: IController)=>Function))
 }
 
 export interface IControllerCtr {

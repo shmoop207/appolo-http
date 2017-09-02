@@ -25,7 +25,7 @@ describe('Appolo Express Unit', () => {
 
         it("should have app", () => {
 
-            let app = appolo.inject.getObject('app');
+            let app = appolo.injector.getObject('app');
 
             should.exist(app);
             should.exist(appolo.launcher.handleRequest)
@@ -33,7 +33,7 @@ describe('Appolo Express Unit', () => {
 
         it("should have managers", () => {
 
-            let manager = appolo.inject.getObject<Manager>('manager');
+            let manager = appolo.container.getObject<Manager>('manager');
 
             should.exist(manager);
             should.exist(manager.manager2);
@@ -44,7 +44,7 @@ describe('Appolo Express Unit', () => {
 
         it("should have manager statics", function () {
 
-            let manager = appolo.inject.getObject<Manager3>('manager3');
+            let manager = appolo.container.getObject<Manager3>('manager3');
 
             manager.TEST.should.be.eq(1)
 
@@ -52,8 +52,8 @@ describe('Appolo Express Unit', () => {
 
         it("should have manager singleton", function () {
 
-            let manager = appolo.inject.getObject<Manager4>('manager4');
-            let manager2 = appolo.inject.getObject<Manager4>('manager4');
+            let manager = appolo.container.getObject<Manager4>('manager4');
+            let manager2 = appolo.container.getObject<Manager4>('manager4');
 
             (manager === manager2).should.be.ok;
 
@@ -67,7 +67,7 @@ describe('Appolo Express Unit', () => {
 
         it("should have valid env", function () {
 
-            let env = appolo.inject.getObject<appolo.IEnv>('env');
+            let env = appolo.container.getObject<appolo.IEnv>('env');
 
             (env === appolo.environment).should.be.ok;
 

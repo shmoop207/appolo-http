@@ -9,7 +9,7 @@ class ValidationController extends appolo.Controller {
         res.json(req.model);
     }
 }
-appolo.define('validationController').type(ValidationController);
+appolo.register('validationController').type(ValidationController);
 appolo.route('validationController')
     .path("/test/validations/")
     .action(c => c.test)

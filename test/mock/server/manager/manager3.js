@@ -7,7 +7,7 @@ class Manager3 {
     }
 }
 exports.Manager3 = Manager3;
-appolo.define('manager3')
+appolo.register('manager3')
     .type(Manager3)
     .singleton()
     .statics("TEST", 1)

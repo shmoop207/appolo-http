@@ -26,34 +26,25 @@ export abstract class Middleware extends StaticMiddleware {
         return (this.req).model as T;
     }
 
-    public sendError(error?: Error, code?: number) {
+    public sendError(error?: Error, code?: number):void{
 
-        this._callNext(500, "Internal Server Error", error, code);
+        Middleware.sendError(this.next,error,code);
+    }
+
+    public sendBadRequest(error?:Error, code?:number) {
+
+        Middleware.sendBadRequest(this.next,error,code)
+    }
+
+    public sendUnauthorized(error?:Error, code?:number) {
+
+        Middleware.sendUnauthorized(this.next,error,code)
 
     }
 
-    public sendBadRequest(error?, code?) {
+    public sendNotFound(error?:Error, code?:number) {
 
-        this._callNext(400, "Bad Request", error, code);
+        Middleware.sendNotFound(this.next,error,code)
     }
 
-    public sendUnauthorized(error?, code?) {
-
-        this._callNext(401, "Unauthorized", error, code);
-
-    }
-
-    public sendNotFound(error?, code?) {
-
-        this._callNext(404, "Not Found", error, code);
-    }
-
-    protected _callNext(status: number, statusText: string, error: Error, code: number) {
-        this.next(new HttpError(status, statusText, {
-            status: status,
-            statusText: statusText,
-            error: error,
-            code: code
-        }));
-    }
 }

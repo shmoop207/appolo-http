@@ -12,6 +12,6 @@ export class Bootstrap implements appolo.IBootstrap{
 }
 
 
-appolo.define('appolo-bootstrap',Bootstrap)
+appolo.register('appolo-bootstrap',Bootstrap)
     .singleton()
     .inject("manager");

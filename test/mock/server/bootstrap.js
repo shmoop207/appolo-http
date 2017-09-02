@@ -8,7 +8,7 @@ class Bootstrap {
     }
 }
 exports.Bootstrap = Bootstrap;
-appolo.define('appolo-bootstrap', Bootstrap)
+appolo.register('appolo-bootstrap', Bootstrap)
     .singleton()
     .inject("manager");
 //# sourceMappingURL=bootstrap.js.map

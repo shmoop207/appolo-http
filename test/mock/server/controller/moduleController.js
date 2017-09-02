@@ -7,7 +7,7 @@ class ModuleController extends appolo.Controller {
     }
 }
 exports.ModuleController = ModuleController;
-appolo.define('moduleController', ModuleController)
+appolo.register('moduleController', ModuleController)
     .inject("logger2");
 appolo.route('moduleController')
     .path("/test/module/")
