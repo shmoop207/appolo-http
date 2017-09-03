@@ -445,7 +445,7 @@ appolo.define({
     id:'fooController',
     singleton: false,
     initMethod:'initialize',
-    type:FooController,
+    type:FooController,[[]]
     inject:['dataManager']
 });
 //or

@@ -68,6 +68,10 @@ export class Launcher extends appolo.Launcher {
         }
     }
 
+    public get options(): IOptions {
+        return this._options
+    }
+
     protected loadOptions(config: IOptions): IOptions {
 
         let dto = super.loadOptions(config);
@@ -76,7 +80,7 @@ export class Launcher extends appolo.Launcher {
     }
 
     protected bindProcessEvents() {
-        process.on('uncaughtException', (err:ErrnoException) => {
+        process.on('uncaughtException', (err: ErrnoException) => {
             if (err.code !== 'EADDRINUSE') {
                 console.error(err.stack || err.toString())
                 return;

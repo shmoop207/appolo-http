@@ -1,6 +1,6 @@
 "use strict";
 import    _ = require('lodash');
-import {IRouteOptions} from "../interfaces/IRouteOptions";
+import {IRouteInnerOptions, IRouteOptions} from "../interfaces/IRouteOptions";
 import {Request} from "../app/request";
 import {Response} from "../app/response";
 import {NextFn} from "../app/app";
@@ -8,9 +8,9 @@ import {IController} from "./IController";
 
 export abstract class StaticController implements IController{
 
-    public invoke(req: Request, res: Response,route: IRouteOptions, action: string | ((c: IController)=>Function)) {
+    public invoke(req: Request, res: Response,routeInner: IRouteInnerOptions, action: string | ((c: IController)=>Function)) {
 
-        let fnName: string = route.actionName;
+        let fnName: string = routeInner.route.actionName;
 
         if (!fnName) {
             fnName = _.isString(action) ? action : action(this).name;
@@ -18,10 +18,10 @@ export abstract class StaticController implements IController{
             if (!this[fnName]) {
                 throw new Error(`failed to invoke ${this.constructor.name} fnName ${fnName}`);
             }
-            route.actionName = fnName;
+            routeInner.route.actionName = fnName;
         }
 
-        this[fnName](req, res, route);
+        this[fnName](req, res, routeInner.route);
     }
 
     public static send(res: Response, statusCode?: number, data?: any) {

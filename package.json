@@ -34,7 +34,7 @@
   "readme": "",
   "readmeFilename": "README.md",
   "dependencies": {
-    "appolo": "^5.0.3",
+    "appolo": "^5.0.4",
     "bluebird": "^3.5.0",
     "joi": "10.6.0",
     "lodash": "^4.17.4",

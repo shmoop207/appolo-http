@@ -3,7 +3,7 @@ import    url = require('url');
 import    Q = require('bluebird');
 import    _ = require('lodash');
 import router from '../routes/router';
-import {IRouteOptions} from "../interfaces/IRouteOptions";
+import {IRouteInnerOptions, IRouteOptions} from "../interfaces/IRouteOptions";
 import {Util} from "../util/util";
 import {request, Request, RequestKeys} from "./request";
 import {response, Response, ResponseKeys} from "./response";
@@ -24,7 +24,7 @@ export type NextFn = (err?: Error) => void
 
 export class App {
 
-    private _routes: IRouteOptions[];
+    private _routes: IRouteInnerOptions[];
     private _routesLength: number;
     private _middlewares: MiddlewareHandler[];
     private _options: IOptions;
@@ -39,9 +39,9 @@ export class App {
 
     public initialize(options: IOptions) {
 
-        this._routes = _<IRouteOptions>(router.getRoutes()).sortBy(r => r.order).value();
+        this._routes = _<IRouteInnerOptions>(router.getRoutes()).sortBy(r => r.route.order).value();
 
-        _.forEach(this._routes, route => route.middleware = [...this._middlewares, ...route.middleware]);
+        _.forEach(this._routes, (route: IRouteInnerOptions) => route.middlewareHandler = [...this._middlewares, ...route.middlewareHandler]);
 
         this._routesLength = this._routes.length;
         this._options = options;
@@ -57,7 +57,7 @@ export class App {
 
             this._initRoute(req);
 
-            this._handleMiddleware(req, res, 0, req.$route.middleware);
+            this._handleMiddleware(req, res, 0, req.$route.middlewareHandler);
 
         } catch (e) {
             this._handleError(e, res);
@@ -99,7 +99,7 @@ export class App {
 
         req.params = this._createRouteParams(route, match);
         req.$route = route;
-        this._cache.set(req.urlParse.pathname, {route:req.$route, params:req.params});
+        this._cache.set(req.urlParse.pathname, {route: req.$route, params: req.params});
     }
 
     private _findRoute(req: Request) {
@@ -118,7 +118,7 @@ export class App {
         return {route, match}
     }
 
-    private _createRouteParams(route: IRouteOptions, match: RegExpExecArray): { [index: string]: any } {
+    private _createRouteParams(route: IRouteInnerOptions, match: RegExpExecArray): { [index: string]: any } {
         let params: { [index: string]: any } = {};
 
         for (let i = 0, length = route.paramsKeys.length; i < length; i++) {

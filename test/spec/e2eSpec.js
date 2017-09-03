@@ -196,6 +196,18 @@ describe('Appolo Http e2e', () => {
             res.body.model.name.should.be.eq("aaa");
         }));
     });
+    describe('decorator param controller', function () {
+        it('should call decorator param controller ', () => tslib_1.__awaiter(this, void 0, void 0, function* () {
+            let res = yield request(appolo.launcher.handleRequest)
+                .get(`/test/decorator/param/aaa/bbb?test=${encodeURIComponent("http://www.cnn.com")}`);
+            res.should.to.have.status(200);
+            res.should.to.be.json;
+            should.exist(res.body);
+            res.body.name.should.be.eq("Manager");
+            res.body.model.should.be.eq("testing");
+            res.body.user.should.be.eq("user");
+        }));
+    });
     describe('static controller', function () {
         it('should  call controller twice', () => tslib_1.__awaiter(this, void 0, void 0, function* () {
             let res = yield request(appolo.launcher.handleRequest)

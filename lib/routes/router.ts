@@ -6,7 +6,7 @@ import    path = require('path');
 import    http = require('http');
 import {Controller} from '../controller/controller';
 import    joi = require('joi');
-import {IRouteOptions} from "../interfaces/IRouteOptions";
+import {IRouteInnerOptions, IRouteOptions} from "../interfaces/IRouteOptions";
 import {IMiddleware} from "../interfaces/IMiddleware";
 import {Util} from "../util/util";
 import {App, MiddlewareHandler, NextFn} from "../app/app";
@@ -22,7 +22,7 @@ export class Router {
     protected readonly controllerSuffix: string = 'Controller';
     protected readonly actionSuffix: string = 'Action';
 
-    protected _routes: IRouteOptions[];
+    protected _routes: IRouteInnerOptions[];
 
     constructor() {
 
@@ -37,44 +37,44 @@ export class Router {
         this._routes = _(this._routes).map(route => this._createRoute(route)).compact().value();
     }
 
-    public getRoutes(): IRouteOptions[] {
+    public getRoutes(): IRouteInnerOptions[] {
         return this._routes;
     }
 
-    protected _createRoute(route: IRouteOptions): IRouteOptions {
+    protected _createRoute(routeInner: IRouteInnerOptions): IRouteInnerOptions {
 
-        let middleware = route.middleware || (route.middleware = []);
+        let middleware = routeInner.middlewareHandler || (routeInner.middlewareHandler = []);
 
-        if (!route.path || (route.environments && route.environments.length && !_.includes(route.environments, (appolo.environment.name || appolo.environment.type)))) {
+        if (!routeInner.route.path || (routeInner.route.environments && routeInner.route.environments.length && !_.includes(routeInner.route.environments, (appolo.environment.name || appolo.environment.type)))) {
             return null;
         }
 
-        if (route.controller.indexOf(this.controllerSuffix, route.controller.length - this.controllerSuffix.length) === -1) {
-            route.controller = route.controller + this.controllerSuffix;
+        if (routeInner.route.controller.indexOf(this.controllerSuffix, routeInner.route.controller.length - this.controllerSuffix.length) === -1) {
+            routeInner.route.controller = routeInner.route.controller + this.controllerSuffix;
         }
 
-        route.controllerName = route.controller.replace(this.controllerSuffix, '');
+        routeInner.route.controllerName = routeInner.route.controller.replace(this.controllerSuffix, '');
 
 
         middleware.push(Router._invokeAction);
 
-        if (!_.isEmpty(route.validations)) {
+        if (!_.isEmpty(routeInner.route.validations)) {
             middleware.unshift(Router._checkValidation);
         }
 
-        return route;
+        return routeInner;
     }
 
 
     protected static _invokeAction(req: Request, res: Response, next: NextFn) {
 
-        let controller: StaticController = appolo.inject.getObject<StaticController>(req.$route.controller, [req, res, req.$route]);
+        let controller: StaticController = appolo.inject.getObject<StaticController>(req.$route.route.controller, [req, res, req.$route.route]);
 
         if (!controller) {
-            throw new Error("failed to find controller " + req.$route.controller);
+            throw new Error("failed to find controller " + req.$route.route.controller);
         }
 
-        controller.invoke(req, res, req.$route, req.$route.action);
+        controller.invoke(req, res, req.$route, req.$route.route.action);
 
         next();
     }
@@ -91,11 +91,11 @@ export class Router {
         };
 
         try {
-            let params = await Q.fromCallback((callback) => joi.validate(data, req.$route.validations, options, callback));
+            let params = await Q.fromCallback((callback) => joi.validate(data, req.$route.route.validations, options, callback));
 
             let output = {};
 
-            if ((req.$route.convertToCamelCase) !== false) {
+            if ((req.$route.route.convertToCamelCase) !== false) {
 
                 for (let key in params) {
                     output[Util.convertSnakeCaseToCamelCase(key)] = params[key]

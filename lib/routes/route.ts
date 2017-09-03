@@ -3,7 +3,7 @@ import appolo = require('appolo');
 import    _ = require('lodash');
 import    joi = require('joi');
 import router from './router';
-import {IRouteOptions} from "../interfaces/IRouteOptions";
+import {IRouteInnerOptions, IRouteOptions} from "../interfaces/IRouteOptions";
 import pathToRegexp = require('path-to-regexp');
 import {MiddlewareHandler, NextFn} from "../app/app";
 import {IMiddleware, IMiddlewareCtr} from "../interfaces/IMiddleware";
@@ -15,23 +15,28 @@ import {Methods} from "../common/enums/methods";
 
 
 export class Route<T extends IController> {
-    protected _route: IRouteOptions;
+    protected _route: IRouteInnerOptions;
 
     constructor(controller: string | { new(): IController }) {
 
-        this._route = <IRouteOptions>{
-            controller: _.isFunction(controller) && controller.name ? _.camelCase(controller.name) : controller,
-            validations: {},
-            middleware: [],
-            environments: [],
-            roles: [],
-            path: "",
-            action: null,
+        this._route = <IRouteInnerOptions>{
+            middlewareHandler: [],
             regExp: null,
-            method: 'get',
-            order: 0,
             methodUpperCase: 'GET',
-            params: {}
+            route: {
+                method: 'get',
+                roles: [],
+                environments: [],
+                middleware: [],
+                validations: {},
+                controller: _.isFunction(controller) && controller.name ? _.camelCase(controller.name) : controller,
+                path: "",
+                order: 0,
+                params: {},
+                action: null,
+
+
+            }
         };
 
         router.getRoutes().push(this._route);
@@ -39,9 +44,9 @@ export class Route<T extends IController> {
 
     public path(pathPattern: string): this {
 
-        this._route.path = pathPattern;
+        this._route.route.path = pathPattern;
         let keys = [];
-        this._route.regExp = pathToRegexp(this._route.path, keys);
+        this._route.regExp = pathToRegexp(this._route.route.path, keys);
 
         this._route.paramsKeys = keys;
 
@@ -56,19 +61,24 @@ export class Route<T extends IController> {
     }
 
     public order(order: number): this {
-        this._route.order = order;
+        this._route.route.order = order;
         return this
     }
 
     public action(action: ((c: T) => Function) | string): this {
 
-        this._route.action = action;
+        this._route.route.action = action;
 
         return this;
     }
 
     public abstract(abstract: Partial<IRouteOptions>): this {
-        _.extend(this._route, _.cloneDeep(abstract));
+
+        let items = _.pick(abstract, ["environments", "roles", "middleware", "validations", "convertToCamelCase", "method", "params"])
+
+        _.forEach(items, (item: any, key: string) => {
+            this[key](item);
+        });
 
         return this;
     }
@@ -80,7 +90,7 @@ export class Route<T extends IController> {
     }
 
     public param(key: string, value: any): this {
-        this._route.params[key] = value;
+        this._route.route.params[key] = value;
         return this
     }
 
@@ -92,11 +102,11 @@ export class Route<T extends IController> {
 
         if (_.isObject(key)) {
 
-            _.extend(this._route.validations, key)
+            _.extend(this._route.route.validations, key)
 
         } else {
 
-            this._route.validations[key as string] = validation
+            this._route.route.validations[key as string] = validation
         }
 
         return this;
@@ -104,7 +114,7 @@ export class Route<T extends IController> {
 
     public method(method: 'get' | 'post' | 'delete' | 'patch' | 'head' | 'put' | Methods): this {
 
-        this._route.method = method;
+        this._route.route.method = method;
         this._route.methodUpperCase = method.toUpperCase();
 
         return this;
@@ -117,18 +127,18 @@ export class Route<T extends IController> {
     public environments(environment: string | string[]): this {
         if (_.isArray(environment)) {
 
-            this._route.environments.push.apply(this._route.environments, environment);
+            this._route.route.environments.push.apply(this._route.route.environments, environment);
         }
         else {
 
-            this._route.environments.push(environment)
+            this._route.route.environments.push(environment)
         }
 
         return this;
     }
 
     public convertToCamelCase(value: boolean): this {
-        this._route.convertToCamelCase = value;
+        this._route.route.convertToCamelCase = value;
         return this
     }
 
@@ -138,10 +148,12 @@ export class Route<T extends IController> {
             return this.middlewares(middleware)
         }
 
+        this._route.route.middleware.push(middleware);
+
         if (Util.isClass(middleware)) {
             middleware = _.camelCase((middleware as IMiddlewareCtr).name)
         } else if (typeof middleware == "function") {
-            this._route.middleware.push(middleware as MiddlewareHandler);
+            this._route.middlewareHandler.push(middleware as MiddlewareHandler);
         }
 
 
@@ -157,11 +169,11 @@ export class Route<T extends IController> {
                         throw new Error("failed to find middleware " + middleware);
                     }
 
-                    middleware.run(req, res, next, req.$route);
+                    middleware.run(req, res, next, req.$route.route);
                 }
             })(middleware);
 
-            this._route.middleware.push(middleware as MiddlewareHandler);
+            this._route.middlewareHandler.push(middleware as MiddlewareHandler);
 
             return this;
         }
@@ -183,18 +195,18 @@ export class Route<T extends IController> {
 
         if (_.isArray(role)) {
 
-            this._route.roles.push.apply(this._route.roles, role);
+            this._route.route.roles.push.apply(this._route.route.roles, role);
 
         } else {
 
-            this._route.roles.push(role)
+            this._route.route.roles.push(role)
         }
 
         return this;
     }
 
     route<T extends IController>(controller: string | IControllerCtr): Route<T> {
-        return new Route<T>(controller || this._route.controller);
+        return new Route<T>(controller || this._route.route.controller);
     }
 }
 

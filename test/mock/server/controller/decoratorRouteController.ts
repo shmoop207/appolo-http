@@ -1,17 +1,18 @@
 "use strict";
-import appolo = require('../../../../index');
+import app = require('../../../../index');
 
-@appolo.define()
-@appolo.singleton()
-@appolo.lazy()
-class DecoratorRouteController extends appolo.StaticController {
-    @appolo.inject() manager: any;
+@app.define()
+@app.singleton()
+@app.lazy()
+class DecoratorRouteController extends app.StaticController {
 
-    @appolo.path("/test/decorator/route/:name/:name2")
-    @appolo.validation("name2", appolo.validator.string())
-    @appolo.validation("name", appolo.validator.string())
-    @appolo.validation("test", appolo.validator.string())
-    public test(req:appolo.Request, res:appolo.Response) {
+    @app.inject() manager: any;
+
+    @app.path("/test/decorator/route/:name/:name2")
+    @app.validation("name2", app.validator.string())
+    @app.validation("name", app.validator.string())
+    @app.validation("test", app.validator.string())
+    public test(req: app.Request, res: app.Response) {
         res.json({model: DecoratorRouteController.getModel(req)})
     }
 
