@@ -1,7 +1,7 @@
 Appolo HTTP 
 =======
 
-![appolo](https://dl.dropboxusercontent.com/content_link/eiFHdXaA1gqpq5tSFrzJ7b5sKCAFkc91KijFkeWVAJR5Tvq2sCbdBXqQOpNCcJ8T/file)
+![appolo](https://www.dropbox.com/s/pwdvd6ohb74t7r7/appollo.png?raw=1)
 
 Appolo HTTP is an light MVC Framework for Node.js written in Typescript<br>
 Build with [appolo][2] framework and [appolo-inject][3] dependency injection module.<br>
@@ -24,7 +24,7 @@ Appolo architecture follows common patten of MVC and dependency injection which 
 ```javascript
 npm install appolo-http --save
 ```
-##Typescript
+## Typescript
 Also make sure you are using TypeScript compiler version > 2.1 and you have enabled following settings in `tsconfig.json`
 ```javascript
 {
@@ -603,7 +603,7 @@ export class Bootstrap implements appolo.IBootstrap{
 ```
 
 
-##Appolo Reset ##
+## Appolo Reset ##
 you can reset appolo sever by calling `appolo.reset()` this will clean all environments, config, injector and close the server  
 
     
