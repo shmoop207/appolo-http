@@ -41,7 +41,7 @@ export {Request} from "./lib/app/request";
 export {Response} from "./lib/app/response";
 
 
-export let launch = function (config: IOptions, callback?: (err?: any) => void): Promise<void> {
+export let launch = function (config?: IOptions, callback?: (err?: any) => void): Promise<void> {
     return launcher.launch(config, callback);
 };
 

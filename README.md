@@ -1,7 +1,7 @@
-Appolo HTTP  [![Build Status](https://travis-ci.org/shmoop207/appolo-express.png?branch=master)](https://travis-ci.org/shmoop207/appolo-express) [![Dependencies status](https://david-dm.org/shmoop207/appolo-express.png)](https://david-dm.org/shmoop207/appolo-express) [![NPM version](https://badge.fury.io/js/appolo-express.svg)](https://badge.fury.io/js/appolo-express)
+Appolo HTTP 
 =======
 
-![appolo](https://dl.dropboxusercontent.com/u/19179794/appollo.png)
+![appolo](https://dl.dropboxusercontent.com/content_link/eiFHdXaA1gqpq5tSFrzJ7b5sKCAFkc91KijFkeWVAJR5Tvq2sCbdBXqQOpNCcJ8T/file)
 
 Appolo HTTP is an light MVC Framework for Node.js written in Typescript<br>
 Build with [appolo][2] framework and [appolo-inject][3] dependency injection module.<br>
@@ -22,17 +22,23 @@ Appolo architecture follows common patten of MVC and dependency injection which 
       
 ## Installation
 ```javascript
-npm install appolo-express --save
+npm install appolo-http --save
 ```
-
-##Quick Start 
+##Typescript
+Also make sure you are using TypeScript compiler version > 2.1 and you have enabled following settings in `tsconfig.json`
+```javascript
+{
+    "experimentalDecorators": true
+}
+```
+## Quick Start 
 in your app.js file
 ```javascript
 var appolo  = require('appolo-http');
-appolo.launcher.launch();
+appolo.launch();
 ```
 
-##Appolo Http Boilerplate
+## Appolo Http Boilerplate
 small example project to get you started with appolo.<br>
 source code : [https://github.com/shmoop207/appolo-express-boilerplate][8]
 ```bash
@@ -40,21 +46,21 @@ git clone https://github.com/shmoop207/appolo-express-boilerplate.git
 ```
 
 
-##Recommended Directory Structure ##
+## Recommended Directory Structure
 the environments folder must to exist every thing else is optional appolo will require all files in the config and server folders but the environments folder will be loaded first.
 ```javascript
 |- config
-    |- environments
-        |- all.ts
-        |- development.ts
-        |- production.ts
-    |- express
-        |- all.ts
-    |- modules
-		|- logger.ts	    
-	    |- redis.ts 
-	    |- mongo.ts
-        |- modules.ts
+  |- environments
+    |- all.ts
+    |- development.ts
+    |- production.ts
+  |- express
+    |- all.ts
+  |- modules
+    |- logger.ts
+    |- redis.ts
+    |- mongo.ts
+    |- modules.ts
     ...
 |- server
     |- controllers
@@ -70,41 +76,16 @@ the environments folder must to exist every thing else is optional appolo will r
 ## Configuration
 appolo launch configuration options
 
-#### options.paths
-Type :`array`, Default: `['config', 'server']`
-The folder will be required and loaded on appolo launch
-#### options.root
-Type :`string`, Default: process.cwd()
-the root folder of the paths option
-#### options.environment 
-Type :`string`, Default: `(process.env.NODE_ENV || 'development')`
-environment file name that will override the environment all.js file
-default is the NODE_ENV or if not defined it will be `development`
-#### options.bootStrapClassId
-Type :`string`, Default: `appolo-bootstrap`
-appolo will try to find the bootstrap class after it launched and run it.
-this is optional if the class is not defined nothing will happen.
-#### options.startMessage
-Type :`string`, Default: 'Appolo Server listening on port: {port} version:{version} environment: {environment}'
-the message that will be written to console log the the server starts
-#### options.startServer
-Type :`boolean`, Default: 'true'
-if true the server will start immediately to listen to port else you will have to start in manually.
-#### options.port
-Type :`number`, Default: `process.env.PORT || this._options.port || appolo.environment.port || 8080)`
-the port that the app will listen to.
-the port will be determined in the following order if defined: `process.env.PORT`, `options.port`,`appolo.environment.port`, `8080`
-#### options.errorStack
-Type :`boolen`, Default: `false`
-print route http stack error when env is nor development
-#### options.errorMessage
-Type :`boolen`, Default: `true`
-print route http error.toString();
-
-#### options.maxRouteCache
-Type :`number`, Default: `10000`
-the max size of route lookup lru cache
-
+- `paths` - Type :`array`, Default: `['config', 'server']` The folder will be required and loaded on appolo launch
+- `root` - Type :`string`, Default: process.cwd() the root folder of the paths option
+- `environment` - Type :`string`, Default: `(process.env.NODE_ENV || 'development')` environment file name that will override the environment all.js file default is the NODE_ENV or if not defined it will be `development`
+- `bootStrapClassId` - Type :`string`, Default: `appolo-bootstrap` appolo will try to find the bootstrap class after it launched and run it. this is optional if the class is not defined nothing will happen.
+- `startMessage` - Type :`string`, Default: 'Appolo Server listening on port: {port} version:{version} environment: {environment}' the message that will be written to console log the the server starts
+- `startServer` - Type :`boolean`, Default: 'true' if true the server will start immediately to listen to port else you will have to start in manually.
+- `port` - Type :`number`, Default: `process.env.PORT || this._options.port || appolo.environment.port || 8080)` the port that the app will listen to. the port will be determined in the following order if defined: `process.env.PORT`, `options.port`,`appolo.environment.port`, `8080`
+- `errorStack` - Type :`boolen`, Default: `false` print route http stack error when env is nor development
+- `errorMessage` - Type :`boolen`, Default: `true` print route http error.toString();
+- `maxRouteCache` - Type :`number`, Default: `10000` the max size of route lookup lru cache
 
 #### usage example:
 ```javascript
@@ -197,7 +178,6 @@ or you can define route using appolo.route method
 
 ```javascript
 import appolo = require('appolo-http')
-
 
 @appolo.define()
 export class TestController extends appolo.Controller{
@@ -378,57 +358,59 @@ export class AuthMiddleware extends appolo.Middleware {
 appolo have powerful [Dependency Injection][22] system based on [appolo-inject][23].
 enables you to organize your code in [loose coupling][24] classes.
 you can always access to injector via `appolo.injector`.
+
+### class decorators 
+ - `define`
+ - `singleton`
+ - `lazy`
+ - `alias`
+ - `aliasFactory`
+### property and methods decorators  
+ - `initMethod`
+ - `inject`
+ - `injectFactoryMethod`
+ - `injectAlias`
+ - `injectAliasFactory`
+ - `injectArray`
+ - `injectDictionary`
+ - `injectAliasFactory`
+ - `injectFactory`
+ - `injectObjectProperty`
+ - `injectValue`
+###  method parameter decorators
+ - `injectParam`
 ```javascript
 //dataManager.js
-var appolo  = require('appolo');
-module.exports = class DataManager {
-    static get $config(){ 
-        return{ 
-            id:'dataManager',
-            singleton: true
-        }
-    }
+import appolo  = require('appolo-http');
+appolo.define()
+appolo.singleton()
+export class DataManager {
     getData(){
         ...
     }
 }
 //fooController.js
-module.exports = class FooController{
-    static get $config() { 
-        return {
-            id:'fooController',
-            singleton: false,
-            initMethod:'initialize',
-            inject:['dataManager']
-        }
-    }
+appolo.define()
+export class FooController{
+   
+    @inject() dataManager:DataManager
+    
     constructor() {
         this.data = null
     }
+    @appolo.initMethod()
     initialize(){
         this.data =  this.dataManager.getData();
         //do something
     }
 }
 //app.js
-var fooController = appolo.inject.getObject('fooController');
+let fooController = appolo.inject.getObject('fooController');
 console.log(fooController.data)
 ```
-you can also `use appolo.define`
+you can also `use appolo.register`
 ```javascript
-var appolo  = require('appolo');
-class DataManager {
-    getData(){
-        ...
-    }
-}
-appolo.define({ 
-    id:'dataManager',
-    singleton: true,
-    type:DataManager
-})
-//or 
-appolo.define('dataManager')
+appolo.register('dataManager')
     .type(DataManager)
     .singleton()
 
@@ -441,70 +423,61 @@ class FooController{
         //do something
     }
 }
-appolo.define({
-    id:'fooController',
-    singleton: false,
-    initMethod:'initialize',
-    type:FooController,[[]]
-    inject:['dataManager']
-});
-//or
+
 appolo.define('fooController')
     .type(FooController)
     .singleton()
     .initMethod('initialize')
     .inject('dataManager');
 
-var fooController = appolo.inject.getObject('fooController');
+let fooController = appolo.inject.getObject('fooController');
 console.log(fooController.data)
 ```
 
-you can also use constructor injection
+you can also use constructor injection or method parameter injection 
 ```javascript
-var appolo  = require('appolo');
-class DataManager {
+import appolo  = require('appolo');
+@appolo.define()
+@appolo.singleton()
+export class DataManager {
     getData(){
         ...
     }
 }
-appolo.define('dataManager')
-	.type(DataManager)
-	.singleton();
-
+appolo.define()
 class FooController{
-    constructor(dataManager) {
+    constructor(@injectParam() dataManager:DataManager) {
        this.dataManager = dataManager;
     }
-    initialize(){
+    @appolo.initMethod()
+    public initialize(){
         this.data =  this.dataManager.getData();
     }
+    
+    public test(@injectParam() logger:Logger){
+        //...
+    }
 }
-appolo.define('fooController')
-    .type(FooController)
-    .singleton()
-    .initMethod('initialize');
+
 ```
 
 ## Event Dispatcher
 appolo have built in event dispatcher to enable classes to listen and fire events
 Event Dispatcher has the following methods:
 
-### `eventDispatcher.on(event,callback,[scope])`
-add event listener
- - `event` - event name.
- - `callback` - callback function that will triggered on event name.
- - `scope` - optional, the scope of the `callback` function default: `this`.
+- `eventDispatcher.on(event,callback,[scope])` add event listener
+   - `event` - event name.
+   - `callback` - callback function that will triggered on event name.
+   - `scope` - optional, the scope of the `callback` function default: `this`.
 
-### `eventDispatcher.un(event,callback,[scope])`     
-remove event listener all the arguments must be `===` to on method else it won`t be removed.
- -  `event` - event name.
- -  `callback` - callback function.
- -  `scope` - optional, the scope of the callback function.
+- `eventDispatcher.un(event,callback,[scope])` - remove event listener all the arguments must be `===` to on method else it won`t be removed.
+   -  `event` - event name.
+   -  `callback` - callback function.
+   -  `scope` - optional, the scope of the callback function.
  
-### `eventDispatcher.fireEvent(event,[arguments])`
-fireEvent - triggers the callback functions on given event name
-- `eventName`
-- `arguments` -  all the rest `arguments` will be applied on the `callback` function
+- `eventDispatcher.fireEvent(event,[arguments])` fireEvent - triggers the callback functions on given event name
+   - `eventName` - name of the event
+   - `arguments` -  all the rest `arguments` will be applied on the `callback` function
 
 ```javascript
 import appolo  = require('appolo-http');
@@ -576,24 +549,15 @@ export  class AuthMiddleware{
 ```
 
 ### Logger module example
-logger module example with [winston][19] and [sentry][20]
+logger module example with [winston][19]
 
 loggerModule.js file
 ```javascript
 import winston = require('winston');
 import appolo = require('appolo');
-import Sentry = require('winston-sentry');
-
 
 appolo.use(async function(env,inject:appolo.Injector){
-    let transports = [];
-    if(env.type == 'production'){
-        transports.push(new Sentry({
-            level: 'warn',
-            dsn: env.sentryConnectionString,
-            json: true
-        }));
-	}
+    
     transports.push(new (winston.transports.Console)({
         json: false,
         timestamp: true,
@@ -625,7 +589,8 @@ export class DataManager{
 once it launched appolo try to find appolo `bootstrap` class and call it's `run` method. only when the bootstrap if finished the server will start
 ```javascript
 import appolo  = require('appolo-http');
-@appolo.define('appolo-bootstrap')
+@appolo.define()
+@appolo.bootstrap()
 export class Bootstrap implements appolo.IBootstrap{
     
     @inject() someManager1:SomeManager1
