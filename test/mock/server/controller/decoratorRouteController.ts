@@ -17,6 +17,14 @@ class DecoratorRouteController extends app.StaticController {
     }
 
 
+    @app.path("/test/decorator2/route/:name/:name2")
+    @app.validation("name2", app.validator.string())
+    @app.validation("name", app.validator.string())
+    @app.validation("test", app.validator.string())
+    public test2(req: app.Request, res: app.Response) {
+        res.json({model: DecoratorRouteController.getModel(req)})
+    }
+
 }
 
 

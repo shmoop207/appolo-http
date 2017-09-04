@@ -13,6 +13,8 @@ import {IController, IControllerCtr} from "../controller/IController";
 import {Util} from "../util/util";
 import {Methods} from "../common/enums/methods";
 
+let orderIndex =  0 ;
+
 
 export class Route<T extends IController> {
     protected _route: IRouteInnerOptions;
@@ -31,7 +33,7 @@ export class Route<T extends IController> {
                 validations: {},
                 controller: _.isFunction(controller) && controller.name ? _.camelCase(controller.name) : controller,
                 path: "",
-                order: 0,
+                order: orderIndex++,
                 params: {},
                 action: null,
 
@@ -46,7 +48,7 @@ export class Route<T extends IController> {
 
         this._route.route.path = pathPattern;
         let keys = [];
-        this._route.regExp = pathToRegexp(this._route.route.path, keys);
+        this._route.regExp = pathToRegexp(Util.addSlashEnd(this._route.route.path), keys);
 
         this._route.paramsKeys = keys;
 

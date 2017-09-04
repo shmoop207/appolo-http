@@ -322,6 +322,20 @@ describe('Appolo Http e2e', () => {
             res.body.model.test.should.be.eq("http://www.cnn.com");
             res.body.model.name.should.be.eq("aaa");
         })
+
+        it('should call decorator2 route controller ', async () => {
+            let res = await request(appolo.launcher.handleRequest)
+                .get(`/test/decorator2/route/aaa/bbb?test=${encodeURIComponent("http://www.cnn.com")}`);
+
+
+            res.should.to.have.status(200);
+            res.should.to.be.json;
+
+            should.exist(res.body);
+
+            res.body.model.test.should.be.eq("http://www.cnn.com");
+            res.body.model.name.should.be.eq("aaa");
+        })
     })
 
     describe('decorator param controller', function () {

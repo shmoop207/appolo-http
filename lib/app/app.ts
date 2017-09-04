@@ -108,7 +108,7 @@ export class App {
 
             route = this._routes[i];
 
-            match = route.regExp.exec(req.urlParse.pathname);
+            match = route.regExp.exec(Util.addSlashEnd(req.urlParse.pathname));
 
             if (match && (req.method == route.methodUpperCase || this.ValidMethods[req.method])) {
                 break;

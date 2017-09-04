@@ -55,4 +55,12 @@ export class Util extends appolo.Util {
 
         return obj;
     }
+
+    public static addSlashEnd = (str: string): string => {
+        if (str[str.length - 1] !== "/") {
+            return str+="/"
+        }
+
+        return str;
+    };
 }

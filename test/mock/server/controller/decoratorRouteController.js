@@ -6,6 +6,9 @@ let DecoratorRouteController = DecoratorRouteController_1 = class DecoratorRoute
     test(req, res) {
         res.json({ model: DecoratorRouteController_1.getModel(req) });
     }
+    test2(req, res) {
+        res.json({ model: DecoratorRouteController_1.getModel(req) });
+    }
 };
 tslib_1.__decorate([
     app.inject()
@@ -16,6 +19,12 @@ tslib_1.__decorate([
     app.validation("name", app.validator.string()),
     app.validation("test", app.validator.string())
 ], DecoratorRouteController.prototype, "test", null);
+tslib_1.__decorate([
+    app.path("/test/decorator2/route/:name/:name2"),
+    app.validation("name2", app.validator.string()),
+    app.validation("name", app.validator.string()),
+    app.validation("test", app.validator.string())
+], DecoratorRouteController.prototype, "test2", null);
 DecoratorRouteController = DecoratorRouteController_1 = tslib_1.__decorate([
     app.define(),
     app.singleton(),
