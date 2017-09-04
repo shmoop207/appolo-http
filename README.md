@@ -424,7 +424,7 @@ class FooController{
     }
 }
 
-appolo.define('fooController')
+appolo.register('fooController')
     .type(FooController)
     .singleton()
     .initMethod('initialize')
@@ -436,7 +436,7 @@ console.log(fooController.data)
 
 you can also use constructor injection or method parameter injection 
 ```javascript
-import appolo  = require('appolo');
+import appolo  = require('appolo-http');
 @appolo.define()
 @appolo.singleton()
 export class DataManager {
@@ -460,6 +460,31 @@ class FooController{
 }
 
 ```
+
+### Inherited injections
+inherited injections are supported as well
+you can inject to base class and the child call will be injected as well.
+```javascript
+import appolo  = require('appolo-http');
+
+export class BaseManager {
+    @appolo.inject() protected env:any
+    getData(){
+        ...
+    }
+}
+appolo.define()
+class FooManager{
+    
+    @appolo.initMethod()
+    public initialize(){
+        //the env object in injected from the base class
+        console.log(this.env.test) 
+    }
+    
+}
+
+``` 
 
 ## Event Dispatcher
 appolo have built in event dispatcher to enable classes to listen and fire events

@@ -9,6 +9,7 @@ describe('Appolo Express Unit', () => {
         beforeEach(() => tslib_1.__awaiter(this, void 0, void 0, function* () {
             return appolo.launcher.launch({
                 paths: ['config', 'server'],
+                environment: "testing",
                 root: process.cwd() + '/test/mock',
                 port: 8183
             });
@@ -28,6 +29,13 @@ describe('Appolo Express Unit', () => {
             should.exist(manager.manager3);
             should.exist(manager.manager3.manager2);
         });
+        it("should have manager with inherit inherit", () => {
+            let manager = appolo.container.getObject('manager4');
+            should.exist(manager);
+            should.exist(manager.env);
+            should.exist(manager.logger);
+            manager.env.test.should.be.eq("testing");
+        });
         it("should have manager statics", function () {
             let manager = appolo.container.getObject('manager3');
             manager.TEST.should.be.eq(1);
@@ -43,7 +51,7 @@ describe('Appolo Express Unit', () => {
         it("should have valid env", function () {
             let env = appolo.container.getObject('env');
             (env === appolo.environment).should.be.ok;
-            env.type.should.be.eq("development");
+            env.type.should.be.eq("testing");
         });
     });
 });

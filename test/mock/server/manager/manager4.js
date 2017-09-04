@@ -2,7 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const decorators_1 = require("../../../../decorators");
-let Manager4 = class Manager4 {
+const baseManager_1 = require("./baseManager");
+let Manager4 = class Manager4 extends baseManager_1.BaseManager {
     get name() {
         return this.constructor.name;
     }
