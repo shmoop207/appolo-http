@@ -150,12 +150,12 @@ export function injectValue(value: any): (target: any, propertyKey: string, desc
     return addDefinitionProperty("injectValue", [value]);
 }
 
-function defineRouteProperty(name: string, args: any[]): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
+function defineRouteProperty(name: string, args: any[],createNew?:boolean): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
 
     return function (name: string, args: any[], target: any, propertyKey: string, descriptor: PropertyDescriptor) {
         let route: Route<any> = target.constructor.prototype.__route__;
 
-        if (!route) {
+        if (!route || createNew) {
             route = target.constructor.prototype.__route__ = new Route<any>(target.constructor);
             route.action(propertyKey);
         }
@@ -166,7 +166,7 @@ function defineRouteProperty(name: string, args: any[]): (target: any, propertyK
 }
 
 export function path(path: string): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
-    return defineRouteProperty("path", [path])
+    return defineRouteProperty("path", [path],true)
 }
 
 export function method(method: 'get' | 'post' | 'delete' | 'patch' | 'head' | 'put' | Methods) {
