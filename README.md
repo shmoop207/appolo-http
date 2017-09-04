@@ -160,15 +160,14 @@ each route class has the following methods:
  - `validation` - validations object as define in [joi][11].
 
 ```javascript
-import appolo = require('appolo-http')
+import {define,singleton,injectParam,initMethod,inject} from 'appolo-http';
 
-
-@appolo.define()
+@define()
 export class TestController extends appolo.Controller{
-    @appolo.inject() dataManager:DataManager
+    @inject() dataManager:DataManager
     
-    @appolo.path("/test/:userId")
-    @appolo.method(appolo.Methods.POST)
+    @path("/test/:userId")
+    @method(appolo.Methods.POST)
     public test (req:appolo.Request, res:appolo.Response) {
        res.send(this.dataManager.getData(this.params.userId));
     }
@@ -177,11 +176,11 @@ export class TestController extends appolo.Controller{
 or you can define route using appolo.route method
 
 ```javascript
-import appolo = require('appolo-http')
+import {define,singleton,injectParam,initMethod,inject} from 'appolo-http';
 
-@appolo.define()
+@define()
 export class TestController extends appolo.Controller{
-    @appolo.inject() dataManager:DataManager
+    @inject() dataManager:DataManager
     
     public test (req:appolo.Request, res:appolo.Response) {
        res.send(this.dataManager.getData());
@@ -200,13 +199,13 @@ validations syntax is done by using [joi module][11] .<br>
 the validator takes request params from `req.param` , `req.query` and `req.body`, after validation the request params will be on `req.model`.
 
 ```javascript
-import appolo = require('appolo-http');
+import {define,singleton,initMethod,inject} from 'appolo-http';
 let validator = appolo.validator;
 
-@appolo.define()
+@define()
 export class TestController extends appolo.Controller{
     
-    @appolo.inject() dataManager:DataManager
+    @inject() dataManager:DataManager
     
     public async search (req:appolo.Request, res:appolo.Response) {
        try{
@@ -246,16 +245,17 @@ in order the router will be able to handle to request the controller class must 
 each controller action will be called with [request][12] and [response][13] objects.
 
 ```javascript
-import appolo = require('appolo-http');
-@appolo.define()
+import {define,singleton,initMethod,inject,lazy,mehtod,path,validation} from 'appolo-http';
+
+@define()
 export class LoginController extends appolo.Controller{
     
-    @appolo.inject() authManager:AuthManager;
+    @inject() authManager:AuthManager;
     
-    @appolo.path("/login/")
-    @appolo.mehtod(appolo.Methods.POST)
-    @appolo.validation("username", appolo.validator.string())
-    @appolo.validation("password", appolo.validator.string())
+    @path("/login/")
+    @mehtod(appolo.Methods.POST)
+    @validation("username", appolo.validator.string())
+    @validation("password", appolo.validator.string())
     public aynsc loginUser(req:appolo.Request,res:appolo.Response,route:appolo.IRouteOptions){
         try{
             let result =  await this.authManager.validateUser(req.model.username,req.model.password)
@@ -269,17 +269,17 @@ export class LoginController extends appolo.Controller{
 ```
 if do not need a new controller instance for evey request you can inherit from StaticController that is singleton and created only once 
 ```javascript
-import appolo = require('appolo-http');
-@appolo.define()
-@appolo.singleton()
-@appolo.lazy()
+import {define,singleton,initMethod,inject,lazy,mehtod,path,validation} from 'appolo-http';
+@define()
+@singleton()
+@lazy()
 export class LoginController extends appolo.StaticController{
-    @appolo.inject() authManager:AuthManager;
+    @inject() authManager:AuthManager;
     
-    @appolo.path("/login/")
-    @appolo.mehtod(appolo.Methods.POST)
-    @appolo.validation("username", appolo.validator.string().required())
-    @appolo.validation("password", appolo.validator.string().required())
+    @path("/login/")
+    @mehtod(appolo.Methods.POST)
+    @validation("username", appolo.validator.string().required())
+    @validation("password", appolo.validator.string().required())
     public aynsc loginUser(req:appolo.Request,res:appolo.Response,route:appolo.IRouteOptions){
         try{
             let result = await this.authManager.validateUser(req.model.username,req.model.password)
@@ -335,8 +335,8 @@ example : in routes file
 ```
 in middleware file
 ```javascript
-import appolo = require('appolo-http');
-@appolo.define()
+import {define,singleton,initMethod,inject} from 'appolo-http';
+@define()
 export class AuthMiddleware extends appolo.Middleware {
     
     @inject() authManager:AuthManager;
@@ -381,16 +381,16 @@ you can always access to injector via `appolo.injector`.
  - `injectParam`
 ```javascript
 //dataManager.js
-import appolo  = require('appolo-http');
-appolo.define()
-appolo.singleton()
+import {define,singleton,initMethod,inject} from 'appolo-http';
+@define()
+@singleton()
 export class DataManager {
     getData(){
         ...
     }
 }
 //fooController.js
-appolo.define()
+@define()
 export class FooController{
    
     @inject() dataManager:DataManager
@@ -398,7 +398,7 @@ export class FooController{
     constructor() {
         this.data = null
     }
-    @appolo.initMethod()
+    @initMethod()
     initialize(){
         this.data =  this.dataManager.getData();
         //do something
@@ -436,20 +436,20 @@ console.log(fooController.data)
 
 you can also use constructor injection or method parameter injection 
 ```javascript
-import appolo  = require('appolo-http');
-@appolo.define()
-@appolo.singleton()
+import {define,singleton,injectParam,initMethod,inject} from 'appolo-http';
+@define()
+@singleton()
 export class DataManager {
     getData(){
         ...
     }
 }
-appolo.define()
+@define()
 class FooController{
     constructor(@injectParam() dataManager:DataManager) {
        this.dataManager = dataManager;
     }
-    @appolo.initMethod()
+    @initMethod()
     public initialize(){
         this.data =  this.dataManager.getData();
     }
@@ -464,19 +464,20 @@ class FooController{
 ### Inherited injections
 inherited injections are supported as well
 you can inject to base class and the child call will be injected as well.
+remember not use `@define` on the parent class
 ```javascript
-import appolo  = require('appolo-http');
+import {define,singleton,injectParam,initMethod,inject} from 'appolo-http';
 
 export class BaseManager {
-    @appolo.inject() protected env:any
-    getData(){
+    @inject() protected env:any
+    private getData(){
         ...
     }
 }
-appolo.define()
+@define()
 class FooManager extends BaseManager{
     
-    @appolo.initMethod()
+    @initMethod()
     public initialize(){
         //the env object in injected from the base class
         console.log(this.env.test) 
@@ -505,19 +506,20 @@ Event Dispatcher has the following methods:
    - `arguments` -  all the rest `arguments` will be applied on the `callback` function
 
 ```javascript
-import appolo  = require('appolo-http');
-@appolo.define()
+import {define,singleton,injectParam,initMethod,inject} from 'appolo-http';
+@define()
+@singleton()
 export class FooManager extends appolo.EventDispatcher{
     public notifyUsers(){
         this.fireEvent('someEventName',{someData:'someData'})
     }
 }
-@appolo.define()
+@define()
 export class FooController {
     
     @inject() fooManager:FooManager
     
-    @appolo.initMethod()
+    @initMethod()
     public initialize(){
         this.fooManager.on('someEventName',(data)=>{
             this.doSomething(data.someData)
@@ -561,11 +563,11 @@ appolo.use(async function(env:any,inject:appolo.Injector){
 ```
 now I can inject `myModuleObject` to any class
 ```javascript
-import appolo = require('appolo-http');
-@appolo.define()
+import {define,singleton,injectParam,initMethod,inject} from 'appolo-http';
+@define()
 export  class AuthMiddleware{
 	
-    @appolo.inject('myModuleObject') testObject:any
+    @inject('myModuleObject') testObject:any
     
     public doSomeThing() {
         return this.testObject.data; //return 'test'
@@ -599,10 +601,10 @@ appolo.use(async function(env,inject:appolo.Injector){
 ```
 now you you inject logger anywhere you want
 ```javascript
-import appolo  = require('appolo-http');
-@appolo.define()
+import {define,singleton,initMethod,inject} from 'appolo-http';
+@define()
 export class DataManager{
-    @appolo.inject() logger:Logger
+    @inject() logger:Logger
     public initialize(){
         this.logger.info("dataManager initialized",{someData:'someData'})
     }
@@ -613,9 +615,9 @@ export class DataManager{
 
 once it launched appolo try to find appolo `bootstrap` class and call it's `run` method. only when the bootstrap if finished the server will start
 ```javascript
-import appolo  = require('appolo-http');
-@appolo.define()
-@appolo.bootstrap()
+import {define,singleton,injectParam,initMethod,inject,bootstrap} from 'appolo-http';
+@define()
+@bootstrap()
 export class Bootstrap implements appolo.IBootstrap{
     
     @inject() someManager1:SomeManager1
