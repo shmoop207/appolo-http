@@ -89,7 +89,7 @@ appolo launch configuration options
 
 #### usage example:
 ```javascript
-var appolo  = require('appolo-express');
+var appolo  = require('appolo-http');
 
 appolo.launcher.launch( {
     paths:['config', 'server'],
@@ -123,7 +123,7 @@ export = {
 ```
 if we launch our app.js with `NODE_ENV = testing`
 ```javascript
-var appolo  = require('appolo-express');
+var appolo  = require('appolo-http');
 appolo.launcher.launch();
 var env = appolo.environment;
 console.log(env.name,env.someVar,env.db) // 'testing someVar monog:://testing-url'
@@ -474,7 +474,7 @@ export class BaseManager {
     }
 }
 appolo.define()
-class FooManager{
+class FooManager extends BaseManager{
     
     @appolo.initMethod()
     public initialize(){
