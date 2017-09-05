@@ -76,20 +76,21 @@ the environments folder must to exist every thing else is optional appolo will r
 ## Configuration
 appolo launch configuration options
 
-- `paths` - Type :`array`, Default: `['config', 'server']` The folder will be required and loaded on appolo launch
-- `root` - Type :`string`, Default: process.cwd() the root folder of the paths option
-- `environment` - Type :`string`, Default: `(process.env.NODE_ENV || 'development')` environment file name that will override the environment all.js file default is the NODE_ENV or if not defined it will be `development`
-- `bootStrapClassId` - Type :`string`, Default: `appolo-bootstrap` appolo will try to find the bootstrap class after it launched and run it. this is optional if the class is not defined nothing will happen.
-- `startMessage` - Type :`string`, Default: 'Appolo Server listening on port: {port} version:{version} environment: {environment}' the message that will be written to console log the the server starts
-- `startServer` - Type :`boolean`, Default: 'true' if true the server will start immediately to listen to port else you will have to start in manually.
-- `port` - Type :`number`, Default: `process.env.PORT || this._options.port || appolo.environment.port || 8080)` the port that the app will listen to. the port will be determined in the following order if defined: `process.env.PORT`, `options.port`,`appolo.environment.port`, `8080`
-- `errorStack` - Type :`boolen`, Default: `false` print route http stack error when env is nor development
-- `errorMessage` - Type :`boolen`, Default: `true` print route http error.toString();
-- `maxRouteCache` - Type :`number`, Default: `10000` the max size of route lookup lru cache
+| key | Description | Type | Default
+| --- | --- | --- | --- |
+| `paths` | folder will be required and loaded on appolo launch | `array`|  `['config', 'server']`| 
+| `root` | the root folder of the paths option | `string` | `process.cwd()` |
+| `environment` | environment file name that  | `string` | `(process.env.NODE_ENV || 'development')` |
+| `startMessage` | the message that will be written to console log the the server starts | `string` | `'Appolo Server listening on port: {port} version:{version} environment: {environment}'` |
+| `startServer` | if true the server will start immediately to listen to port else you will have to start in manually. | `boolean` | `true` |
+| `port` | the port that the app will listen to. | `number` | `process.env.PORT || this._options.port || appolo.environment.port || 8080)`` |
+| `errorStack` | print route http stack error when env is not development | `boolen` | `false` |
+| `errorMessage` | print route http error.toString() | `boolen` | `true` |
+| `maxRouteCache` | the max size of route lookup lru cache | `number` | `10000` |
 
 #### usage example:
 ```javascript
-var appolo  = require('appolo-http');
+let appolo  = require('appolo-http');
 
 appolo.launcher.launch( {
     paths:['config', 'server'],
@@ -109,12 +110,12 @@ export = {
     name:'all',
     someVar:'someVar'
 }
-//development.js
+//development.ts
 export = {
     name:'develpment',
     db:'monog://development-url'
 }
-//development.js
+//development.ts
 export = {
     name:'testing',
     db:'monog://testing-url'
