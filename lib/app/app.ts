@@ -174,7 +174,7 @@ export class App {
 
     }
 
-    public use(fn: (req: Request, res: Response, next: (e?: Error) => void) => void): void {
+    public use(fn: ((req: Request, res: Response, next: (e?: Error) => void) => void) | ((req: any, res: any, next: any) => void)): void {
         this._middlewares.push(fn)
     }
 }

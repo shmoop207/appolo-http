@@ -303,7 +303,7 @@ export class LoginController extends appolo.StaticController{
     }
 }
 ```
-## appolo.Controller
+### appolo.Controller
  - `this.req` -   request object
  - `this.res` -   response object
  - `this.route` - the route object of the current action 
