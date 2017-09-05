@@ -144,7 +144,7 @@ export class Route<T extends IController> {
         return this
     }
 
-    public middleware(middleware: string | MiddlewareHandler | IMiddlewareCtr): this {
+    public middleware(middleware: string | MiddlewareHandler | IMiddlewareCtr | ((req: any, res: any, next: any) => void)): this {
 
         if (_.isArray(middleware)) {
             return this.middlewares(middleware)

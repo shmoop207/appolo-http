@@ -99,7 +99,7 @@ export function aliasFactory(aliasFactory: string): (fn: Function) => void {
 }
 
 
-export function initMethod(): (target: Function, propertyKey: string, descriptor?: PropertyDescriptor) => void {
+export function initMethod(): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
 
     return addDefinitionProperty("initMethod", []);
 }
@@ -162,7 +162,7 @@ function defineRouteProperty(params: { name: string, args: any[] }[]): (target: 
             routes[propertyKey] = route = new Route<any>(target.constructor);
             route.action(propertyKey);
         }
-        _.forEach(params , param => {
+        _.forEach(params, param => {
             route[param.name].apply(route, param.args)
         })
 
@@ -197,7 +197,7 @@ export function method(method: 'get' | 'post' | 'delete' | 'patch' | 'head' | 'p
     return defineRouteProperty([{name: "method", args: [method]}])
 }
 
-export function middleware(middleware: string | MiddlewareHandler | IMiddlewareCtr): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
+export function middleware(middleware: string | MiddlewareHandler | IMiddlewareCtr | ((req: any, res: any, next: any) => void)): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
     return defineRouteProperty([{name: "middleware", args: [middleware]}])
 }
 

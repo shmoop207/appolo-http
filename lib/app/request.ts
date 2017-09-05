@@ -5,6 +5,7 @@ import {Url} from "url";
 
 export interface Request extends http.IncomingMessage{
     query?:{[index:string]:any}
+    body?:{[index:string]:any}
     params?:{[index:string]:any}
     model?:{[index:string]:any}
     $route?:IRouteInnerOptions
