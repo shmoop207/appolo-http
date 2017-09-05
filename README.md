@@ -160,7 +160,7 @@ each route class has the following methods:
  - `validation` - validations object as define in [joi][11].
 
 ```javascript
-import {define,singleton,injectParam,initMethod,inject} from 'appolo-http';
+import {define,singleton,initMethod,inject} from 'appolo-http';
 
 @define()
 export class TestController extends appolo.Controller{
@@ -169,14 +169,25 @@ export class TestController extends appolo.Controller{
     @path("/test/:userId")
     @method(appolo.Methods.POST)
     public test (req:appolo.Request, res:appolo.Response) {
-       res.send(this.dataManager.getData(this.params.userId));
+       res.send(this.dataManager.getData(req.params.userId));
+    }
+}
+
+@define()
+export class Test2Controller extends appolo.Controller{
+    @inject() dataManager:DataManager
+    
+    @pathPost("/test2/:userId")
+    @validations("userId",validator.string().required())
+    public test (req:appolo.Request, res:appolo.Response) {
+       res.send(this.dataManager.getData(req.params.userId));
     }
 }
 ```
 or you can define route using appolo.route method
 
 ```javascript
-import {define,singleton,injectParam,initMethod,inject} from 'appolo-http';
+import {define,singleton,initMethod,inject} from 'appolo-http';
 
 @define()
 export class TestController extends appolo.Controller{

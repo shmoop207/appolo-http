@@ -150,9 +150,9 @@ export function injectValue(value: any): (target: any, propertyKey: string, desc
     return addDefinitionProperty("injectValue", [value]);
 }
 
-function defineRouteProperty(name: string, args: any[]): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
+function defineRouteProperty(params: { name: string, args: any[] }[]): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
 
-    return function (name: string, args: any[], target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+    return function (params: { name: string, args: any[] }[], target: any, propertyKey: string, descriptor: PropertyDescriptor) {
 
         let routes = target.constructor.prototype.__route__ || (target.constructor.prototype.__route__ = {});
 
@@ -162,30 +162,51 @@ function defineRouteProperty(name: string, args: any[]): (target: any, propertyK
             routes[propertyKey] = route = new Route<any>(target.constructor);
             route.action(propertyKey);
         }
+        _.forEach(params , param => {
+            route[param.name].apply(route, param.args)
+        })
 
-        route[name].apply(route, args)
-
-    }.bind(null, name, args)
+    }.bind(null, params)
 }
 
 export function path(path: string): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
-    return defineRouteProperty("path", [path])
+    return defineRouteProperty([{name: "path", args: [path]}])
+}
+
+export function pathGet(path: string): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
+    return defineRouteProperty([{name: "path", args: [path]}, {name: "method", args: [Methods.GET]}])
+}
+
+export function pathPost(path: string): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
+    return defineRouteProperty([{name: "path", args: [path]}, {name: "method", args: [Methods.POST]}])
+}
+
+export function pathPatch(path: string): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
+    return defineRouteProperty([{name: "path", args: [path]}, {name: "method", args: [Methods.PATCH]}])
+}
+
+export function pathPut(path: string): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
+    return defineRouteProperty([{name: "path", args: [path]}, {name: "method", args: [Methods.PUT]}])
+}
+
+export function pathDelete(path: string): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
+    return defineRouteProperty([{name: "path", args: [path]}, {name: "method", args: [Methods.DELETE]}])
 }
 
 export function method(method: 'get' | 'post' | 'delete' | 'patch' | 'head' | 'put' | Methods) {
-    return defineRouteProperty("method", [method])
+    return defineRouteProperty([{name: "method", args: [method]}])
 }
 
 export function middleware(middleware: string | MiddlewareHandler | IMiddlewareCtr): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
-    return defineRouteProperty("middleware", [middleware])
+    return defineRouteProperty([{name: "middleware", args: [middleware]}])
 }
 
 export function validation(key: string | { [index: string]: joi.Schema }, validation?: joi.Schema): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
-    return defineRouteProperty("validation", [key, validation])
+    return defineRouteProperty([{name: "validation", args: [key, validation]}])
 }
 
 export function abstract(route: Partial<IRouteOptions>): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
-    return defineRouteProperty("abstract", [route])
+    return defineRouteProperty([{name: "abstract", args: [route]}])
 }
 
 

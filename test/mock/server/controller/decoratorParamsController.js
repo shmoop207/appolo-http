@@ -28,4 +28,4 @@ DecoratorParamsController = tslib_1.__decorate([
     app.lazy(),
     tslib_1.__param(0, app.injectParam())
 ], DecoratorParamsController);
-//# sourceMappingURL=~decoratorParamsController.js.map
+//# sourceMappingURL=decoratorParamsController.js.map
