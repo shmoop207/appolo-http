@@ -74,7 +74,7 @@ the environments folder must to exist every thing else is optional appolo will r
 ```
 
 ## Configuration
-appolo launch configuration options
+appolo launch configuration options, all options are optional
 
 | key | Description | Type | Default
 | --- | --- | --- | --- |
@@ -392,7 +392,7 @@ you can always access to injector via `appolo.injector`.
 ###  method parameter decorators
  - `injectParam`
 ```javascript
-//dataManager.js
+//dataManager.ts
 import {define,singleton,initMethod,inject} from 'appolo-http';
 @define()
 @singleton()
@@ -401,7 +401,7 @@ export class DataManager {
         ...
     }
 }
-//fooController.js
+//fooController.ts
 @define()
 export class FooController{
    
@@ -416,7 +416,7 @@ export class FooController{
         //do something
     }
 }
-//app.js
+//app.ts
 let fooController = appolo.inject.getObject('fooController');
 console.log(fooController.data)
 ```
@@ -529,7 +529,7 @@ export class FooManager extends appolo.EventDispatcher{
 @define()
 export class FooController {
     
-    @inject() fooManager:FooManager
+    @inject() fooManager:FooManager;
     
     @initMethod()
     public initialize(){
@@ -595,7 +595,7 @@ loggerModule.js file
 import winston = require('winston');
 import appolo = require('appolo');
 
-appolo.use(async function(env,inject:appolo.Injector){
+appolo.use(async function(env:any,inject:appolo.Injector){
     
     transports.push(new (winston.transports.Console)({
         json: false,
