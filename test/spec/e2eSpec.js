@@ -160,6 +160,15 @@ describe('Appolo Http e2e', () => {
             res.body.name2.should.be.eq("bbb");
         }));
     });
+    describe('static', function () {
+        it('should should serve static', () => tslib_1.__awaiter(this, void 0, void 0, function* () {
+            let res = yield request(appolo.launcher.handleRequest)
+                .get('/test.html');
+            res.should.to.have.status(200);
+            res.text.should.be.match(/aaa/);
+            res.type.should.be.match(/text\/html/);
+        }));
+    });
     describe('root', function () {
         xit('should should call route *', () => tslib_1.__awaiter(this, void 0, void 0, function* () {
             let res = yield request(appolo.launcher.handleRequest)

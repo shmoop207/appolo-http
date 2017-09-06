@@ -1,5 +1,7 @@
 import appolo = require('../../../../index');
 import    bodyParser = require('body-parser');
+import    serve = require('serve-static');
+import    path = require('path');
 
 
 export = function (app: appolo.App) {
@@ -13,6 +15,8 @@ export = function (app: appolo.App) {
         //parameterLimit: 10000,
         limit: 1024 * 1024 * 10
     }));
+
+    app.use(serve(path.join(__dirname,"../../uploads")))
 
     app.use(function (req: appolo.Request, res: appolo.Response, next: appolo.NextFn) {
         res.setHeader("Access-Control-Allow-Origin", req.headers.origin || '*');

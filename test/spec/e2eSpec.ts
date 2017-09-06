@@ -267,6 +267,18 @@ describe('Appolo Http e2e', () => {
         });
     });
 
+    describe('static', function () {
+        it('should should serve static', async () => {
+            let res = await request(appolo.launcher.handleRequest)
+                .get('/test.html')
+
+            res.should.to.have.status(200);
+
+            res.text.should.be.match(/aaa/)
+            res.type.should.be.match(/text\/html/)
+        })
+    })
+
     describe('root', function () {
         xit('should should call route *', async () => {
 

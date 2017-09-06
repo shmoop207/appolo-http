@@ -25,7 +25,7 @@
     "npm": ">= 5.3.x"
   },
   "main": "./index.js",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -50,6 +50,7 @@
     "@types/lodash": "^4.14.74",
     "@types/mocha": "^2.2.40",
     "@types/node": "^8.0.26",
+    "@types/serve-static": "^1.7.32",
     "@types/supertest": "^2.0.0",
     "body-parser": "^1.17.2",
     "chai": "3.5.0",
@@ -59,9 +60,10 @@
     "grunt-mocha-test": "0.13.2",
     "mocha": "^3.2.0",
     "path-to-regexp": "^2.0.0",
+    "serve-static": "^1.12.4",
     "sinon": "^2.1.0",
     "sinon-chai": "^2.9.0",
     "supertest": "^3.0.0",
-    "typescript": "^2.4.1"
+    "typescript": "^2.5.2"
   }
 }

@@ -41,7 +41,7 @@ export class App {
 
         this._routes = _<IRouteInnerOptions>(router.getRoutes()).sortBy(r => r.route.order).value();
 
-        _.forEach(this._routes, (route: IRouteInnerOptions) => route.middlewareHandler = [...this._middlewares, ...route.middlewareHandler]);
+        this._middlewares.push((req, res, next) => this._initRoute(req, res, next));
 
         this._routesLength = this._routes.length;
         this._options = options;
@@ -55,9 +55,7 @@ export class App {
 
             this._initRequest(req, res);
 
-            this._initRoute(req);
-
-            this._handleMiddleware(req, res, 0, req.$route.middlewareHandler);
+            this._handleMiddleware(req, res, 0, this._middlewares);
 
         } catch (e) {
             this._handleError(e, res);
@@ -79,7 +77,7 @@ export class App {
         res.req = req;
     }
 
-    private _initRoute(req: Request): void {
+    private _initRoute(req: Request, res: Response, next: NextFn): void {
 
         let match, route;
 
@@ -88,18 +86,22 @@ export class App {
         if (cached) {
             req.$route = cached.route;
             req.params = cached.params;
+            this._handleMiddleware(req, res, 0, req.$route.middlewareHandler);
             return;
         }
 
         ({match, route} = this._findRoute(req));
 
         if (!match) {
-            throw new HttpError(404, `Cannot ${req.method} ${req.urlParse.pathname}`);
+            next(new HttpError(404, `Cannot ${req.method} ${req.urlParse.pathname}`));
+            return;
         }
 
         req.params = this._createRouteParams(route, match);
         req.$route = route;
         this._cache.set(req.urlParse.pathname, {route: req.$route, params: req.params});
+
+        this._handleMiddleware(req, res, 0, req.$route.middlewareHandler);
     }
 
     private _findRoute(req: Request) {
