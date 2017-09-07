@@ -279,6 +279,20 @@ describe('Appolo Http e2e', () => {
         })
     })
 
+    describe('query', function () {
+        it('should should have query params', async () => {
+            let res = await request(appolo.launcher.handleRequest)
+                .get(`/test/query?test=1&test2[]=2&test2[]=3&test3[]=${encodeURIComponent("http://test.com")}`)
+
+            res.should.to.have.status(200);
+
+            res.body.test.should.be.eq("1")
+            res.body.test2[1].should.be.eq("3")
+            res.body.test3[0].should.be.eq("http://test.com")
+        })
+    })
+
+
     describe('root', function () {
         xit('should should call route *', async () => {
 
@@ -511,7 +525,7 @@ describe('Appolo Http e2e', () => {
 
             let res = await request(appolo.launcher.handleRequest)
                 .post('/test/json/')
-                .send({aaa:"bbb",ccc:"ddd"})
+                .send({aaa: "bbb", ccc: "ddd"})
 
             res.should.to.have.status(200);
             res.should.to.be.json;
@@ -525,8 +539,6 @@ describe('Appolo Http e2e', () => {
         });
 
     });
-
-
 
 
     describe('methods', function () {
@@ -570,11 +582,6 @@ describe('Appolo Http e2e', () => {
         });
 
     })
-
-
-
-
-
 
 
 });

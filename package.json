@@ -25,7 +25,7 @@
     "npm": ">= 5.3.x"
   },
   "main": "./index.js",
-  "version": "1.0.11",
+  "version": "1.1.0",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -34,13 +34,16 @@
   "readme": "",
   "readmeFilename": "README.md",
   "dependencies": {
+    "@types/type-is": "^1.6.0",
     "appolo": "^5.0.4",
     "bluebird": "^3.5.0",
     "joi": "10.6.0",
     "lodash": "^4.17.4",
     "path-to-regexp": "2.0.0",
+    "qs": "^6.5.0",
     "simple-lru-cache": "0.0.2",
-    "tslib": "^1.7.1"
+    "tslib": "^1.7.1",
+    "type-is": "^1.6.15"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.2",
@@ -50,6 +53,7 @@
     "@types/lodash": "^4.14.74",
     "@types/mocha": "^2.2.40",
     "@types/node": "^8.0.26",
+    "@types/qs": "^6.5.0",
     "@types/serve-static": "^1.7.32",
     "@types/supertest": "^2.0.0",
     "body-parser": "^1.17.2",

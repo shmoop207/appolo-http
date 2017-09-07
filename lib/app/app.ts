@@ -1,12 +1,16 @@
+require("./request");
+require("./response");
+
 import    http = require('http');
 import    url = require('url');
 import    Q = require('bluebird');
 import    _ = require('lodash');
+import    qs = require('qs');
 import router from '../routes/router';
 import {IRouteInnerOptions, IRouteOptions} from "../interfaces/IRouteOptions";
 import {Util} from "../util/util";
-import {request, Request, RequestKeys} from "./request";
-import {response, Response, ResponseKeys} from "./response";
+import {Request} from "./request";
+import {Response} from "./response";
 import {HttpError} from "../common/error/httpError";
 import appolo = require('appolo');
 import {IOptions} from "../interfaces/IOptions";
@@ -49,10 +53,10 @@ export class App {
     }
 
     public handleRequest(request: http.IncomingMessage, response: http.ServerResponse) {
-        let {req, res} = this._mixinReqRes(request, response);
+        let req: Request = request as any;
+        let res: Response = response as any;
 
         try {
-
             this._initRequest(req, res);
 
             this._handleMiddleware(req, res, 0, this._middlewares);
@@ -63,17 +67,10 @@ export class App {
 
     }
 
-    private _mixinReqRes(req: http.IncomingMessage, res: http.ServerResponse): { req: Request, res: Response } {
-        Util.mixinProperties(req, request, RequestKeys);
-        Util.mixinProperties(res, response, ResponseKeys);
-
-        return {req: req as any, res: res as any}
-    }
-
     private _initRequest(req: Request, res: Response): void {
 
         req.urlParse = url.parse(req.url, true);
-        req.query = req.urlParse.query;
+        req.query = qs.parse(req.urlParse.query);
         res.req = req;
     }
 

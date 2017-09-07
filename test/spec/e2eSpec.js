@@ -169,6 +169,16 @@ describe('Appolo Http e2e', () => {
             res.type.should.be.match(/text\/html/);
         }));
     });
+    describe('query', function () {
+        it('should should have query params', () => tslib_1.__awaiter(this, void 0, void 0, function* () {
+            let res = yield request(appolo.launcher.handleRequest)
+                .get(`/test/query?test=1&test2[]=2&test2[]=3&test3[]=${encodeURIComponent("http://test.com")}`);
+            res.should.to.have.status(200);
+            res.body.test.should.be.eq("1");
+            res.body.test2[1].should.be.eq("3");
+            res.body.test3[0].should.be.eq("http://test.com");
+        }));
+    });
     describe('root', function () {
         xit('should should call route *', () => tslib_1.__awaiter(this, void 0, void 0, function* () {
             let res = yield request(appolo.launcher.handleRequest)
