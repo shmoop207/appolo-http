@@ -378,8 +378,9 @@ you can always access to injector via `appolo.injector`.
  - `lazy` - create class only on the first call
  - [`alias`](https://github.com/shmoop207/appolo-inject#alias) - add alias name to the object
  - [`aliasFactory`](https://github.com/shmoop207/appolo-inject#alias-factory) - add alias factory name to the object
-### property and methods decorators  
+### methods decorators  
  - [`initMethod`](https://github.com/shmoop207/appolo-inject#init-method) - The method will be called after all instances were created and all the properties injected.
+ ### property decorators  
  - [`inject`](https://github.com/shmoop207/appolo-inject#inject-property-instance) - inject instance reference by id
  - [`injectFactoryMethod`](https://github.com/shmoop207/appolo-inject#inject-factory-method) - factory method is a function that will return the injected object. this is useful the create many instances of the same class.
  - [`injectAlias`](https://github.com/shmoop207/appolo-inject#alias) - inject objects by alias name
