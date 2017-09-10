@@ -373,25 +373,24 @@ enables you to organize your code in [loose coupling][24] classes.
 you can always access to injector via `appolo.injector`.
 
 ### class decorators 
- - `define`
- - `singleton`
- - `lazy`
- - `alias`
- - `aliasFactory`
+ - `define` - make the object injectable
+ - [`singleton`](https://github.com/shmoop207/appolo-inject#singleton) - the class will be created only once and injector will return the same instance every time
+ - `lazy` - create class only on the first call
+ - [`alias`](https://github.com/shmoop207/appolo-inject#alias) - add alias name to the object
+ - [`aliasFactory`](https://github.com/shmoop207/appolo-inject#alias-factory) - add alias factory name to the object
 ### property and methods decorators  
- - `initMethod`
- - `inject`
- - `injectFactoryMethod`
- - `injectAlias`
- - `injectAliasFactory`
- - `injectArray`
- - `injectDictionary`
- - `injectAliasFactory`
- - `injectFactory`
- - `injectObjectProperty`
- - `injectValue`
+ - [`initMethod`](https://github.com/shmoop207/appolo-inject#init-method) - The method will be called after all instances were created and all the properties injected.
+ - [`inject`](https://github.com/shmoop207/appolo-inject#inject-property-instance) - inject instance reference by id
+ - [`injectFactoryMethod`](https://github.com/shmoop207/appolo-inject#inject-factory-method) - factory method is a function that will return the injected object. this is useful the create many instances of the same class.
+ - [`injectAlias`](https://github.com/shmoop207/appolo-inject#alias) - inject objects by alias name
+ - [`injectArray`](https://github.com/shmoop207/appolo-inject#inject-property-array) - inject array of properties by reference or by value
+ - [`injectDictionary`](https://github.com/shmoop207/appolo-inject#inject-property-dictionary) -  inject dictionary of properties by reference or by value.
+ - [`injectAliasFactory`](https://github.com/shmoop207/appolo-inject#alias-factory) - inject factory methods by alias name
+ - [`injectFactory`](https://github.com/shmoop207/appolo-inject#inject-property-from-factory-object) inject object by factory class
+ - [`injectObjectProperty`](https://github.com/shmoop207/appolo-inject#inject-property-from-object-property) inject property of another object
+ - [`injectValue`](https://github.com/shmoop207/appolo-inject#inject-property-value) inject property by value
 ###  method parameter decorators
- - `injectParam`
+ - `injectParam` - inject object by parameter
 ```javascript
 //dataManager.ts
 import {define,singleton,initMethod,inject} from 'appolo-http';
