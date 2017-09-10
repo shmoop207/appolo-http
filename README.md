@@ -11,7 +11,7 @@ Appolo architecture follows common patten of MVC and dependency injection which 
 ## Features
   * super fast
   * MVC Architecture
-  * full support for [express][1] modules
+  * full support for [express][4] middlewares
   * dependency injection system
   * simple routing system
   * routes validation
@@ -38,12 +38,13 @@ var appolo  = require('appolo-http');
 appolo.launch();
 ```
 
-## Appolo Http Boilerplate
+<!---## Appolo Http Boilerplate
 small example project to get you started with appolo.<br>
 source code : [https://github.com/shmoop207/appolo-express-boilerplate][8]
 ```bash
 git clone https://github.com/shmoop207/appolo-express-boilerplate.git
 ```
+-->
 
 
 ## Recommended Directory Structure
@@ -141,7 +142,7 @@ import bodyParser = require("body-parser");
 export = function (app: appolo.App) {
     app.use(bodyParser.json());
     
-    app.use(function (req: appolo.Request, res: appolo.Response, next: appolo.NextFn) {
+    app.use(function (req: appolo.IRequest, res: appolo.IResponse, next: appolo.NextFn) {
         res.setHeader("Access-Control-Allow-Origin", "*");
         next();
     });
@@ -169,7 +170,7 @@ export class TestController extends appolo.Controller{
     
     @path("/test/:userId")
     @method(appolo.Methods.POST)
-    public test (req:appolo.Request, res:appolo.Response) {
+    public test (req:appolo.IRequest, res:appolo.IResponse) {
        res.send(this.dataManager.getData(req.params.userId));
     }
 }
@@ -180,7 +181,7 @@ export class Test2Controller extends appolo.Controller{
     
     @pathPost("/test2/:userId")
     @validations("userId",validator.string().required())
-    public test (req:appolo.Request, res:appolo.Response) {
+    public test (req:appolo.IRequest, res:appolo.IResponse) {
        res.send(this.dataManager.getData(req.params.userId));
     }
 }
@@ -194,7 +195,7 @@ import {define,singleton,initMethod,inject} from 'appolo-http';
 export class TestController extends appolo.Controller{
     @inject() dataManager:DataManager
     
-    public test (req:appolo.Request, res:appolo.Response) {
+    public test (req:appolo.IRequest, res:appolo.IResponse) {
        res.send(this.dataManager.getData());
     }
 }
@@ -219,7 +220,7 @@ export class TestController extends appolo.Controller{
     
     @inject() dataManager:DataManager
     
-    public async search (req:appolo.Request, res:appolo.Response) {
+    public async search (req:appolo.IRequest, res:appolo.IResponse) {
        try{
            let model = req.model;
            let result = await this.dataManager.getSearchResults(model.search,model.page,model.pageSize)
@@ -268,7 +269,7 @@ export class LoginController extends appolo.Controller{
     @mehtod(appolo.Methods.POST)
     @validation("username", appolo.validator.string())
     @validation("password", appolo.validator.string())
-    public aynsc loginUser(req:appolo.Request,res:appolo.Response,route:appolo.IRouteOptions){
+    public aynsc loginUser(req:appolo.IRequest,res:appolo.IResponse,route:appolo.IRouteOptions){
         try{
             let result =  await this.authManager.validateUser(req.model.username,req.model.password)
             this.send(result)
@@ -292,7 +293,7 @@ export class LoginController extends appolo.StaticController{
     @mehtod(appolo.Methods.POST)
     @validation("username", appolo.validator.string().required())
     @validation("password", appolo.validator.string().required())
-    public aynsc loginUser(req:appolo.Request,res:appolo.Response,route:appolo.IRouteOptions){
+    public aynsc loginUser(req:appolo.IRequest,res:appolo.IResponse,route:appolo.IRouteOptions){
         try{
             let result = await this.authManager.validateUser(req.model.username,req.model.password)
             this.send(result)
@@ -353,7 +354,7 @@ export class AuthMiddleware extends appolo.Middleware {
     
     @inject() authManager:AuthManager;
     
-    public async run(req:appolo.Request,res:appolo.Response,next:appolo.NextFn,route:appolo.IRouteOptions){
+    public async run(req:appolo.IRequest,res:appolo.IResponse,next:appolo.NextFn,route:appolo.IRouteOptions){
         try{
             let result =  await this.authManager.validateToken(req.headers.authorization)     
             req.user = user;
@@ -657,26 +658,14 @@ The `appolo` library is released under the MIT license. So feel free to modify a
 
 
   [1]: http://expressjs.com/
-  [2]: https://www.github.com/shmoop207/appolo-class
+  [2]: https://www.github.com/shmoop207/appolo
   [3]: https://www.github.com/shmoop207/appolo-inject
-  [4]: http://appolo-chat-example.herokuapp.com
-  [5]: https://github.com/shmoop207/appolo-chat-example
-  [6]: http://appolo-express-quotes-example.herokuapp.com/
-  [7]: https://github.com/shmoop207/appolo-express-quotes-example
-  [8]: https://github.com/shmoop207/appolo-express-boilerplate
-  [9]: https://www.npmjs.org/package/consolidate
-  [10]: http://expressjs.com/4x/api.html#router
+  [4]: http://expressjs.com/en/resources/middleware.html
+  [10]:http://expressjs.com/en/guide/routing.html
   [11]: https://github.com/hapijs/joi
-  [12]: http://expressjs.com/4x/api.html#req.params
-  [13]: http://expressjs.com/4x/api.html#res.status
-  [14]: https://github.com/Automattic/socket.io
-  [15]: https://github.com/mranney/node_redis
-  [16]: https://github.com/kriskowal/q
-  [17]: https://github.com/LearnBoost/mongoose
-  [18]: https://github.com/kriskowal/q
+  [12]: http://expressjs.com/en/4x/api.html#req
+  [13]: http://expressjs.com/en/4x/api.html#res
   [19]: https://github.com/flatiron/winston
-  [20]: https://github.com/getsentry/sentry
-  [21]: https://github.com/shmoop207/appolo-class
   [22]: http://en.wikipedia.org/wiki/Dependency_injection
   [23]: https://github.com/shmoop207/appolo-inject
   [24]: http://en.wikipedia.org/wiki/Loose_coupling
