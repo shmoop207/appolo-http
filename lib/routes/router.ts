@@ -10,8 +10,8 @@ import {IRouteInnerOptions, IRouteOptions} from "../interfaces/IRouteOptions";
 import {IMiddleware} from "../interfaces/IMiddleware";
 import {Util} from "../util/util";
 import {App, MiddlewareHandler, NextFn} from "../app/app";
-import {Request} from "../app/request";
-import {Response} from "../app/response";
+import {IRequest} from "../app/request";
+import {IResponse} from "../app/response";
 import pathToRegexp = require('path-to-regexp');
 import {HttpError} from "../common/error/httpError";
 import {StaticController} from "../controller/staticController";
@@ -66,7 +66,7 @@ export class Router {
     }
 
 
-    protected static _invokeAction(req: Request, res: Response, next: NextFn) {
+    protected static _invokeAction(req: IRequest, res: IResponse, next: NextFn) {
 
         let controller: StaticController = appolo.inject.getObject<StaticController>(req.$route.route.controller, [req, res, req.$route.route]);
 
@@ -79,7 +79,7 @@ export class Router {
         next();
     }
 
-    protected static async _checkValidation(req: Request, res: Response, next: NextFn) {
+    protected static async _checkValidation(req: IRequest, res: IResponse, next: NextFn) {
 
 
         let data = _.extend({}, req.params, req.query, (req as any).body);

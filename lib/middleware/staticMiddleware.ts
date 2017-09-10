@@ -4,8 +4,8 @@ import path = require('path');
 import _= require('lodash');
 import {IRouteOptions} from "../interfaces/IRouteOptions";
 import {IMiddleware} from "../interfaces/IMiddleware";
-import {Request} from "../app/request";
-import {Response} from "../app/response";
+import {IRequest} from "../app/request";
+import {IResponse} from "../app/response";
 import {NextFn} from "../app/app";
 import {HttpError} from "../common/error/httpError";
 import {Err} from "joi";
@@ -14,11 +14,11 @@ import {Err} from "joi";
 export abstract class StaticMiddleware implements IMiddleware {
 
 
-    public getModel<T>(req?: Request): T {
+    public getModel<T>(req?: IRequest): T {
         return (req).model as T;
     }
 
-    public abstract run(req: Request, res: Response, next: NextFn, route: IRouteOptions): void
+    public abstract run(req: IRequest, res: IResponse, next: NextFn, route: IRouteOptions): void
 
     public static sendError(next: NextFn,error?: Error, code?: number):void{
 

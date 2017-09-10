@@ -7,8 +7,8 @@ import {IRouteInnerOptions, IRouteOptions} from "../interfaces/IRouteOptions";
 import pathToRegexp = require('path-to-regexp');
 import {MiddlewareHandler, NextFn} from "../app/app";
 import {IMiddleware, IMiddlewareCtr} from "../interfaces/IMiddleware";
-import {Response} from "../app/response";
-import {Request} from "../app/request";
+import {IResponse} from "../app/response";
+import {IRequest} from "../app/request";
 import {IController, IControllerCtr} from "../controller/IController";
 import {Util} from "../util/util";
 import {Methods} from "../common/enums/methods";
@@ -163,7 +163,7 @@ export class Route<T extends IController> {
 
             middleware = (function (middlewareId): MiddlewareHandler {
 
-                return function (req: Request, res: Response, next: NextFn) {
+                return function (req: IRequest, res: IResponse, next: NextFn) {
 
                     let middleware: IMiddleware = appolo.inject.getObject<IMiddleware>(middlewareId, [req, res, next, req.$route]);
 

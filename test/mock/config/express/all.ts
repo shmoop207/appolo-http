@@ -18,7 +18,7 @@ export = function (app: appolo.App) {
 
     app.use(serve(path.join(__dirname,"../../uploads")))
 
-    app.use(function (req: appolo.Request, res: appolo.Response, next: appolo.NextFn) {
+    app.use(function (req: appolo.IRequest, res: appolo.IResponse, next: appolo.NextFn) {
         res.setHeader("Access-Control-Allow-Origin", req.headers.origin || '*');
         res.setHeader("Access-Control-Allow-Credentials", "true");
         res.setHeader("Cache-Control", "max-age=0, no-cache, must-revalidate, proxy-revalidate");
@@ -39,4 +39,4 @@ export = function (app: appolo.App) {
 
 
     });
-}
+ }

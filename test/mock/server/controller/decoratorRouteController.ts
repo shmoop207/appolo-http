@@ -12,7 +12,7 @@ class DecoratorRouteController extends app.StaticController {
     @app.validation("name2", app.validator.string())
     @app.validation("name", app.validator.string())
     @app.validation("test", app.validator.string())
-    public test(req: app.Request, res: app.Response) {
+    public test(req: app.IRequest, res: app.IResponse) {
         res.json({model: DecoratorRouteController.getModel(req)})
     }
 
@@ -21,7 +21,7 @@ class DecoratorRouteController extends app.StaticController {
     @app.validation("name2", app.validator.string())
     @app.validation("name", app.validator.string())
     @app.validation("test", app.validator.string())
-    public test2(req: app.Request, res: app.Response) {
+    public test2(req: app.IRequest, res: app.IResponse) {
         res.json({model: DecoratorRouteController.getModel(req)})
     }
 

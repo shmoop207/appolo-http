@@ -1,17 +1,17 @@
 "use strict";
 import {IRouteOptions} from "../interfaces/IRouteOptions";
-import {Request} from "../app/request";
-import {Response} from "../app/response";
+import {IRequest} from "../app/request";
+import {IResponse} from "../app/response";
 import {StaticController} from "./staticController";
 
 export abstract class Controller extends StaticController {
 
-    protected req: Request;
-    protected res: Response;
+    protected req: IRequest;
+    protected res: IResponse;
     protected route: IRouteOptions;
     protected action: string | Function;
 
-    constructor(req: Request, res: Response, route: IRouteOptions) {
+    constructor(req: IRequest, res: IResponse, route: IRouteOptions) {
 
         super();
         this.req = req;

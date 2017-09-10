@@ -1,7 +1,7 @@
 import    http = require('http');
 import    zlib = require('zlib');
 
-import {Request} from "./request";
+import {IRequest} from "./request";
 
 const statusEmpty = {
     204: true,
@@ -10,51 +10,61 @@ const statusEmpty = {
 };
 
 
-export interface Response extends http.ServerResponse {
-    req: Request
-    useGzip: boolean;
+export interface IResponse extends http.ServerResponse, IAppResponse {
 
-    status(code: number): Response
-
-    contentType(type: string): Response
-
-    header(key: string, value: string): Response
-
-    json(obj: object)
-
-    send(data?: string | Buffer)
-
-    gzip(): Response
 
 }
 
-(http.ServerResponse.prototype as any).status = function (code: number) {
+interface IAppResponse {
+    req: IRequest
+    useGzip: boolean;
+
+    status(code: number): IResponse
+
+    contentType(type: string): IResponse
+
+    header(key: string, value: string): IResponse
+
+    set(key: string, value: string): IResponse
+
+    json(obj: object)
+
+    jsonp(obj: object)
+
+    send(data?: string | Buffer)
+
+    gzip(): IResponse
+}
+
+let proto:any = http.ServerResponse.prototype;
+
+proto.status = function (code: number) {
     this.statusCode = code;
     return this
 };
 
-(http.ServerResponse.prototype as any).contentType = function (type: string) {
+proto.contentType = function (type: string) {
     this.setHeader("Content-Type", type);
     return this;
 };
 
-(http.ServerResponse.prototype as any).json = function (obj: any) {
+proto.json = function (obj: any) {
     this.setHeader('Content-Type', "application/json; charset=utf-8");
     this.send(JSON.stringify(obj))
 };
 
-(http.ServerResponse.prototype as any).set = (http.ServerResponse.prototype as any).header = function (key: string, value: string) {
+proto.set = proto.header = function (key: string, value: string) {
     this.setHeader(key, value);
     return this
 };
 
 
-(http.ServerResponse.prototype as any).gzip = function () {
+proto.gzip = function () {
     this.useGzip = true;
     return this;
 };
 
-(http.ServerResponse.prototype as any).jsonp = function (data: any) {
+proto.jsonp = function (data: any) {
     let body = data;
 
     if (this.method == "GET" && this.query["callback"]) {
@@ -74,7 +84,7 @@ export interface Response extends http.ServerResponse {
     this.send(body);
 };
 
-(http.ServerResponse.prototype as any).send = function (data?: string | Buffer) {
+proto.send = function (data?: string | Buffer) {
     if (this.useGzip) {
         gzipResponse(this, data);
         return;
@@ -82,7 +92,7 @@ export interface Response extends http.ServerResponse {
 
     let statusCode = this.statusCode || (this.statusCode = 200),
         isEmptyStatusCode = !!statusEmpty[statusCode],
-        hasContentType = this.getHeader("Content-Type"), isBuffer = Buffer.isBuffer(data);
+        hasContentType = this.hasHeader("Content-Type"), isBuffer = Buffer.isBuffer(data);
 
     //send empty
     if (isEmptyStatusCode) {
@@ -112,7 +122,7 @@ export interface Response extends http.ServerResponse {
 };
 
 
-function gzipResponse(res: Response, data: any) {
+function gzipResponse(res: IResponse, data: any) {
     zlib.gzip(data, (err, gziped) => {
         res.useGzip = false;
 
@@ -124,5 +134,11 @@ function gzipResponse(res: Response, data: any) {
         res.setHeader('Content-Encoding', "gzip");
         res.send(gziped)
     });
+}
+
+export function createResponse(request: http.IncomingMessage, response: http.ServerResponse): IResponse {
+    let res = response as IResponse;
+    res.req = request as IRequest;
+    return res;
 }
 

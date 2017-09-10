@@ -4,11 +4,11 @@ import appolo = require('../../../../index');
 
 class ValidationController extends appolo.Controller {
 
-    test(req:appolo.Request, res:appolo.Response) {
+    test(req:appolo.IRequest, res:appolo.IResponse) {
         res.json({working: true, controllerName: this.route.controller, model: req.model})
     }
 
-    validaion(req:appolo.Request, res:appolo.Response) {
+    validaion(req:appolo.IRequest, res:appolo.IResponse) {
         res.json(req.model)
     }
 

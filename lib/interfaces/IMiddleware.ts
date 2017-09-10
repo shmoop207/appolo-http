@@ -1,12 +1,12 @@
 import appolo = require('appolo');
 import {IRouteOptions} from "./IRouteOptions";
 import {NextFn} from "../app/app";
-import {Response} from "../app/response";
-import {Request} from "../app/request";
+import {IResponse} from "../app/response";
+import {IRequest} from "../app/request";
 
 
 export interface IMiddleware{
- run(req:Request, res:Response, next:NextFn,route:IRouteOptions)
+ run(req:IRequest, res:IResponse, next:NextFn,route:IRouteOptions)
 }
 
 

@@ -1,16 +1,20 @@
 "use strict";
 import appolo = require('../../../../index');
-import {define, inject} from '../../../../decorators';
+import {define, inject,pathGet} from '../../../../decorators';
 
 @define()
-export class RootController extends appolo.Controller {
+export class RootController extends appolo.StaticController {
 
-    all(req, res) {
-        res.json({name: this.route.actionName})
+    all(req, res,route) {
+        res.json({name: route.actionName})
     }
 
-    root(req, res) {
-        res.json({name: this.route.actionName})
+    root(req, res,route) {
+        res.json({name: route.actionName})
+    }
+    @pathGet("/raw")
+    raw(req, res,route) {
+        res.end(route.actionName)
     }
 
 }

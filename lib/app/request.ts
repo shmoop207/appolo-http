@@ -5,21 +5,28 @@ import {Url} from "url";
 import typeis = require('type-is');
 
 
-export interface Request extends http.IncomingMessage {
+export interface IRequest extends http.IncomingMessage,AppRequest{
+
+}
+
+interface AppRequest extends http.IncomingMessage {
     query?: { [index: string]: any }
     body?: { [index: string]: any }
     params?: { [index: string]: any }
     model?: { [index: string]: any }
     $route?: IRouteInnerOptions
-    urlParse?: Url
+    pathName:string
+    originUrl: string;
+
 }
 
+let proto = (http.IncomingMessage.prototype as any)
 
-(http.IncomingMessage.prototype as any).is = function (types: string | string[]) {
+proto.is = function (types: string | string[]) {
     return typeis.apply(typeis, [this].concat(_.toArray(arguments)));
 };
 
-(http.IncomingMessage.prototype as any).get = (http.IncomingMessage.prototype as any).header = function (name: string) {
+proto.get = proto.header = function (name: string) {
 
     let nameLower = name.toLowerCase();
 
@@ -35,3 +42,7 @@ export interface Request extends http.IncomingMessage {
 
 
 
+export function createRequest(request: http.IncomingMessage): IRequest {
+    let req = request as IRequest;
+    return req;
+}

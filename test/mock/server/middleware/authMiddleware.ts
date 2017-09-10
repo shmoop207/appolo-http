@@ -11,7 +11,7 @@ import {HttpError} from "../../../../lib/common/error/httpError";
 export class AuthMiddleware extends appolo.StaticMiddleware {
     @inject() manager: Manager;
 
-    public run(req:appolo.Request, res:appolo.Response, next:appolo.NextFn) {
+    public run(req:appolo.IRequest, res:appolo.IResponse, next:appolo.NextFn) {
 
         AuthMiddleware.sendUnauthorized(next,new HttpError(403,"NOT AUTHORIZED"),11);
     }

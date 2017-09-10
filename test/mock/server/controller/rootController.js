@@ -3,14 +3,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const appolo = require("../../../../index");
 const decorators_1 = require("../../../../decorators");
-let RootController = class RootController extends appolo.Controller {
-    all(req, res) {
-        res.json({ name: this.route.actionName });
+let RootController = class RootController extends appolo.StaticController {
+    all(req, res, route) {
+        res.json({ name: route.actionName });
     }
-    root(req, res) {
-        res.json({ name: this.route.actionName });
+    root(req, res, route) {
+        res.json({ name: route.actionName });
+    }
+    raw(req, res, route) {
+        res.end(route.actionName);
     }
 };
+tslib_1.__decorate([
+    decorators_1.pathGet("/raw")
+], RootController.prototype, "raw", null);
 RootController = tslib_1.__decorate([
     decorators_1.define()
 ], RootController);

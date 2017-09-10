@@ -37,8 +37,8 @@ export {IMiddleware} from "./lib/interfaces/IMiddleware";
 export {IRouteOptions} from "./lib/interfaces/IRouteOptions";
 export {IDefinition} from "./lib/interfaces/IDefinition";
 export {App,NextFn} from "./lib/app/app";
-export {Request} from "./lib/app/request";
-export {Response} from "./lib/app/response";
+export {IRequest} from "./lib/app/request";
+export {IResponse} from "./lib/app/response";
 
 
 export let launch = function (config?: IOptions, callback?: (err?: any) => void): Promise<void> {

@@ -25,7 +25,7 @@
     "npm": ">= 5.3.x"
   },
   "main": "./index.js",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -34,7 +34,6 @@
   "readme": "",
   "readmeFilename": "README.md",
   "dependencies": {
-    "@types/type-is": "^1.6.0",
     "appolo": "^5.0.4",
     "bluebird": "^3.5.0",
     "joi": "10.6.0",
@@ -46,6 +45,8 @@
     "type-is": "^1.6.15"
   },
   "devDependencies": {
+    "@types/type-is": "^1.6.0",
+    "@types/benchmark": "^1.0.30",
     "@types/bluebird": "^3.5.2",
     "@types/chai": "^3.4.35",
     "@types/chai-http": "0.0.30",
@@ -56,6 +57,7 @@
     "@types/qs": "^6.5.0",
     "@types/serve-static": "^1.7.32",
     "@types/supertest": "^2.0.0",
+    "benchmark": "^2.1.4",
     "body-parser": "^1.17.2",
     "chai": "3.5.0",
     "chai-http": "^3.0.0",

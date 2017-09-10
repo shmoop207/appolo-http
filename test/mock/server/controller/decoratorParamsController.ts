@@ -22,7 +22,7 @@ class DecoratorParamsController extends app.StaticController {
     @app.validation("name2", app.validator.string())
     @app.validation("name", app.validator.string())
     @app.abstract({middleware:[UserMiddleware]})
-    public test(req: app.Request, res: app.Response, route, aaa, @app.injectParam() env: any) {
+    public test(req: app.IRequest, res: app.IResponse, route, aaa, @app.injectParam() env: any) {
         res.json({model: env.test,name:this.name,user:(req as any).user})
     }
 

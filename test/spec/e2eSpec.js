@@ -178,6 +178,14 @@ describe('Appolo Http e2e', () => {
             res.body.test2[1].should.be.eq("3");
             res.body.test3[0].should.be.eq("http://test.com");
         }));
+        it('should should have query params with #', () => tslib_1.__awaiter(this, void 0, void 0, function* () {
+            let res = yield request(appolo.launcher.handleRequest)
+                .get(`/test/query/?test=1&test2[]=2&test2[]=3&test3[]=${encodeURIComponent("http://test.com")}#aaa`);
+            res.should.to.have.status(200);
+            res.body.test.should.be.eq("1");
+            res.body.test2[1].should.be.eq("3");
+            res.body.test3[0].should.be.eq("http://test.com");
+        }));
     });
     describe('root', function () {
         xit('should should call route *', () => tslib_1.__awaiter(this, void 0, void 0, function* () {
@@ -195,6 +203,13 @@ describe('Appolo Http e2e', () => {
             res.should.to.be.json;
             should.exist(res.body);
             res.body.name.should.be.eq("root");
+        }));
+        it('should should call route with end', () => tslib_1.__awaiter(this, void 0, void 0, function* () {
+            let res = yield request(appolo.launcher.handleRequest)
+                .get('/raw');
+            res.should.to.have.status(200);
+            should.exist(res.body);
+            res.text.should.be.eq("raw");
         }));
         it('should should call with route not found', () => tslib_1.__awaiter(this, void 0, void 0, function* () {
             let res = yield request(appolo.launcher.handleRequest)
@@ -362,4 +377,15 @@ describe('Appolo Http e2e', () => {
         }));
     });
 });
+// import Benchmark = require('benchmark');
+//
+// let suite = new Benchmark.Suite;
+// suite.
+// add('vanilla', function() {
+//     new Test(11).getName()
+// }).add('fast', function() {
+//     (new Test(22) as any).getName2()
+// }).on('cycle', function(event) {
+//     console.log(String(event.target));
+// }).run(); 
 //# sourceMappingURL=e2eSpec.js.map

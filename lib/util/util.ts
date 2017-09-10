@@ -1,8 +1,12 @@
-import _ = require('lodash');
+import url = require('url');
 import appolo = require('appolo');
 
 
 export class Util extends appolo.Util {
+
+
+    private static readonly UrlRegex: RegExp = /^(\/\/?(?!\/)[^?#\s]*)(\?[^#\s]*)?$/
+
     public static convertSnakeCaseToCamelCase(str: string) {
         return str.replace(/(\_\w)/g, function (m) {
             return m[1].toUpperCase();
@@ -57,10 +61,50 @@ export class Util extends appolo.Util {
     }
 
     public static addSlashEnd = (str: string): string => {
-        if (str[str.length - 1] !== "/") {
-            return str+="/"
+        if (str[str.length - 1] != "/") {
+            return str += "/"
         }
 
         return str;
     };
+
+    public static addSlashEndFast = (str: string): string => {
+
+        if (str.charCodeAt(str.length - 1) != 47) {
+            return str += "/"
+        }
+
+        return str;
+    };
+
+    public static parseUrl(str: string): { pathName: string, query: string } {
+        let match = this.UrlRegex.exec(str);
+        if (match) {
+            let pathName = match[1];
+            let query = match[2] || "";
+            if (query) {
+                query = query.substring(1)
+            }
+            return {pathName, query}
+        }
+        let parsed = url.parse(str);
+        return {
+            pathName: parsed.pathname,
+            query: parsed.query
+        }
+
+    }
+
+    public static parseUrlFast(str: string): { pathName: string, query: string } {
+        let index = str.indexOf('?');
+        if (index > -1) {
+            let pathName = str.substring(0, index);
+            let query = str.substring(index + 1);
+
+            return {query, pathName}
+        } else {
+            return {pathName: str, query: ""}
+        }
+    }
 }
+

@@ -1,7 +1,7 @@
 "use strict";
 import {IRouteOptions} from "../interfaces/IRouteOptions";
-import {Request} from "../app/request";
-import {Response} from "../app/response";
+import {IRequest} from "../app/request";
+import {IResponse} from "../app/response";
 import {NextFn} from "../app/app";
 import {HttpError} from "../common/error/httpError";
 import {StaticMiddleware} from "./staticMiddleware";
@@ -9,12 +9,12 @@ import {StaticMiddleware} from "./staticMiddleware";
 
 export abstract class Middleware extends StaticMiddleware {
 
-    protected req: Request;
-    protected res: Response;
+    protected req: IRequest;
+    protected res: IResponse;
     protected next: NextFn;
     protected route: IRouteOptions;
 
-    constructor(req: Request, res: Response, next: NextFn, route: IRouteOptions) {
+    constructor(req: IRequest, res: IResponse, next: NextFn, route: IRouteOptions) {
         super();
         this.req = req;
         this.res = res;

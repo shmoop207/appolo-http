@@ -1,10 +1,10 @@
-import {Request} from "../app/request";
-import {Response} from "../app/response";
+import {IRequest} from "../app/request";
+import {IResponse} from "../app/response";
 import {NextFn} from "../app/app";
 import {IRouteInnerOptions, IRouteOptions} from "../interfaces/IRouteOptions";
 
 export interface IController{
-    invoke(req: Request, res: Response,route: IRouteInnerOptions, action: string | ((c: IController)=>Function))
+    invoke(req: IRequest, res: IResponse,route: IRouteInnerOptions, action: string | ((c: IController)=>Function))
 }
 
 export interface IControllerCtr {
