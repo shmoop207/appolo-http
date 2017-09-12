@@ -36,9 +36,11 @@ var httpError_1 = require("./lib/common/error/httpError");
 exports.HttpError = httpError_1.HttpError;
 var launcher_2 = require("./lib/launcher/launcher");
 exports.launcher = launcher_2.default;
-exports.validator = require("joi");
 var app_1 = require("./lib/app/app");
-exports.App = app_1.App;
+exports.app = app_1.default;
+exports.validator = require("joi");
+var app_2 = require("./lib/app/app");
+exports.App = app_2.App;
 exports.launch = function (config, callback) {
     return launcher_1.default.launch(config, callback);
 };

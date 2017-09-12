@@ -364,6 +364,7 @@ export class AuthMiddleware extends Middleware {
             this.sendUnauthorized();
         } 
     }
+    
 }
 ```
 

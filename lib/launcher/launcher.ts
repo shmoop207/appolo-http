@@ -115,7 +115,11 @@ export class Launcher extends appolo.Launcher {
 
         appolo.inject.addObject('app', app);
 
+        appolo.inject.addObject('injector', appolo.inject);
+
         appolo.inject.addObject('router', router);
+
+        appolo.inject.addObject('httpServer', server);
     }
 
 
