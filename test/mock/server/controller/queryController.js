@@ -8,7 +8,10 @@ let QueryController = class QueryController extends appolo.Controller {
         res.json(req.query);
     }
     cooker(req, res) {
-        res.cookie('cookie', 'hey', { expires: new Date(new Date(2100, 9, 16, 12, 0).getTime()) });
+        let date = new Date();
+        date.setUTCFullYear(2100, 1, 1);
+        date.setUTCHours(0, 0, 0, 0);
+        res.cookie('cookie', 'hey', { expires: date });
         res.json(req.cookies);
     }
 };
