@@ -331,7 +331,7 @@ describe('Appolo Http e2e', () => {
                 .get(`/test/cookie/?aa=bb`)
 
             res.should.to.have.status(200);
-            res.header["set-cookie"][0].should.be.eq("cookie=hey; Path=/; Expires=Mon, 15 Oct 2317 21:00:00 GMT");
+            res.header["set-cookie"][0].should.be.eq("cookie=hey; Path=/; Expires=Sat, 16 Oct 2100 09:00:00 GMT");
 
             let res2 = await agent
                 .get(`/test/cookie/?aa=bb`)

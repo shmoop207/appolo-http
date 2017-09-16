@@ -15,7 +15,7 @@ class QueryController extends appolo.Controller {
     @path("/test/cookie")
     cooker(req:appolo.IRequest, res:appolo.IResponse) {
 
-        res.cookie('cookie', 'hey',{expires:new Date(2317,9,16)});
+        res.cookie('cookie', 'hey',{expires:new Date(new Date(2100,9,16,12,0).getTime())});
 
         res.json((req as any).cookies);
     }
