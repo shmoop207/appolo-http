@@ -2,6 +2,7 @@ import appolo = require('../../../../index');
 import    bodyParser = require('body-parser');
 import    serve = require('serve-static');
 import    path = require('path');
+import cookieParser = require('cookie-parser')
 
 
 export = function (app: appolo.App) {
@@ -16,6 +17,9 @@ export = function (app: appolo.App) {
         limit: 1024 * 1024 * 10
     }));
 
+    app.use(cookieParser());
+
+
     app.use(serve(path.join(__dirname,"../../uploads")))
 
     app.use(function (req: appolo.IRequest, res: appolo.IResponse, next: appolo.NextFn) {
@@ -26,7 +30,6 @@ export = function (app: appolo.App) {
         res.setHeader("P3P", 'CP="CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR"');
         //res.header("Access-Control-Allow-Methods", "GET, PUT, PATCH, DELETE, HEAD, OPTIONS");
         //res.header("Allow", "GET, PUT, PATCH, DELETE, HEAD, OPTIONS");
-
 
         // intercept OPTIONS method
         if (req.method == 'OPTIONS') {

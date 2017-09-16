@@ -131,8 +131,25 @@ describe('Appolo Http e2e', () => {
             res.should.to.be.json;
 
             should.exist(res.body)
+            res.header["content-encoding"].should.be.eq("gzip")
 
             res.body.working.should.be.ok;
+        });
+
+        it('should  call call controller with compression', async () => {
+
+            let res = await request(appolo.launcher.handleRequest)
+                .get('/test/compression/')
+
+
+            res.should.to.have.status(200);
+            res.should.to.be.json;
+
+            should.exist(res.body)
+
+            res.body.working.should.be.ok;
+            res.header["content-encoding"].should.be.eq("gzip")
+
         });
     });
 
@@ -289,7 +306,7 @@ describe('Appolo Http e2e', () => {
             res.body.test.should.be.eq("1")
             res.body.test2[1].should.be.eq("3")
             res.body.test3[0].should.be.eq("http://test.com")
-        })
+        });
 
         it('should should have query params with #', async () => {
             let res = await request(appolo.launcher.handleRequest)
@@ -300,8 +317,28 @@ describe('Appolo Http e2e', () => {
             res.body.test.should.be.eq("1")
             res.body.test2[1].should.be.eq("3")
             res.body.test3[0].should.be.eq("http://test.com")
+        });
+    });
+
+    describe('query', function () {
+
+        it('should should have cookie', async () => {
+
+            const agent = request.agent(appolo.launcher.handleRequest);
+
+
+            let res = await agent
+                .get(`/test/cookie/?aa=bb`)
+
+            res.should.to.have.status(200);
+            res.header["set-cookie"][0].should.be.eq("cookie=hey; Path=/; Expires=Mon, 15 Oct 2317 21:00:00 GMT");
+
+            let res2 = await agent
+                .get(`/test/cookie/?aa=bb`)
+
+            res2.body.cookie.should.be.eq("hey")
         })
-    })
+    });
 
 
     describe('root', function () {
@@ -371,7 +408,7 @@ describe('Appolo Http e2e', () => {
 
             res.body.model.test.should.be.eq("http://www.cnn.com");
             res.body.model.name.should.be.eq("aaa");
-        })
+        });
 
         it('should call decorator2 route controller ', async () => {
             let res = await request(appolo.launcher.handleRequest)
@@ -609,7 +646,6 @@ describe('Appolo Http e2e', () => {
 
 
 });
-
 
 
 // import Benchmark = require('benchmark');

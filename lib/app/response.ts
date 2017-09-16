@@ -1,5 +1,7 @@
 import    http = require('http');
 import    zlib = require('zlib');
+import    cookie = require('cookie');
+import    _ = require('lodash');
 
 import {IRequest} from "./request";
 
@@ -34,16 +36,17 @@ interface IAppResponse {
     send(data?: string | Buffer)
 
     gzip(): IResponse
+    cookie(key:string,value:string|string[],options?:cookie.CookieSerializeOptions): IResponse
 }
 
-let proto:any = http.ServerResponse.prototype;
+let proto: any = http.ServerResponse.prototype;
 
-proto.status = function (code: number) {
+proto.status = function (code: number): IResponse {
     this.statusCode = code;
     return this
 };
 
-proto.contentType = function (type: string) {
+proto.contentType = function (type: string): IResponse {
     this.setHeader("Content-Type", type);
     return this;
 };
@@ -53,9 +56,45 @@ proto.json = function (obj: any) {
     this.send(JSON.stringify(obj))
 };
 
-proto.set = proto.header = function (key: string, value: string) {
+proto.set = proto.header = function (key: string, value: number | string | string[]): IResponse {
     this.setHeader(key, value);
     return this
+};
+
+proto.cookie = function (name: string, value: any, options: cookie.CookieSerializeOptions): IResponse {
+    let opts: cookie.CookieSerializeOptions = options || {};
+
+    let val: string = _.isObject(value) ? 'j:' + JSON.stringify(value) : String(value);
+
+    if ('maxAge' in opts) {
+        opts.expires = new Date(Date.now() + opts.maxAge);
+        opts.maxAge /= 1000;
+    }
+
+    if (opts.path == null) {
+        opts.path = '/';
+    }
+
+    this.append('Set-Cookie', cookie.serialize(name, val, opts));
+
+    return this;
+};
+
+proto.get = function(field:string):string|string[]{
+    return this.getHeader(field);
+};
+
+proto.append = function (field: string, value: string): IResponse {
+    let current = this.getHeader(field);
+
+    if (!current) {
+        return this.setHeader(field, value)
+    }
+    let val: string[] = _.isArray(current)
+        ? current.concat(value)
+        : (_.isArray(value) ? [current].concat(value) : [current, value]);
+
+    return this.setHeader(field, val);
 };
 
 

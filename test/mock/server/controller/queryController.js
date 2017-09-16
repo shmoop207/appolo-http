@@ -7,10 +7,17 @@ let QueryController = class QueryController extends appolo.Controller {
     test(req, res) {
         res.json(req.query);
     }
+    cooker(req, res) {
+        res.cookie('cookie', 'hey', { expires: new Date(2317, 9, 16) });
+        res.json(req.cookies);
+    }
 };
 tslib_1.__decorate([
     decorators_1.path("/test/query")
 ], QueryController.prototype, "test", null);
+tslib_1.__decorate([
+    decorators_1.path("/test/cookie")
+], QueryController.prototype, "cooker", null);
 QueryController = tslib_1.__decorate([
     decorators_1.define()
 ], QueryController);
