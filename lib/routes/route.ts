@@ -86,7 +86,7 @@ export class Route<T extends IController> {
     }
 
     public extend(opts: { [index: string]: any }): this {
-        _.extend(this._route, opts);
+        _.extend(this._route.route, opts);
 
         return this;
     }
