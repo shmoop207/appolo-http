@@ -36,7 +36,8 @@ interface IAppResponse {
     send(data?: string | Buffer)
 
     gzip(): IResponse
-    cookie(key:string,value:string|string[],options?:cookie.CookieSerializeOptions): IResponse
+
+    cookie(key: string, value: string | string[], options?: cookie.CookieSerializeOptions): IResponse
 }
 
 let proto: any = http.ServerResponse.prototype;
@@ -56,8 +57,19 @@ proto.json = function (obj: any) {
     this.send(JSON.stringify(obj))
 };
 
-proto.set = proto.header = function (key: string, value: number | string | string[]): IResponse {
-    this.setHeader(key, value);
+proto.set = proto.header = function (field: string | { [index: string]: string }, value?: number | string | string[]): IResponse {
+
+    if (arguments.length === 2) {
+        this.setHeader(field, value);
+
+    } else {
+        let keys = Object.keys(field);
+        for (let i = 0, length = keys.length; i < length; i++) {
+            let key = keys[i];
+            this.setHeader(key, field[key]);
+        }
+    }
+
     return this
 };
 
@@ -80,7 +92,7 @@ proto.cookie = function (name: string, value: any, options: cookie.CookieSeriali
     return this;
 };
 
-proto.get = function(field:string):string|string[]{
+proto.get = function (field: string): string | string[] {
     return this.getHeader(field);
 };
 
