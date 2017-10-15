@@ -9,12 +9,12 @@ Appolo architecture follows common patten of MVC and dependency injection which 
 
 
 ## Features
-  * super fast
+  * Super fast
   * MVC Architecture
-  * full support for [express][4] middlewares
-  * dependency injection system
-  * simple routing system
-  * routes validation
+  * Full support for [express][4] middlewares
+  * Dependency injection system
+  * Simple routing system
+  * Routes validation
   * Manage easily configurations and environments 
   * Simple folder structures
   * Easy integrate third party modules
@@ -25,21 +25,21 @@ Appolo architecture follows common patten of MVC and dependency injection which 
 npm install appolo-http --save
 ```
 ## Typescript
-Also make sure you are using TypeScript compiler version > 2.1 and you have enabled following settings in `tsconfig.json`
+`appolo-http` requires TypeScript compiler version > 2.1 and the following settings in `tsconfig.json`:
 ```javascript
 {
     "experimentalDecorators": true
 }
 ```
 ## Quick Start 
-in your app.js file
+In your app.js file:
 ```javascript
 var appolo  = require('appolo-http');
 appolo.launch();
 ```
 
 <!---## Appolo Http Boilerplate
-small example project to get you started with appolo.<br>
+Small example project to get you started with appolo.<br>
 source code : [https://github.com/shmoop207/appolo-express-boilerplate][8]
 ```bash
 git clone https://github.com/shmoop207/appolo-express-boilerplate.git
@@ -48,7 +48,7 @@ git clone https://github.com/shmoop207/appolo-express-boilerplate.git
 
 
 ## Recommended Directory Structure
-the environments folder must to exist every thing else is optional appolo will require all files in the config and server folders but the environments folder will be loaded first.
+The `config/environments` folder is required. Appolo will require all files in the `config` and `server` folders, but the environments folder will be loaded first. All other folders are optional and will not influence the way appolo-http works. 
 ```javascript
 |- config
   |- environments
@@ -79,9 +79,9 @@ appolo launch configuration options, all options are optional
 
 | key | Description | Type | Default
 | --- | --- | --- | --- |
-| `paths` | folder will be required and loaded on appolo launch | `array`|  `['config', 'server']`| 
+| `paths` | folders that will be required and loaded on appolo launch | `array`|  `['config', 'server']`| 
 | `root` | the root folder of the paths option | `string` | `process.cwd()` |
-| `environment` | environment file name that  | `string` | `(process.env.NODE_ENV || 'development')` |
+| `environment` | environment file name that will override the settinngs in `environments/all.js` | `string` | `(process.env.NODE_ENV || 'development')` |
 | `startMessage` | the message that will be written to console log the the server starts | `string` | `'Appolo Server listening on port: {port} version:{version} environment: {environment}'` |
 | `startServer` | if true the server will start immediately to listen to port else you will have to start in manually. | `boolean` | `true` |
 | `port` | the port that the app will listen to. | `number` | `process.env.PORT || this._options.port || appolo.environment.port || 8080)`` |
@@ -102,9 +102,9 @@ appolo.launcher.launch( {
 ```
 
 ## Environments
-With environments you can define different set of configurations depending on the environment type your app is currently running.
-it is recommended to have 4 types of environments : `development`, `testing`, `staging`, `production`.
-after `appolo.launch` you can always to access to current environment vars via `appolo.environment`.
+With environments you can define different configurations depending on the environment type your app is currently running.
+It is recommended to have 4 types of environments: `development`, `testing`, `staging`, `production`.
+After `appolo.launch` you can always access the current environment vars via `appolo.environment`.
 ```javascript
 //all.ts
 export = {
@@ -114,16 +114,16 @@ export = {
 //development.ts
 export = {
     name:'develpment',
-    db:'monog://development-url'
+    db:'mongo://development-url'
 }
 //development.ts
 export = {
     name:'testing',
-    db:'monog://testing-url'
+    db:'mongo://testing-url'
 }
 
 ```
-if we launch our app.js with `NODE_ENV = testing`
+If we launch our app.js with `NODE_ENV = testing`
 ```javascript
 var appolo  = require('appolo-http');
 appolo.launcher.launch();
@@ -132,8 +132,8 @@ console.log(env.name,env.someVar,env.db) // 'testing someVar monog:://testing-ur
 ```
 
 ## Express modules
-you can configure express modules or  add custom middleware by adding configuration file to the express folder.
-the express configuration file is called after the environments loaded
+You can configure express modules or add custom middleware by adding configuration files to the express folder.
+The express configuration file is called after the environment files were loaded.
 ```javascript
 //express/all.ts
 import favicon = require('static-favicon');
@@ -150,16 +150,16 @@ export = function (app: appolo.App) {
 }
 ```
 ## Routes
-you can easily  bind route path to a controller method 
-the routes path are the same as you defined in [expressjs][10] router
+You can easily bind a route path to a controller method.
+The routes path are defined in the same way as in [expressjs][10] router.
 
-each route class has the following methods:
+Each route class has the following methods:
 
- - `path` - same as you define in expressjs
- - `method` - one of `get`,`post`,`patch`,`delete`,`put`. default `get`
- - `action` - the action function the will be invoked to handle the route
- - `middleware` - middleware function the will be invoked be before the controller if the next function is not called or called with error the controller won`t be created.
- - `validation` - validations object as define in [joi][11].
+ - `path` - same as in expressjs.
+ - `method` - one of `get`,`post`,`patch`,`delete`,`put`. default `get`.
+ - `action` - the action function the will be invoked to handle the route.
+ - `middleware` - middleware function the will be invoked before the controller. If the `next` function is not called or called with an error, the controller won`t be created.
+ - `validation` - validations object as defined in [joi][11].
 
 ```javascript
 import {define,singleton,initMethod,inject,Controller,IRequest,IResponse} from 'appolo-http';
@@ -186,7 +186,7 @@ export class Test2Controller extends Controller{
     }
 }
 ```
-or you can define route using appolo.route method
+You can also define routes using `appolo.route` method:
 
 ```javascript
 import {define,singleton,initMethod,inject,Controller,IRequest,IResponse} from 'appolo-http';
@@ -207,9 +207,9 @@ appolo.route<TestController>(TestController)
 ```
 
 ## Routes Validation 
-you can add validations to your routes the action controller will be called only if the route params are valid.<br>
-validations syntax is done by using [joi module][11] .<br>
-the validator takes request params from `req.param` , `req.query` and `req.body`, after validation the request params will be on `req.model`.
+You can add validations to your routes. The action controller will be called only if the route params are valid.<br>
+Validations are done using [joi module][11] .<br>
+The validator takes request params from `req.param` , `req.query` and `req.body`. After validation, all request params will be available on `req.model`.
 
 ```javascript
 import {define,singleton,initMethod,inject,Controller,IRequest,IResponse} from 'appolo-http';
@@ -241,7 +241,7 @@ appolo.route<TestController>(TestController)
     })
 ```
 
-if the request params are not valid `400 Bad Request` will be sent and json with validation error.
+If the request params are not valid, appolo will return a `400 Bad Request` response with detailed validation errors.
 ```javascript
 {
     status: 400,
@@ -252,10 +252,9 @@ if the request params are not valid `400 Bad Request` will be sent and json with
 ```
 
 ## Controllers
-Controllers are classes that handled the routes request.
-for every request an new controller will be created, it can not be singleton.
-in order the router will be able to handle to request the controller class must inherit from `appolo.Controller`
-each controller action will be called with [request][12] and [response][13] objects.
+Controllers are classes that handle routes request.
+In order for the router to be able to handle the request, a controller class must extend `appolo.Controller`.
+Each controller action will be called with [request][12] and [response][13] objects.
 
 ```javascript
 import {define,inject,mehtod,path,validation,Controller,Methods,IRequest,IResponse,IRouteOptions,validator} from 'appolo-http';
@@ -280,7 +279,7 @@ export class LoginController extends Controller{
     }
 }
 ```
-if do not need a new controller instance for evey request you can inherit from StaticController that is singleton and created only once 
+By default, appolo creates a new controller instance for every request. If you do not need a new controller instance for every request, you can inherit from StaticController which is singleton.
 ```javascript
 import {define,singleton,inject,lazy,mehtod,path,validation,StaticController,Methods,validator,IRequest,IResponse,IRouteOptions} from 'appolo-http';
 @define()
@@ -338,15 +337,10 @@ send json error response with optional message
 ```
 
 ## Middleware 
-middleware class will run before the action of the controller is invoked.
-you must and declare the middleware `id` in the route and call `next` function in order to continue the request.
-the middleware must implement the `run` method and inherit from `appolo.Middleware`
+A middleware class will run before the action of the controller is invoked.
+The middleware class must extend must extend `appolo.Middleware` and implement the `run` method.
 
-example : in routes file
-```javascript
-    appolo.route("someController").path("somePath").middleware(AuthMiddleware)
-```
-in middleware file
+Middleware file:
 ```javascript
 import {define,inject,Middleware,IRequest,IResponse,NextFn,IRouteOptions} from 'appolo-http';
 @define()
@@ -368,25 +362,30 @@ export class AuthMiddleware extends Middleware {
 }
 ```
 
+In order to use a middleware in a controller, add it using `appolo.route(...).middleware(<middleware-id>)`:
+```javascript
+    appolo.route("someController").path("somePath").middleware(AuthMiddleware)
+```
+
 ## Dependency Injection System
-appolo have powerful [Dependency Injection][22] system based on [appolo-inject][23].
-enables you to organize your code in [loose coupling][24] classes.
-you can always access to injector via `appolo.injector`.
+Appolo has a powerful [Dependency Injection][22] system based on [appolo-inject][23].
+It enables you to write organised, testable code based on the [loose coupling][24] idea.
+You can always access the injector via `appolo.injector`.
 
 ### class decorators 
  - `define` - make the object injectable
- - [`singleton`](https://github.com/shmoop207/appolo-inject#singleton) - the class will be created only once and injector will return the same instance every time
- - `lazy` - create class only on the first call
- - [`alias`](https://github.com/shmoop207/appolo-inject#alias) - add alias name to the object
- - [`aliasFactory`](https://github.com/shmoop207/appolo-inject#alias-factory) - add alias factory name to the object
+ - [`singleton`](https://github.com/shmoop207/appolo-inject#singleton) - the class will be created only once and the injector will return the same instance every time
+ - `lazy` - wait for the class to be injected before creating it
+ - [`alias`](https://github.com/shmoop207/appolo-inject#alias) - add alias name to the object (allows injecting multiple objects which share an alias using `injectAlias`)
+ - [`aliasFactory`](https://github.com/shmoop207/appolo-inject#alias-factory) - add alias factory name to the object (allows injecting multiple objects which share an alias using `injectAliasFactory`)
 ### methods decorators  
  - [`initMethod`](https://github.com/shmoop207/appolo-inject#init-method) - The method will be called after all instances were created and all the properties injected.
  ### property decorators  
  - [`inject`](https://github.com/shmoop207/appolo-inject#inject-property-instance) - inject instance reference by id
- - [`injectFactoryMethod`](https://github.com/shmoop207/appolo-inject#inject-factory-method) - factory method is a function that will return the injected object. this is useful the create many instances of the same class.
+ - [`injectFactoryMethod`](https://github.com/shmoop207/appolo-inject#inject-factory-method) - factory method is a function that will return the injected object. This is useful to create many instances of the same class.
  - [`injectAlias`](https://github.com/shmoop207/appolo-inject#alias) - inject objects by alias name
  - [`injectArray`](https://github.com/shmoop207/appolo-inject#inject-property-array) - inject array of properties by reference or by value
- - [`injectDictionary`](https://github.com/shmoop207/appolo-inject#inject-property-dictionary) -  inject dictionary of properties by reference or by value.
+ - [`injectDictionary`](https://github.com/shmoop207/appolo-inject#inject-property-dictionary) - inject a dictionary of properties by reference or by value.
  - [`injectAliasFactory`](https://github.com/shmoop207/appolo-inject#alias-factory) - inject factory methods by alias name
  - [`injectFactory`](https://github.com/shmoop207/appolo-inject#inject-property-from-factory-object) inject object by factory class
  - [`injectObjectProperty`](https://github.com/shmoop207/appolo-inject#inject-property-from-object-property) inject property of another object
@@ -448,7 +447,7 @@ let fooController = appolo.inject.getObject('fooController');
 console.log(fooController.data)
 ```
 
-you can also use constructor injection or method parameter injection 
+You can also use constructor injection or method parameter injection:
 ```javascript
 import {define,singleton,injectParam,initMethod,inject} from 'appolo-http';
 @define()
@@ -476,9 +475,9 @@ class FooController{
 ```
 
 ### Inherited injections
-inherited injections are supported as well
-you can inject to base class and the child call will be injected as well.
-remember not use `@define` on the parent class
+Inherited injections are supported as well.
+Anything you inject on a base class will be available to child classes.
+Remember not to use `@define` on the parent class.
 ```javascript
 import {define,singleton,injectParam,initMethod,inject} from 'appolo-http';
 
@@ -502,22 +501,22 @@ class FooManager extends BaseManager{
 ``` 
 
 ## Event Dispatcher
-appolo have built in event dispatcher to enable classes to listen and fire events
+Appolo has a built-in event dispatcher to enable classes to listen to and fire events.
 Event Dispatcher has the following methods:
 
-- `eventDispatcher.on(event,callback,[scope])` add event listener
+- `eventDispatcher.on(event,callback,[scope])` add an event listener
    - `event` - event name.
    - `callback` - callback function that will triggered on event name.
    - `scope` - optional, the scope of the `callback` function default: `this`.
 
-- `eventDispatcher.un(event,callback,[scope])` - remove event listener all the arguments must be `===` to on method else it won`t be removed.
+- `eventDispatcher.un(event,callback,[scope])` - remove an event listener. All the arguments must be `===` to the onces used in the `on` method, or else it won\`t be removed.
    -  `event` - event name.
    -  `callback` - callback function.
    -  `scope` - optional, the scope of the callback function.
  
-- `eventDispatcher.fireEvent(event,[arguments])` fireEvent - triggers the callback functions on given event name
+- `eventDispatcher.fireEvent(event,[arguments])` fireEvent - triggers the callback functions of a given event name
    - `eventName` - name of the event
-   - `arguments` -  all the rest `arguments` will be applied on the `callback` function
+   - `arguments` -  all other `arguments` will be passed to the `callback` function
 
 ```javascript
 import {define,singleton,injectParam,initMethod,inject,EventDispatcher} from 'appolo-http';
@@ -547,18 +546,17 @@ export class FooController {
 
 
 ## Modules
-third party modules can be easily loaded to appolo inject and used in the inject container.
-each module must call `appolo.use` before it can be used by `appolo launcher`.
-the modules loaded in series so the module must call the `next` function or return a `promise`  in order to continue the lunch process.
-you can inject the `appolo.use` function any object that is already exists in the injector 
+Third party modules can be easily loaded intto appolo inject and used in the inject container.
+Each module must call `appolo.use` before it can be used by `appolo launcher`.
+`appolo.use` accepts a function as anargument. The last argument to that function must be the `next` function: modules are loaded serially, so each module must call the `next` function or return a `promise` in order to continue the launch process.
+Other arguments to the function are object which you wish to inject into the module (these objects must be injected earlier). 
 
-the default injectable objects:
+By default, each module can inject:
 
  - `env` - environment object,
  - `inject` - injector  - to add objects to the injector,
 
-the last argument must be the `next` function 
-
+Module example:
 ```javascript
 import appolo = require('appolo-http');
 
@@ -575,7 +573,7 @@ appolo.use(async function(env:any,inject:appolo.Injector){
 });
 	
 ```
-now I can inject `myModuleObject` to any class
+Now we can inject `myModuleObject` to any class:
 ```javascript
 import {define,singleton,injectParam,initMethod,inject} from 'appolo-http';
 @define()
@@ -590,9 +588,9 @@ export  class AuthMiddleware{
 ```
 
 ### Logger module example
-logger module example with [winston][19]
+A logger module example with [winston][19]
 
-loggerModule.js file
+loggerModule.js file:
 ```javascript
 import winston = require('winston');
 import appolo = require('appolo');
@@ -613,7 +611,7 @@ appolo.use(async function(env:any,inject:appolo.Injector){
     inject.addObject('logger', logger);
 });
 ```
-now you you inject logger anywhere you want
+Now we you inject logger anywhere we need it:
 ```javascript
 import {define,singleton,initMethod,inject} from 'appolo-http';
 @define()
@@ -627,7 +625,7 @@ export class DataManager{
 
 ## Appolo Bootstrap
 
-once it launched appolo try to find appolo `bootstrap` class and call it's `run` method. only when the bootstrap if finished the server will start
+Once it launched, appolo will try to find an appolo `bootstrap` class and call it's `run` method. Only when the bootstrap is finished, the server will start
 ```javascript
 import {define,singleton,injectParam,initMethod,inject,bootstrap,IBootstrap} from 'appolo-http';
 @define()
@@ -645,7 +643,7 @@ export class Bootstrap implements IBootstrap{
 
 
 ## Appolo Reset ##
-you can reset appolo sever by calling `appolo.reset()` this will clean all environments, config, injector and close the server  
+You can reset appolo sever by calling `appolo.reset()`. This will clean all environments, config, injector and close the server.
 
     
 ## Tests ##
