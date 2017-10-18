@@ -3,9 +3,10 @@ import    _ = require('lodash');
 import {IRouteInnerOptions, IRouteOptions} from "../interfaces/IRouteOptions";
 import {Url} from "url";
 import typeis = require('type-is');
+import {NextFn} from "./app";
 
 
-export interface IRequest extends http.IncomingMessage,AppRequest{
+export interface IRequest extends http.IncomingMessage, AppRequest {
 
 }
 
@@ -15,7 +16,8 @@ interface AppRequest extends http.IncomingMessage {
     params?: { [index: string]: any }
     model?: { [index: string]: any }
     $route?: IRouteInnerOptions
-    pathName:string
+    next?: NextFn
+    pathName: string
     originUrl: string;
 
 }
@@ -39,7 +41,6 @@ proto.get = proto.header = function (name: string) {
             return this.headers[nameLower];
     }
 };
-
 
 
 export function createRequest(request: http.IncomingMessage): IRequest {

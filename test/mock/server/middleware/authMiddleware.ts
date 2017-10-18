@@ -13,6 +13,6 @@ export class AuthMiddleware extends appolo.StaticMiddleware {
 
     public run(req:appolo.IRequest, res:appolo.IResponse, next:appolo.NextFn) {
 
-        AuthMiddleware.sendUnauthorized(next,new HttpError(403,"NOT AUTHORIZED"),11);
+        this.sendUnauthorized(next,new HttpError(403,"NOT AUTHORIZED"),11);
     }
 }

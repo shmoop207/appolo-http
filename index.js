@@ -44,4 +44,7 @@ exports.App = app_2.App;
 exports.launch = function (config, callback) {
     return launcher_1.default.launch(config, callback);
 };
+exports.handleRequest = function (req, res) {
+    launcher_1.default.handleRequest(req, res);
+};
 //# sourceMappingURL=index.js.map

@@ -20,28 +20,28 @@ export abstract class StaticMiddleware implements IMiddleware {
 
     public abstract run(req: IRequest, res: IResponse, next: NextFn, route: IRouteOptions): void
 
-    public static sendError(next: NextFn,error?: Error, code?: number):void{
+    public  sendError(next: NextFn,error?: Error, code?: number):void{
 
-        StaticMiddleware._callNext(next,500, "Internal Server Error", error, code);
+        this._callNext(next,500, "Internal Server Error", error, code);
     }
 
-    public static sendBadRequest(next: NextFn,error?:Error, code?:number) {
+    public  sendBadRequest(next: NextFn,error?:Error, code?:number) {
 
-        StaticMiddleware._callNext(next,400, "Bad Request", error, code);
+        this._callNext(next,400, "Bad Request", error, code);
     }
 
-    public static sendUnauthorized(next: NextFn,error?:Error, code?:number) {
+    public  sendUnauthorized(next: NextFn,error?:Error, code?:number) {
 
-        StaticMiddleware._callNext(next,403, "Unauthorized", error, code);
+        this._callNext(next,403, "Unauthorized", error, code);
 
     }
 
-    public static sendNotFound(next: NextFn,error?:Error, code?:number) {
+    public  sendNotFound(next: NextFn,error?:Error, code?:number) {
 
-        StaticMiddleware._callNext(next,404, "Not Found", error, code);
+        this._callNext(next,404, "Not Found", error, code);
     }
 
-    protected static _callNext(next: NextFn,status: number, statusText: string, error: Error, code: number) {
+    protected  _callNext(next: NextFn,status: number, statusText: string, error: Error, code: number) {
         next(new HttpError(status, statusText, {
             status: status,
             statusText: statusText,

@@ -46,4 +46,8 @@ export let launch = function (config?: IOptions, callback?: (err?: any) => void)
     return launcher.launch(config, callback);
 };
 
+export let handleRequest = function (req, res): void {
+    launcher.handleRequest(req, res);
+};
+
 

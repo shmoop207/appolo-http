@@ -1,19 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = require("tslib");
 const chai = require("chai");
 const appolo = require("../../index");
 let should = chai.should();
 describe('Appolo Express Unit', () => {
     describe("basic test", () => {
-        beforeEach(() => tslib_1.__awaiter(this, void 0, void 0, function* () {
+        beforeEach(async () => {
             return appolo.launcher.launch({
                 paths: ['config', 'server'],
                 environment: "testing",
                 root: process.cwd() + '/test/mock',
                 port: 8183
             });
-        }));
+        });
         afterEach(() => {
             appolo.launcher.reset();
         });
@@ -55,4 +54,28 @@ describe('Appolo Express Unit', () => {
         });
     });
 });
+// import Benchmark = require('benchmark');
+// import qs = require('qs');
+//
+// let suite = new Benchmark.Suite;
+// suite.
+// add('vanilla', function() {
+//     Util.parseQsFast("aa[]=bb&aa[]=cc&a=1&b=2&c=3&c=3&ss=45&ss=46&dg=gfdgfd&dfdfdfds=2222&test[ggg]=bbb")
+// }).add('qs', function() {
+//    qs.parse("aa[]=bb&aa[]=cc&a=1&b=2&c=3&c=3&ss=45&ss=46&dg=gfdgfd&dfdfdfds=2222&test[ggg]=bbb",{allowDots:false,depth:0})
+// }).add('node', function() {
+//     let a = Util.parseQsFast2("aa[]=bb&aa[]=cc&a=1&b=2&c=3&c=3&ss=45&ss=46&dg=gfdgfd&dfdfdfds=2222&test[ggg]=bbb")
+// })
+// .add('url', function() {
+//     let {query, pathName} = Util.parseUrlFast("/fdfdf/dfdfdfdgfgf/gfgdgf?aa[]=bb&aa[]=cc&a=1&b=2&c=3&c=3&ss=45&ss=46&dg=gfdgfd&dfdfdfds=2222&test[ggg]=bbb");
+//     querystring.parse(query);
+// })
+// .add('url node', function() {
+//     let a = Url.parse("/fdfdf/dfdfdfdgfgf/gfgdgf?aa[]=bb&aa[]=cc&a=1&b=2&c=3&c=3&ss=45&ss=46&dg=gfdgfd&dfdfdfds=2222&test[ggg]=bbb",true)
+// })
+//
+//
+//     .on('cycle', function(event) {
+//     console.log(String(event.target));
+// }).run(); 
 //# sourceMappingURL=unitSpec.js.map

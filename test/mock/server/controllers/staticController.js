@@ -3,15 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const appolo = require("../../../../index");
 const decorators_1 = require("../../../../decorators");
-let StaticController = StaticController_1 = class StaticController extends appolo.StaticController {
+let StaticController = class StaticController extends appolo.StaticController {
     test(req, res) {
-        res.json({ model: StaticController_1.getModel(req) });
+        res.json({ model: this.getModel(req) });
     }
 };
 tslib_1.__decorate([
     decorators_1.inject()
 ], StaticController.prototype, "manager", void 0);
-StaticController = StaticController_1 = tslib_1.__decorate([
+StaticController = tslib_1.__decorate([
     decorators_1.define(),
     decorators_1.singleton(),
     decorators_1.lazy()
@@ -32,5 +32,4 @@ appolo.route(StaticController)
     .validation("test", appolo.validator.string())
     .validation("name", appolo.validator.string())
     .validation("testPost", appolo.validator.boolean().required());
-var StaticController_1;
 //# sourceMappingURL=staticController.js.map

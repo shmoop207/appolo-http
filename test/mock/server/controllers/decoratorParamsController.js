@@ -9,7 +9,10 @@ let DecoratorParamsController = class DecoratorParamsController extends app.Stat
         this.name = manager.name;
     }
     test(req, res, route, aaa, env) {
-        res.json({ model: env.test, name: this.name, user: req.user });
+        this.sendOk(res, { model: env.test, name: this.name, user: req.user });
+    }
+    hello(req, res, route) {
+        res.json({ hello: 'world' });
     }
 };
 tslib_1.__decorate([
@@ -22,6 +25,9 @@ tslib_1.__decorate([
     app.abstract({ middleware: [userMiddleware_1.UserMiddleware] }),
     tslib_1.__param(4, app.injectParam())
 ], DecoratorParamsController.prototype, "test", null);
+tslib_1.__decorate([
+    app.path("/test/hello")
+], DecoratorParamsController.prototype, "hello", null);
 DecoratorParamsController = tslib_1.__decorate([
     app.define(),
     app.singleton(),

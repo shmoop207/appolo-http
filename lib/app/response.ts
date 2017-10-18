@@ -2,6 +2,8 @@ import    http = require('http');
 import    zlib = require('zlib');
 import    cookie = require('cookie');
 import    _ = require('lodash');
+import view, {} from '../app/view';
+
 
 import {IRequest} from "./request";
 
@@ -33,6 +35,10 @@ interface IAppResponse {
 
     jsonp(obj: object)
 
+    render(path: string, params?: any)
+
+    render(params?: any)
+
     send(data?: string | Buffer)
 
     gzip(): IResponse
@@ -55,6 +61,21 @@ proto.contentType = function (type: string): IResponse {
 proto.json = function (obj: any) {
     this.setHeader('Content-Type', "application/json; charset=utf-8");
     this.send(JSON.stringify(obj))
+};
+
+proto.render = function (path: string, params?: any) {
+    if (arguments.length == 1) {
+        params = path;
+        path = "";
+    }
+
+    if (!this.hasHeader("Content-Type")) {
+        this.setHeader("Content-Type", "text/html;charset=utf-8")
+    }
+
+    view.render(this.req.$route.route.controllerName, this.req.$route.route.actionName, path, params)
+        .then((str: string) => this.send(str))
+        .catch((e) => this.req.next(e))
 };
 
 proto.set = proto.header = function (field: string | { [index: string]: string }, value?: number | string | string[]): IResponse {
@@ -136,6 +157,7 @@ proto.jsonp = function (data: any) {
 };
 
 proto.send = function (data?: string | Buffer) {
+    //check if need to gzip
     if (this.useGzip) {
         gzipResponse(this, data);
         return;
@@ -146,14 +168,10 @@ proto.send = function (data?: string | Buffer) {
         hasContentType = this.hasHeader("Content-Type"), isBuffer = Buffer.isBuffer(data);
 
     //send empty
-    if (isEmptyStatusCode) {
+    if (isEmptyStatusCode || data == undefined) {
         this.setHeader('Content-Length', '0');
-        this.end();
+        setImmediate(() => this.end());
         return
-    }
-
-    if (data === undefined) {
-        data = "";
     }
 
     if (!hasContentType) {
@@ -169,7 +187,7 @@ proto.send = function (data?: string | Buffer) {
 
     this.setHeader('Content-Length', isBuffer ? data.length : Buffer.byteLength(data as string, 'utf8'));
 
-    (this.req.method === 'HEAD') ? this.end() : this.end(data);
+    setImmediate(() => this.req.method === 'HEAD' ? this.end() : this.end(data));
 };
 
 

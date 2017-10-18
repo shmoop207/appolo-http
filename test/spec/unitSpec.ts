@@ -3,6 +3,9 @@ import    appolo = require('../../index');
 import {Manager} from "../mock/server/manager/manager";
 import {Manager3} from "../mock/server/manager/manager3";
 import {Manager4} from "../mock/server/manager/manager4";
+import {Util} from "../../lib/util/util";
+import * as Url from "url";
+import * as querystring from "querystring";
 
 let should = chai.should()
 
@@ -87,5 +90,32 @@ describe('Appolo Express Unit', () => {
 
         })
 
+
+
     });
 });
+
+// import Benchmark = require('benchmark');
+// import qs = require('qs');
+//
+// let suite = new Benchmark.Suite;
+// suite.
+// add('vanilla', function() {
+//     Util.parseQsFast("aa[]=bb&aa[]=cc&a=1&b=2&c=3&c=3&ss=45&ss=46&dg=gfdgfd&dfdfdfds=2222&test[ggg]=bbb")
+// }).add('qs', function() {
+//    qs.parse("aa[]=bb&aa[]=cc&a=1&b=2&c=3&c=3&ss=45&ss=46&dg=gfdgfd&dfdfdfds=2222&test[ggg]=bbb",{allowDots:false,depth:0})
+// }).add('node', function() {
+//     let a = Util.parseQsFast2("aa[]=bb&aa[]=cc&a=1&b=2&c=3&c=3&ss=45&ss=46&dg=gfdgfd&dfdfdfds=2222&test[ggg]=bbb")
+// })
+// .add('url', function() {
+//     let {query, pathName} = Util.parseUrlFast("/fdfdf/dfdfdfdgfgf/gfgdgf?aa[]=bb&aa[]=cc&a=1&b=2&c=3&c=3&ss=45&ss=46&dg=gfdgfd&dfdfdfds=2222&test[ggg]=bbb");
+//     querystring.parse(query);
+// })
+// .add('url node', function() {
+//     let a = Url.parse("/fdfdf/dfdfdfdgfgf/gfgdgf?aa[]=bb&aa[]=cc&a=1&b=2&c=3&c=3&ss=45&ss=46&dg=gfdgfd&dfdfdfds=2222&test[ggg]=bbb",true)
+// })
+//
+//
+//     .on('cycle', function(event) {
+//     console.log(String(event.target));
+// }).run();

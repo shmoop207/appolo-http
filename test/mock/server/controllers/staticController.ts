@@ -9,7 +9,7 @@ class StaticController extends appolo.StaticController {
     @inject() manager: any;
 
     test(req, res) {
-        res.json({model: StaticController.getModel(req)})
+        res.json({model: this.getModel(req)})
     }
 
 

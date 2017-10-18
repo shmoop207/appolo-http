@@ -71,15 +71,29 @@ export class Router {
         let controller: StaticController = appolo.inject.getObject<StaticController>(req.$route.route.controller, [req, res, req.$route.route]);
 
         if (!controller) {
-            throw new Error("failed to find controller " + req.$route.route.controller);
+            next(new HttpError(500, `failed to find controller ${req.$route.route.controller}`));
+            return;
         }
 
-        controller.invoke(req, res, req.$route, req.$route.route.action);
+        let route = req.$route.route;
 
-        next();
+        let fnName: string = route.actionName;
+
+        if (!fnName) {
+            fnName = _.isString(route.action) ? route.action : route.action(controller).name;
+
+            if (!controller[fnName]) {
+                next(new HttpError(500, `failed to invoke ${this.constructor.name} fnName ${fnName}`));
+                return;
+            }
+
+            route.actionName = fnName;
+        }
+
+        return controller[fnName](req, res, route);
     }
 
-    protected static async _checkValidation(req: IRequest, res: IResponse, next: NextFn) {
+    protected static _checkValidation(req: IRequest, res: IResponse, next: NextFn) {
 
 
         let data = _.extend({}, req.params, req.query, (req as any).body);
@@ -90,8 +104,19 @@ export class Router {
             stripUnknown: true
         };
 
-        try {
-            let params = await Q.fromCallback((callback) => joi.validate(data, req.$route.route.validations, options, callback));
+
+        joi.validate(data, req.$route.route.validations, options, function (e, params) {
+
+            if (e) {
+                next(new HttpError(400, e.toString(), {
+                    status: 400,
+                    statusText: "Bad Request",
+                    error: e.toString(),
+                    code: 400
+                }));
+
+                return;
+            }
 
             let output = {};
 
@@ -108,17 +133,7 @@ export class Router {
             (req as any).model = output;
 
             next();
-
-        } catch (e) {
-
-            next(new HttpError(400, e.toString(), {
-                status: 400,
-                statusText: "Bad Request",
-                error: e.toString(),
-                code: 400
-            }))
-
-        }
+        });
     }
 
     public reset() {

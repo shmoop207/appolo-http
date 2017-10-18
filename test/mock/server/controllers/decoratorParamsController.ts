@@ -2,6 +2,7 @@
 import app = require('../../../../index');
 import {Manager} from "../manager/manager";
 import {UserMiddleware} from "../middleware/userMiddleware";
+import set = Reflect.set;
 
 @app.define()
 @app.singleton()
@@ -23,7 +24,12 @@ class DecoratorParamsController extends app.StaticController {
     @app.validation("name", app.validator.string())
     @app.abstract({middleware:[UserMiddleware]})
     public test(req: app.IRequest, res: app.IResponse, route, aaa, @app.injectParam() env: any) {
-        res.json({model: env.test,name:this.name,user:(req as any).user})
+        this.sendOk(res,{model: env.test,name:this.name,user:(req as any).user})
+    }
+
+    @app.path("/test/hello")
+    public hello(req: app.IRequest, res: app.IResponse, route) {
+        res.json({ hello: 'world' })
     }
 
 

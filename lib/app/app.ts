@@ -6,7 +6,8 @@ import    url = require('url');
 import    Q = require('bluebird');
 import    _ = require('lodash');
 import    qs = require('qs');
-import router from '../routes/router';
+import    querystring = require('querystring');
+import router, {Router} from '../routes/router';
 import {IRouteInnerOptions, IRouteOptions} from "../interfaces/IRouteOptions";
 import {Util} from "../util/util";
 import {IRequest, createRequest} from "./request";
@@ -14,12 +15,8 @@ import {IResponse, createResponse} from "./response";
 import {HttpError} from "../common/error/httpError";
 import appolo = require('appolo');
 import {IOptions} from "../interfaces/IOptions";
-import SimpleCache = require("simple-lru-cache");
-
-SimpleCache.prototype.get = function (key) {
-    let cacheVal = this.cache[key];
-    return cacheVal ? cacheVal.value : undefined
-};
+import {Cache} from "appolo-lru-cache";
+import {default as launcher} from "../launcher/launcher";
 
 
 export type MiddlewareHandler = ((req: IRequest, res: IResponse, next: NextFn) => void)
@@ -32,7 +29,7 @@ export class App {
     private _routesLength: number;
     private _middlewares: MiddlewareHandler[];
     private _options: IOptions;
-    private _cache: any;
+    private _routeCache: Cache<string, { route: IRouteInnerOptions, params: { [index: string]: string } }>;
 
     private readonly ValidMethods = {"OPTIONS": 1, "HEAD": 1};
 
@@ -49,7 +46,7 @@ export class App {
 
         this._routesLength = this._routes.length;
         this._options = options;
-        this._cache = new SimpleCache({maxSize: this._options.maxRouteCache});
+        this._routeCache = new Cache<string, { route: IRouteInnerOptions, params: { [index: string]: string } }>({maxSize: this._options.maxRouteCache});
     }
 
     public handleRequest(request: http.IncomingMessage, response: http.ServerResponse) {
@@ -61,6 +58,7 @@ export class App {
 
             this._handleMiddleware(req, res, 0, this._middlewares);
 
+
         } catch (e) {
             this._handleError(e, res);
         }
@@ -68,9 +66,15 @@ export class App {
 
     private _initRequest(req: IRequest, res: IResponse): void {
 
-        let {query, pathName} = Util.parseUrlFast(req.url);
-        req.query = qs.parse(query);
-        req.pathName = pathName;
+        let {query, pathname} = this._options.urlParser === "fast"
+            ? Util.parseUrlFast(req.url)
+            : url.parse(req.url);
+
+        req.query = this._options.qsParser === "qs"
+            ? qs.parse(query)
+            : querystring.parse(query);
+
+        req.pathName = pathname;
         req.originUrl = req.url;
     }
 
@@ -78,7 +82,7 @@ export class App {
 
         let match, route;
 
-        let cached = this._cache.get(req.pathName + req.method, false);
+        let cached = this._routeCache.get(req.pathName + req.method);
 
         if (cached) {
             req.$route = cached.route;
@@ -96,7 +100,8 @@ export class App {
 
         req.params = this._createRouteParams(route, match);
         req.$route = route;
-        this._cache.set(req.pathName + req.method, {route: req.$route, params: req.params});
+        this._routeCache.set(req.pathName + req.method, {route: req.$route, params: req.params});
+
 
         this._handleMiddleware(req, res, 0, req.$route.middlewareHandler);
     }
@@ -139,13 +144,19 @@ export class App {
             return;
         }
 
+
         let fn = middlewares[num];
 
         if (!fn) {
             return;
         }
+
+        let next = (err) => this._handleMiddleware(req, res, num + 1, middlewares, err);
+        req.next = next;
+
+
         try {
-            fn(req, res, (err) => this._handleMiddleware(req, res, num + 1, middlewares, err));
+            fn(req, res, next);
         } catch (e) {
             this._handleError(e, res);
         }
@@ -174,6 +185,15 @@ export class App {
 
     public use(fn: ((req: IRequest, res: IResponse, next: (e?: Error) => void) => void) | ((req: any, res: any, next: any) => void)): void {
         this._middlewares.push(fn)
+    }
+
+    public viewEngine(fn: (path: string, options?: { cache?: boolean, [otherOptions: string]: any }) => Promise<string>, ext: string = "html"): void {
+        launcher.options.viewEngine = fn;
+        launcher.options.viewExt = ext;
+    }
+
+    public set(name: keyof IOptions, value: any) {
+        launcher.options[name] = value;
     }
 }
 

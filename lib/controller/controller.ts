@@ -4,7 +4,7 @@ import {IRequest} from "../app/request";
 import {IResponse} from "../app/response";
 import {StaticController} from "./staticController";
 
-export abstract class Controller extends StaticController {
+export abstract class Controller {
 
     protected req: IRequest;
     protected res: IResponse;
@@ -13,54 +13,69 @@ export abstract class Controller extends StaticController {
 
     constructor(req: IRequest, res: IResponse, route: IRouteOptions) {
 
-        super();
         this.req = req;
         this.res = res;
         this.route = route;
     }
 
-    public send(statusCode?:number, data?:any) {
+    public send(statusCode?: number, data?: any) {
 
-        Controller.send(this.res, statusCode, data)
+        if (arguments.length === 1) {
+            this.sendOk(arguments[0])
+        } else {
+            this.res.status(statusCode).json(data);
+        }
     }
 
     public sendOk(data?: any) {
-        Controller.sendOk(this.res, data);
+        this.res.status(200).json(data);
     }
 
     public sendCreated(data?: any) {
-        Controller.sendCreated(this.res, data)
+        this.res.status(201).send(data);
     }
 
     public sendNoContent() {
-        Controller.sendNoContent(this.res);
+        this.res.status(204).send();
     }
 
     public sendError(error?, code?) {
-
-        Controller.sendError(this.res, error, code);
+        this.res.status(500).json({
+            status: 500,
+            statusText: "Internal Server Error",
+            error: error ? error.toString() : "",
+            code: code
+        });
     }
 
     public sendBadRequest(error?, code?) {
-
-        Controller.sendBadRequest(this.res, error, code);
+        this.res.status(400).json({
+            status: 400,
+            statusText: "Bad Request",
+            error: (error instanceof Error) ? error.toString() : "",
+            code: code
+        });
     }
 
     public sendUnauthorized(error?, code?) {
-
-        Controller.sendUnauthorized(this.res, error, code);
+        this.res.status(401).json({
+            status: 401,
+            statusText: "Unauthorized",
+            error: error ? error.toString() : "",
+            code: code
+        });
     }
 
     public sendNotFound(error?, code?) {
-
-        Controller.sendNotFound(this.res, error, code);
+        this.res.status(404).json({
+            status: 404,
+            statusText: "Not Found",
+            error: error ? error.toString() : "",
+            code: code
+        });
     }
 
-    public getName(): string {
-        return this.route.controller;
-    }
-
-    public getModel<T>(): T {
-        return this.req.model as T;
+    public getModel<T>(req: IRequest): T {
+        return (req as any).model;
     }
 }

@@ -2,6 +2,7 @@
 import appolo = require('appolo');
 import router from '../routes/router';
 import app, {App} from '../app/app';
+import view, {} from '../app/view';
 import    path = require('path');
 import    http = require('http');
 import    https = require('https');
@@ -18,12 +19,17 @@ export class Launcher extends appolo.Launcher {
     protected _options: IOptions;
     protected _port: number;
 
-    protected readonly Defaults = {
+    protected readonly Defaults: IOptions = {
         startMessage: "Appolo Server listening on port: ${port} version:${version} environment: ${environment}",
         startServer: true,
         errorStack: false,
         errorMessage: true,
         maxRouteCache: 10000,
+        qsParser: "qs",
+        urlParser: "fast",
+        viewExt: "html",
+        viewEngine: null,
+        viewFolder: "/server/views"
     };
 
     public async launch(config?: IOptions, callback?: (err?: any) => void): Promise<void> {
@@ -49,9 +55,14 @@ export class Launcher extends appolo.Launcher {
 
             this.loadCustomConfigurations();
 
-            this.loadRoutes();
+            router.initialize();
+
+            app.initialize(this._options);
+
+            view.initialize(this._options);
 
             await super.loadBootStrap();
+
 
             await this._startServer();
 
@@ -152,11 +163,6 @@ export class Launcher extends appolo.Launcher {
         });
     }
 
-    protected loadRoutes(): void {
-
-        //load routes
-        router.initialize();
-    }
 
     protected async _startServer() {
 
@@ -170,7 +176,6 @@ export class Launcher extends appolo.Launcher {
 
     public async startServer() {
 
-        this.app.initialize(this._options);
 
         await Q.fromCallback((callback: (err: any, result?: any) => void) => this._server.listen(this._port, callback));
 

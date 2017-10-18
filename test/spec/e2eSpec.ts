@@ -181,7 +181,6 @@ describe('Appolo Http e2e', () => {
 
             res.text.should.be.eq('{"status":403,"statusText":"Unauthorized","error":"NOT AUTHORIZED","code":11}')
 
-
         });
 
         it('should  call middleware before controller with class', async () => {
@@ -193,11 +192,11 @@ describe('Appolo Http e2e', () => {
             res.should.to.have.status(200);
             res.should.to.be.json;
 
-            should.exist(res.body)
+            should.exist(res.body);
 
             res.body.working.should.be.ok;
 
-            res.body.middleware.should.be.ok
+            res.body.middleware.should.be.ok;
             res.body.name.should.be.eq("Manager")
         });
 
@@ -642,8 +641,34 @@ describe('Appolo Http e2e', () => {
             res.text.should.be.eq("");
         });
 
+
     })
 
+    describe('render', function () {
+        it('should render view', async () => {
+
+            let res = await request(appolo.launcher.handleRequest)
+                .get('/test/view?test=11');
+
+            res.should.to.have.status(200);
+            res.header["access-control-allow-origin"].should.be.eq('*');
+            res.header["content-type"].should.be.eq('text/html;charset=utf-8');
+
+            res.text.should.be.eq("hello 11");
+        });
+
+        it('should render view', async () => {
+
+            let res = await request(appolo.launcher.handleRequest)
+                .get('/test/view2?test=11');
+
+            res.should.to.have.status(200);
+            res.header["access-control-allow-origin"].should.be.eq('*');
+            res.header["content-type"].should.be.eq('text/html;charset=utf-8');
+
+            res.text.should.be.eq("hello2 11");
+        });
+    });
 
 });
 
