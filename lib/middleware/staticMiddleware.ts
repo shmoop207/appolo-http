@@ -45,7 +45,7 @@ export abstract class StaticMiddleware implements IMiddleware {
         next(new HttpError(status, statusText, {
             status: status,
             statusText: statusText,
-            error: error.message,
+            error: error && error.message,
             code: code
         }));
     }
