@@ -49,7 +49,7 @@ __Method:__: `autocannon -c 100 -d 10 -p 10 localhost:3000`
 
 | Name | Average | Min | Max
 | --- | --- | --- | --- |
-| `Req/Sec` | 32821.6  | 23840 | 34463
+| Req/Sec | 32,821.6  | 23,840 | 34,463
 
 <!---## Appolo Http Boilerplate
 Small example project to get you started with appolo.<br>
