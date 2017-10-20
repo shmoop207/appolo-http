@@ -41,11 +41,10 @@ appolo.launch();
 ## Benchmarks
 ```
 node benchmarks/benchmarks
-
 ```
 __Machine:__ 2.2 GHz Intel Core i7, 16GiB RAM
 
-__Method:__: `autocannon -c 100 -d 10 -p 10 localhost:3000`
+__Method:__ `autocannon -c 100 -d 10 -p 10 localhost:3000`
 
 | Name | Average | Min | Max
 | --- | --- | --- | --- |
