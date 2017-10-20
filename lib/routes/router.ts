@@ -68,7 +68,7 @@ export class Router {
 
     protected static _invokeAction(req: IRequest, res: IResponse, next: NextFn) {
 
-        let controller: StaticController = appolo.inject.getObject<StaticController>(req.$route.route.controller, [req, res, req.$route.route]);
+        let controller: StaticController = appolo.inject.getObject<StaticController>(req.$route.route.controller, [req, res, req.$route.route],true);
 
         if (!controller) {
             next(new HttpError(500, `failed to find controller ${req.$route.route.controller}`));

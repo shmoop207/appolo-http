@@ -24,9 +24,9 @@ let child: ChildProcess, instance;
 function run() {
     const instance = autocannon({
         url: 'http://localhost:3000/test/',
-        connections: 10, //default
-        pipelining: 1, // default
-        duration: 2 // default
+        connections: 10,
+        pipelining: 1,
+        duration: 2
     });
 
     instance.on('done', (result) => {

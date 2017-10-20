@@ -32,7 +32,7 @@ export class Launcher extends appolo.Launcher {
         viewFolder: "/server/views"
     };
 
-    public async launch(config?: IOptions, callback?: (err?: any) => void): Promise<void> {
+    public async launch(config?: IOptions, callback?: (err?: any,app?:App) => void): Promise<App> {
 
         try {
             appolo.inject.addObject('appolo', require("../../index"));
@@ -66,9 +66,11 @@ export class Launcher extends appolo.Launcher {
 
             await this._startServer();
 
-            callback && callback();
+            callback && callback(null,app);
 
             this.fireEvent('appolo-launched');
+
+            return app;
 
         } catch (e) {
             if (!callback) {

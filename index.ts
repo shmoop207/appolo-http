@@ -32,6 +32,7 @@ export {default as launcher} from './lib/launcher/launcher';
 export {default as app} from './lib/app/app';
 
 export  import   validator =  require('joi');
+import {App} from "./lib/app/app";
 
 export {IOptions} from "./lib/interfaces/IOptions";
 export {IMiddleware} from "./lib/interfaces/IMiddleware";
@@ -42,7 +43,7 @@ export {IRequest} from "./lib/app/request";
 export {IResponse} from "./lib/app/response";
 
 
-export let launch = function (config?: IOptions, callback?: (err?: any) => void): Promise<void> {
+export let launch = function (config?: IOptions, callback?: (err?: any) => void): Promise<App> {
     return launcher.launch(config, callback);
 };
 

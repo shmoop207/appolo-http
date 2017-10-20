@@ -25,7 +25,7 @@
     "npm": ">= 5.3.x"
   },
   "main": "./index.js",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -34,7 +34,7 @@
   "readme": "",
   "readmeFilename": "README.md",
   "dependencies": {
-    "appolo": "^5.0.4",
+    "appolo": "^5.0.5",
     "appolo-lru-cache": "1.0.0",
     "bluebird": "^3.5.0",
     "cookie": "^0.3.1",
@@ -75,7 +75,6 @@
     "grunt-mocha-test": "0.13.2",
     "mocha": "^3.2.0",
     "nunjucks": "^3.0.1",
-    "path-to-regexp": "^2.0.0",
     "serve-static": "^1.12.4",
     "sinon": "^2.1.0",
     "sinon-chai": "^2.9.0",
