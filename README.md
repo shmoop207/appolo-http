@@ -38,6 +38,19 @@ var appolo  = require('appolo-http');
 appolo.launch();
 ```
 
+## Benchmarks
+```
+node benchmarks/benchmarks
+
+```
+__Machine:__ 2.2 GHz Intel Core i7, 16GiB RAM
+
+__Method:__: `autocannon -c 100 -d 10 -p 10 localhost:3000`
+
+| Name | Average | Min | Max
+| --- | --- | --- | --- |
+| `Req/Sec` | 32821.6  | 23840 | 34463
+
 <!---## Appolo Http Boilerplate
 Small example project to get you started with appolo.<br>
 source code : [https://github.com/shmoop207/appolo-express-boilerplate][8]
@@ -295,7 +308,7 @@ export class LoginController extends StaticController{
     public aynsc loginUser(req:IRequest,res:IResponse,route:IRouteOptions){
         try{
             let result = await this.authManager.validateUser(req.model.username,req.model.password)
-            this.send(result)
+            this.send(res,result)
         
         }catch (e){
             this.sendError(e)
@@ -316,10 +329,10 @@ export class LoginController extends StaticController{
  - `this.sendNoContent()` send empty response with statusCode 204
 
 ### json server error helper methods
- - `controller.sendError([error?:Error,code?:number])` send Error with statusCode 500
- - `controller.sendBadRequest([error?:Error,code?:number])` send Error with statusCode 400
- - `controller.sendUnauthorized([error?:Error,code?:number])` send Error with statusCode 403
- - `controller.sendNotFound([error?:Error,code?:number])` send Error with statusCode 404
+ - `this.sendError([error?:Error,code?:number])` send Error with statusCode 500
+ - `this.sendBadRequest([error?:Error,code?:number])` send Error with statusCode 400
+ - `this.sendUnauthorized([error?:Error,code?:number])` send Error with statusCode 403
+ - `this.sendNotFound([error?:Error,code?:number])` send Error with statusCode 404
 
 send json error response with optional message
 
