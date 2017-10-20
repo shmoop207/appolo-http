@@ -1,6 +1,4 @@
 import appolo = require('appolo');
-import {constructor} from 'consolidate';
-
 
 export interface IOptions extends appolo.IOptions {
     startMessage?: string,
