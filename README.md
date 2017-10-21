@@ -1,4 +1,4 @@
-Appolo HTTP 
+Appolo HTTP [![Build Status](https://travis-ci.org/shmoop207/appolo-http.png?branch=master)](https://travis-ci.org/shmoop207/appolo-http) [![Dependencies status](https://david-dm.org/shmoop207/appolo-http.png)](https://david-dm.org/shmoop207/appolo-http) [![NPM version](https://badge.fury.io/js/appolo-http.svg)](https://badge.fury.io/js/appolo-http)
 =======
 
 ![appolo](https://www.dropbox.com/s/pwdvd6ohb74t7r7/appollo.png?raw=1)
@@ -57,6 +57,10 @@ source code : [https://github.com/shmoop207/appolo-express-boilerplate][8]
 git clone https://github.com/shmoop207/appolo-express-boilerplate.git
 ```
 -->
+## Examples
+#### Real-time Stocks data
+  * live demo: [demo](http://appolo-http-quotes-example.herokuapp.com). 
+  * source code: [code](https://github.com/shmoop207/quotes-example).
 
 
 ## Recommended Directory Structure
