@@ -36,11 +36,11 @@
   "dependencies": {
     "appolo": "^5.0.5",
     "appolo-lru-cache": "1.0.0",
-    "bluebird": "^3.5.0",
+    "bluebird": "^3.5.1",
     "cookie": "^0.3.1",
-    "joi": "10.6.0",
+    "joi": "^13.0.1",
     "lodash": "^4.17.4",
-    "path-to-regexp": "2.0.0",
+    "path-to-regexp": "^2.1.0",
     "qs": "^6.5.0",
     "tslib": "^1.7.1",
     "type-is": "^1.6.15"
