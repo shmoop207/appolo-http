@@ -40,7 +40,7 @@ export class App {
 
     public initialize(options: IOptions) {
 
-        this._routes = _<IRouteInnerOptions>(router.getRoutes()).sortBy(r => r.route.order).value();
+        this._routes = _(router.getRoutes()).sortBy(r => r.route.order).value();
 
         this._middlewares.push((req: IRequest, res: IResponse, next) => this._initRoute(req, res, next));
 

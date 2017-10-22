@@ -13,7 +13,7 @@ import {IController, IControllerCtr} from "../controller/IController";
 import {Util} from "../util/util";
 import {Methods} from "../common/enums/methods";
 
-let orderIndex =  0 ;
+let orderIndex = 0;
 
 
 export class Route<T extends IController> {
@@ -183,7 +183,7 @@ export class Route<T extends IController> {
 
     public middlewares(middlewares: string[] | MiddlewareHandler[] | IMiddlewareCtr[]): this {
 
-        _.forEach(_.isArray(middlewares) ? middlewares : [middlewares], fn => this.middleware(fn));
+        _.forEach(_.isArray(middlewares) ? middlewares : [middlewares], fn => this.middleware(fn as any));
 
         return this;
     }

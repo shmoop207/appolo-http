@@ -75,7 +75,7 @@ export abstract class Controller {
         });
     }
 
-    public getModel<T>(req: IRequest): T {
-        return (req as any).model;
+    public getModel<T>(): T {
+        return (this.req as any).model;
     }
 }
