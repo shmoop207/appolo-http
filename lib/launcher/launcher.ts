@@ -29,7 +29,7 @@ export class Launcher extends appolo.Launcher {
         urlParser: "fast",
         viewExt: "html",
         viewEngine: null,
-        viewFolder: "/server/views"
+        viewFolder: "server/views"
     };
 
     public async launch(config?: IOptions, callback?: (err?: any,app?:App) => void): Promise<App> {
