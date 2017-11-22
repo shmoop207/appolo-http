@@ -233,7 +233,7 @@ describe('Appolo Http e2e', () => {
 
             res.body.logger.should.be.ok;
 
-            res.body.logger.should.be.eq("testinglogger2");
+            res.body.logger.should.be.eq("testinglogger2testinglogger3");
         });
     });
 

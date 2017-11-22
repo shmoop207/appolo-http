@@ -11,6 +11,7 @@ export {
     loader,
     environment,
     use,
+    load,
     IEnv,
     IBootstrap,
     IFactory,

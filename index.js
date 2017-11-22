@@ -11,6 +11,7 @@ exports.container = appolo_1.inject;
 exports.loader = appolo_1.loader;
 exports.environment = appolo_1.environment;
 exports.use = appolo_1.use;
+exports.load = appolo_1.load;
 exports.Injector = appolo_1.Injector;
 var register_1 = require("./lib/register/register");
 exports.Register = register_1.Register;

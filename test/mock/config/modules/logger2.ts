@@ -4,7 +4,7 @@ import Q = require('bluebird');
 
 
 export function logger2(options?) {
-    return  function (env:appolo.IEnv, inject:appolo.Injector, logger) {
+    return  async function (env:appolo.IEnv, inject:appolo.Injector, logger) {
 
         let logger2 = {
             getName: function () {

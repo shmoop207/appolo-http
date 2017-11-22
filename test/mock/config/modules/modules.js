@@ -1,10 +1,11 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const appolo = require("../../../../index");
 const logger_1 = require("./logger");
 const logger2_1 = require("./logger2");
-//module.exports = function(env){
-appolo.use(logger_1.logger);
-appolo.use(logger2_1.logger2({ test: 'test' }));
-//} 
+const logger3_1 = require("./logger3");
+module.exports = async function (env) {
+    appolo.use(logger_1.logger);
+    appolo.use(logger2_1.logger2({ test: 'test' }));
+    await appolo.load(logger3_1.logger3({ test: 'test3' }));
+};
 //# sourceMappingURL=modules.js.map

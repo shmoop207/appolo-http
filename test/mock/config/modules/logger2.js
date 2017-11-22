@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Q = require("bluebird");
 function logger2(options) {
-    return function (env, inject, logger) {
+    return async function (env, inject, logger) {
         let logger2 = {
             getName: function () {
                 return env.test + "logger2";
