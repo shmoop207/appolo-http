@@ -200,6 +200,22 @@ describe('Appolo Http e2e', () => {
             res.body.name.should.be.eq("Manager")
         });
 
+        it('should  call middleware by order', async () => {
+
+            let res = await request(appolo.launcher.handleRequest)
+                .get('/test/middleware/order')
+
+
+            res.should.to.have.status(200);
+            res.should.to.be.json;
+
+            should.exist(res.body);
+
+            res.body.working.should.be.eq("working1working2");
+
+        });
+
+
         it('should  call middleware before controller with objectId', async () => {
 
             let res = await request(appolo.launcher.handleRequest)

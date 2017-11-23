@@ -12,10 +12,24 @@ let MiddlewareController = class MiddlewareController extends appolo.Controller 
     fn(req, res) {
         res.json({ working: req.working });
     }
+    testOrderMiddleware(req, res) {
+        res.json({ working: req.working2 });
+    }
 };
 tslib_1.__decorate([
     decorators_1.inject()
 ], MiddlewareController.prototype, "manager", void 0);
+tslib_1.__decorate([
+    decorators_1.pathGet("/test/middleware/order"),
+    decorators_1.middleware(function (req, res, next) {
+        req.working = "working1";
+        next();
+    }),
+    decorators_1.middleware(function (req, res, next) {
+        (req).working2 = req.working + "working2";
+        next();
+    })
+], MiddlewareController.prototype, "testOrderMiddleware", null);
 MiddlewareController = tslib_1.__decorate([
     decorators_1.define()
 ], MiddlewareController);

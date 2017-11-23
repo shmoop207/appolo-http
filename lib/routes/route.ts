@@ -144,7 +144,9 @@ export class Route<T extends IController> {
         return this
     }
 
-    public middleware(middleware: string | MiddlewareHandler | IMiddlewareCtr | ((req: any, res: any, next: any) => void)): this {
+    public middleware(middleware: string | MiddlewareHandler | IMiddlewareCtr | ((req: any, res: any, next: any) => void), order: "head" | "tail" = "tail"): this {
+
+        let arrMethod = order == "head" ? "unshift" : "push";
 
         if (_.isArray(middleware)) {
             return this.middlewares(middleware)
@@ -155,7 +157,7 @@ export class Route<T extends IController> {
         if (Util.isClass(middleware)) {
             middleware = _.camelCase((middleware as IMiddlewareCtr).name)
         } else if (typeof middleware == "function") {
-            this._route.middlewareHandler.push(middleware as MiddlewareHandler);
+            this._route.middlewareHandler[arrMethod](middleware as MiddlewareHandler);
         }
 
 
@@ -175,15 +177,15 @@ export class Route<T extends IController> {
                 }
             })(middleware);
 
-            this._route.middlewareHandler.push(middleware as MiddlewareHandler);
+            this._route.middlewareHandler[arrMethod](middleware as MiddlewareHandler);
 
             return this;
         }
     }
 
-    public middlewares(middlewares: string[] | MiddlewareHandler[] | IMiddlewareCtr[]): this {
+    public middlewares(middlewares: string[] | MiddlewareHandler[] | IMiddlewareCtr[], order: "head" | "tail" = "head"): this {
 
-        _.forEach(_.isArray(middlewares) ? middlewares : [middlewares], fn => this.middleware(fn as any));
+        _.forEach(_.isArray(middlewares) ? middlewares : [middlewares], fn => this.middleware(fn as any, order));
 
         return this;
     }

@@ -1,6 +1,6 @@
 "use strict";
 import appolo = require('../../../../index');
-import {define, inject} from '../../../../decorators';
+import {define, inject,pathGet,middleware} from '../../../../decorators';
 import {TestMiddleware} from "../middleware/middleware";
 import {AuthMiddleware} from "../middleware/authMiddleware";
 
@@ -14,6 +14,19 @@ class MiddlewareController extends appolo.Controller {
 
     fn(req, res) {
         res.json({working: req.working})
+    }
+
+    @pathGet("/test/middleware/order")
+    @middleware(function (req, res, next) {
+            (req as any).working = "working1";
+            next()
+        })
+    @middleware(function (req, res, next) {
+        (req).working2 = req.working+ "working2"
+        next()
+    })
+    testOrderMiddleware(req, res){
+        res.json({working: req.working2})
     }
 
 

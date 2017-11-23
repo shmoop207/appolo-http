@@ -64,7 +64,7 @@ proto.json = function (obj: any) {
 };
 
 proto.render = function (path: string, params?: any) {
-    if (arguments.length == 1) {
+    if (arguments.length == 1 && typeof path !== "string") {
         params = path;
         path = "";
     }

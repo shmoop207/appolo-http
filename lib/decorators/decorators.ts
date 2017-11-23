@@ -198,7 +198,7 @@ export function method(method: 'get' | 'post' | 'delete' | 'patch' | 'head' | 'p
 }
 
 export function middleware(middleware: string | MiddlewareHandler | IMiddlewareCtr | ((req: any, res: any, next: any) => void)): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
-    return defineRouteProperty([{name: "middleware", args: [middleware]}])
+    return defineRouteProperty([{name: "middleware", args: [middleware,"head"]}])
 }
 
 export function validation(key: string | { [index: string]: joi.Schema }, validation?: joi.Schema): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
