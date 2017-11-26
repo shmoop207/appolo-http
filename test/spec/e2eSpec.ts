@@ -335,7 +335,7 @@ describe('Appolo Http e2e', () => {
         });
     });
 
-    describe('query', function () {
+    describe('cookie', function () {
 
         it('should should have cookie', async () => {
 
@@ -353,8 +353,55 @@ describe('Appolo Http e2e', () => {
 
             res2.body.cookie.should.be.eq("hey")
         })
+
+        it('should should have cookie json', async () => {
+
+            const agent = request.agent(appolo.launcher.handleRequest);
+
+
+            let res = await agent
+                .get(`/test/cookie_json/?aa=bb`)
+
+            res.should.to.have.status(200);
+            res.header["set-cookie"][0].should.be.eq("cookie=j%3A%7B%22test%22%3A%22working%22%7D; Path=/; Expires=Mon, 01 Feb 2100 00:00:00 GMT");
+
+            let res2 = await agent
+                .get(`/test/cookie_json/?aa=bb`)
+
+            res2.body.cookie.test.should.be.eq("working")
+        })
+
+        it('should should clear cookie', async () => {
+
+            const agent = request.agent(appolo.launcher.handleRequest);
+
+
+            let res = await agent
+                .get(`/test/cookie_json/?aa=bb`)
+
+            res.should.to.have.status(200);
+            res.header["set-cookie"][0].should.be.eq("cookie=j%3A%7B%22test%22%3A%22working%22%7D; Path=/; Expires=Mon, 01 Feb 2100 00:00:00 GMT");
+
+            let res2 = await agent
+                .get(`/test/cookie_clear/?aa=bb`)
+
+            res2.header["set-cookie"][0].should.be.eq("cookie=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT");
+        })
     });
 
+    describe('redirect',  ()=> {
+        it("should redirect to path",async ()=>{
+            let res = await request(appolo.handleRequest)
+                .get('/test/redirect/').redirects(2)
+
+            res.should.to.have.status(200);
+            res.should.to.be.json;
+
+            should.exist(res.body);
+
+            res.body.name.should.be.eq("redirectTo")
+        })
+    })
 
     describe('root', function () {
         xit('should should call route *', async () => {

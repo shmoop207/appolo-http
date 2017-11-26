@@ -43,7 +43,11 @@ interface IAppResponse {
 
     gzip(): IResponse
 
-    cookie(key: string, value: string | string[], options?: cookie.CookieSerializeOptions): IResponse
+    cookie(key: string, value: any, options?: cookie.CookieSerializeOptions): IResponse
+
+    clearCookie(key: string, options?: cookie.CookieSerializeOptions): IResponse
+
+    redirect(path: string): void
 }
 
 let proto: any = http.ServerResponse.prototype;
@@ -94,7 +98,7 @@ proto.set = proto.header = function (field: string | { [index: string]: string }
     return this
 };
 
-proto.cookie = function (name: string, value: any, options: cookie.CookieSerializeOptions): IResponse {
+proto.cookie = function (name: string, value: any, options?: cookie.CookieSerializeOptions): IResponse {
     let opts: cookie.CookieSerializeOptions = options || {};
 
     let val: string = _.isObject(value) ? 'j:' + JSON.stringify(value) : String(value);
@@ -112,6 +116,25 @@ proto.cookie = function (name: string, value: any, options: cookie.CookieSeriali
 
     return this;
 };
+
+proto.clearCookie = function (name: string, options?: cookie.CookieSerializeOptions): IResponse {
+    let opts: cookie.CookieSerializeOptions = options || {};
+    opts.expires = new Date(1);
+    opts.path = '/';
+
+    this.cookie(name, '', opts);
+
+    return this;
+}
+
+proto.redirect = function (path:string):void {
+
+    if(this.statusCode){
+        this.statusCode = 302;
+    }
+    this.setHeader("Location",path);
+    this.send()
+}
 
 proto.get = function (field: string): string | string[] {
     return this.getHeader(field);
