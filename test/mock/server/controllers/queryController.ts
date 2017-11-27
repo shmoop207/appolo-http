@@ -12,30 +12,35 @@ class QueryController extends appolo.Controller {
         res.json(req.query);
     }
 
+    @path("/test/protocol")
+    protocol(req: appolo.IRequest, res) {
+        res.json({protocol: req.protocol, secure: req.secure, host: req.hostname});
+    }
+
     @path("/test/cookie")
-    cookie(req:appolo.IRequest, res:appolo.IResponse) {
+    cookie(req: appolo.IRequest, res: appolo.IResponse) {
 
         let date = new Date()
-        date.setUTCFullYear(2100,1,1)
-        date.setUTCHours(0,0,0,0)
-        res.cookie('cookie', 'hey',{expires:date});
+        date.setUTCFullYear(2100, 1, 1)
+        date.setUTCHours(0, 0, 0, 0)
+        res.cookie('cookie', 'hey', {expires: date});
 
         res.json((req as any).cookies);
     }
 
     @path("/test/cookie_json")
-    cookieJson(req:appolo.IRequest, res:appolo.IResponse) {
+    cookieJson(req: appolo.IRequest, res: appolo.IResponse) {
 
         let date = new Date()
-        date.setUTCFullYear(2100,1,1)
-        date.setUTCHours(0,0,0,0)
-        res.cookie('cookie', {test:"working"},{expires:date});
+        date.setUTCFullYear(2100, 1, 1)
+        date.setUTCHours(0, 0, 0, 0)
+        res.cookie('cookie', {test: "working"}, {expires: date});
 
         res.json((req as any).cookies);
     }
 
     @path("/test/cookie_clear")
-    cookieClear(req:appolo.IRequest, res:appolo.IResponse) {
+    cookieClear(req: appolo.IRequest, res: appolo.IResponse) {
 
         let date = new Date()
         date.setUTCFullYear(2100, 1, 1)

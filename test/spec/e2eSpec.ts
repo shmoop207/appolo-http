@@ -335,6 +335,35 @@ describe('Appolo Http e2e', () => {
         });
     });
 
+    describe('protocol', function () {
+        it('should should have protocol on request', async () => {
+            let res = await request(appolo.handleRequest)
+                .get(`/test/protocol`)
+
+            res.should.to.have.status(200);
+
+            res.body.host.should.be.includes("127.0.0.1");
+            res.body.protocol.should.be.eq("http");
+            res.body.secure.should.be.eq(false)
+        });
+
+        it('should should have protocol on request with proxy', async () => {
+            let res = await request(appolo.handleRequest)
+                .get(`/test/protocol`)
+                .set('X-Forwarded-Host', 'test.com')
+                .set('X-Forwarded-Proto', 'https')
+                .send();
+
+            res.should.to.have.status(200);
+
+            res.body.host.should.be.includes("test.com");
+            res.body.protocol.should.be.eq("https");
+            res.body.secure.should.be.eq(true)
+        });
+
+
+    });
+
     describe('cookie', function () {
 
         it('should should have cookie', async () => {
@@ -389,8 +418,8 @@ describe('Appolo Http e2e', () => {
         })
     });
 
-    describe('redirect',  ()=> {
-        it("should redirect to path",async ()=>{
+    describe('redirect', () => {
+        it("should redirect to path", async () => {
             let res = await request(appolo.handleRequest)
                 .get('/test/redirect/').redirects(2)
 

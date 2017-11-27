@@ -7,6 +7,9 @@ let QueryController = class QueryController extends appolo.Controller {
     test(req, res) {
         res.json(req.query);
     }
+    protocol(req, res) {
+        res.json({ protocol: req.protocol, secure: req.secure, host: req.hostname });
+    }
     cookie(req, res) {
         let date = new Date();
         date.setUTCFullYear(2100, 1, 1);
@@ -32,6 +35,9 @@ let QueryController = class QueryController extends appolo.Controller {
 tslib_1.__decorate([
     decorators_1.path("/test/query")
 ], QueryController.prototype, "test", null);
+tslib_1.__decorate([
+    decorators_1.path("/test/protocol")
+], QueryController.prototype, "protocol", null);
 tslib_1.__decorate([
     decorators_1.path("/test/cookie")
 ], QueryController.prototype, "cookie", null);
