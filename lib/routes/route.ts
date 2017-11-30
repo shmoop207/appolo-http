@@ -183,7 +183,7 @@ export class Route<T extends IController> {
         }
     }
 
-    public middlewares(middlewares: string[] | MiddlewareHandler[] | IMiddlewareCtr[], order: "head" | "tail" = "head"): this {
+    public middlewares(middlewares: string[] | MiddlewareHandler[] | IMiddlewareCtr[], order: "head" | "tail" = "tail"): this {
 
         _.forEach(_.isArray(middlewares) ? middlewares : [middlewares], fn => this.middleware(fn as any, order));
 
