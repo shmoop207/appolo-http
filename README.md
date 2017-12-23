@@ -580,19 +580,28 @@ By default, each module can inject:
 Module example:
 ```javascript
 import appolo = require('appolo-http');
-
+export = function(){
 //my custom module 
-appolo.use(function(env:any,inject:appolo.Injector,next:appolo.NextFn){
-    let myModuleObject = {data:'test'};	
-    inject.addObject('myModuleObject',myModuleObject);
-    next();
-}); 
+    appolo.use(function(env:any,inject:appolo.Injector,next:appolo.NextFn){
+        let myModuleObject = {data:'test'};	
+        inject.addObject('myModuleObject',myModuleObject);
+        next();
+    }); 
 //or with promise
-appolo.use(async function(env:any,inject:appolo.Injector){
-    let myModuleObject = {data:'test'};	
-    inject.addObject('myModuleObject',myModuleObject);
-});
-	
+    appolo.use(async function(env:any,inject:appolo.Injector){
+        let myModuleObject = {data:'test'};
+        await toSomeThing();
+        inject.addObject('myModuleObject',myModuleObject);
+    });
+
+}
+//or with asyc await and appolo load
+export = async function(){
+    await appolo.load(function(env:any,inject:appolo.Injector){
+        let myModuleObject = {data:'test'};	
+        inject.addObject('myModuleObject',myModuleObject);
+    });
+}
 ```
 Now we can inject `myModuleObject` to any class:
 ```javascript
