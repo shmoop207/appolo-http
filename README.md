@@ -59,9 +59,13 @@ git clone https://github.com/shmoop207/appolo-express-boilerplate.git
 ```
 -->
 ## Examples
-#### Real-time Stocks data
+#### Real-time Stocks
   * live demo: [demo](http://appolo-http-quotes-example.herokuapp.com). 
   * source code: [code](https://github.com/shmoop207/quotes-example).
+
+#### Chat
+* source code: [source](https://github.com/shmoop207/appolo-chat-example)
+* live demo:[demo](http://appolo-chat-example.herokuapp.com/)
 
 
 ## Recommended Directory Structure
