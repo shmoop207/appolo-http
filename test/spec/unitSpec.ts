@@ -60,7 +60,7 @@ describe('Appolo Express Unit', () => {
 
         });
 
-        it.only("should have manager with valid inherit ", () => {
+        it("should have manager with valid inherit ", () => {
 
             let manager = appolo.container.getObject<Manager6>('manager6');
 

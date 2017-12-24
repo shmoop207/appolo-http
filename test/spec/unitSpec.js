@@ -36,7 +36,7 @@ describe('Appolo Express Unit', () => {
             should.not.exist(manager.manager4);
             manager.env.test.should.be.eq("testing");
         });
-        it.only("should have manager with valid inherit ", () => {
+        it("should have manager with valid inherit ", () => {
             let manager = appolo.container.getObject('manager6');
             should.exist(manager);
             should.exist(manager.env);
