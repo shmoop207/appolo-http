@@ -38,6 +38,7 @@ import {App} from "./lib/app/app";
 export {IOptions} from "./lib/interfaces/IOptions";
 export {IMiddleware} from "./lib/interfaces/IMiddleware";
 export {IRouteOptions} from "./lib/interfaces/IRouteOptions";
+export {RouteModel} from "./lib/routes/routeModel";
 export {IDefinition} from "./lib/interfaces/IDefinition";
 export {App, NextFn} from "./lib/app/app";
 export {IRequest} from "./lib/app/request";

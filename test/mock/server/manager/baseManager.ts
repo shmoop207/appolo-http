@@ -5,7 +5,7 @@ import {Manager2} from "./manager2";
 
 
 export class BaseManager {
-    @appolo.inject() logger: any
+    @appolo.inject() logger: any;
     @appolo.inject() env: any
 
 }

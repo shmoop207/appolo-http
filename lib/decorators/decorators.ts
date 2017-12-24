@@ -7,12 +7,19 @@ import {MiddlewareHandler} from "../app/app";
 import {IMiddlewareCtr} from "../interfaces/IMiddleware";
 import launcher from '../launcher/launcher';
 import {IRouteOptions} from "../interfaces/IRouteOptions";
+import {RouteModel} from "../routes/routeModel";
 
 
 const EmptyFunction = () => {
 };
 
 function addDefinition(name: string, args: any[], type): void {
+
+    if (type.prototype.__inject__ && !type.prototype.hasOwnProperty("__inject__")) {
+
+        type.prototype.__inject__ = _.cloneDeep(type.prototype.__inject__)
+    }
+
     if (!type.prototype.__inject__) {
         type.prototype.__inject__ = []
     }
@@ -50,11 +57,11 @@ export function define(id?: string): (fn: Function) => void {
     return function (id: string, fn: Function) {
         let appoloDef = appolo.define(id || (fn.name.charAt(0).toLowerCase() + fn.name.slice(1)), fn);
 
-        _.forEach(fn.prototype.__inject__, (item: any) => appoloDef[item.name].apply(appoloDef, item.args))
+        _.forEach(fn.prototype.__inject__, (item: any) => appoloDef[item.name].apply(appoloDef, item.args));
 
         fn.prototype.__inject__ = appoloDef;
 
-        fn.prototype.__param_inject__ = _.groupBy(fn.prototype.__param_inject__, "method")
+        fn.prototype.__param_inject__ = _.groupBy(fn.prototype.__param_inject__, "method");
 
         _.forEach(fn.prototype.__param_inject__, (items: any[], method: string) => {
             let oldFn = fn.prototype[method];
@@ -110,7 +117,10 @@ export function inject(inject?: string): (target: any, propertyKey: string, desc
 }
 
 
-export function injectFactoryMethod(factoryMethod: string): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
+export function injectFactoryMethod(factoryMethod: string| Function): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
+    if(typeof factoryMethod =="function"){
+        factoryMethod = factoryMethod.name.charAt(0).toLowerCase() + factoryMethod.name.slice(1)
+    }
 
     return addDefinitionProperty("injectFactoryMethod", [factoryMethod]);
 }
@@ -153,6 +163,10 @@ export function injectValue(value: any): (target: any, propertyKey: string, desc
 function defineRouteProperty(params: { name: string, args: any[] }[]): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
 
     return function (params: { name: string, args: any[] }[], target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+
+        if (target.constructor.prototype.__route__ && !target.constructor.prototype.hasOwnProperty("__route__")) {
+            target.constructor.prototype.__route__ = _.cloneDeep(target.constructor.prototype.__route__);
+        }
 
         let routes = target.constructor.prototype.__route__ || (target.constructor.prototype.__route__ = {});
 
@@ -198,11 +212,27 @@ export function method(method: 'get' | 'post' | 'delete' | 'patch' | 'head' | 'p
 }
 
 export function middleware(middleware: string | MiddlewareHandler | IMiddlewareCtr | ((req: any, res: any, next: any) => void)): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
-    return defineRouteProperty([{name: "middleware", args: [middleware,"head"]}])
+    return defineRouteProperty([{name: "middleware", args: [middleware, "head"]}])
 }
 
-export function validation(key: string | { [index: string]: joi.Schema }, validation?: joi.Schema): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
+export function validation(key: string | { [index: string]: joi.Schema } | RouteModel, validation?: joi.Schema): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
+    if (key.constructor.prototype == RouteModel.constructor.prototype) {
+        key = (key as any).prototype.__validations__
+    }
+
     return defineRouteProperty([{name: "validation", args: [key, validation]}])
+}
+
+export function validationParam(validation: joi.Schema): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => any {
+    return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+
+        if (target.constructor.prototype.__validations__ && !target.constructor.prototype.hasOwnProperty("__validations__")) {
+            target.constructor.prototype.__validations__ = _.cloneDeep(target.constructor.prototype.__validations__);
+        }
+
+        let validations = target.constructor.prototype.__validations__ || (target.constructor.prototype.__validations__ = {});
+        validations[propertyKey] = validation;
+    }
 }
 
 export function abstract(route: Partial<IRouteOptions>): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {

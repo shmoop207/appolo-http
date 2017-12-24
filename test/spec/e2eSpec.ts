@@ -654,6 +654,37 @@ describe('Appolo Http e2e', () => {
             res.body.username.should.be.ok;
         });
 
+        it('should call validations param', async () => {
+
+            let res = await request(appolo.launcher.handleRequest)
+                .get('/test/validations/param?test=aaa&test2=2');
+
+
+            res.should.to.have.status(200);
+            res.should.to.be.json;
+
+            should.exist(res.body);
+
+            res.body.test.should.be.eq("aaa");
+            res.body.name.should.be.eq("ValidationParamController");
+        });
+
+        it('should call validations param inherit', async () => {
+
+            let res = await request(appolo.launcher.handleRequest)
+                .get('/test/validations/param2?test=aaa&test2=2&id=www');
+
+
+            res.should.to.have.status(200);
+            res.should.to.be.json;
+
+            should.exist(res.body);
+
+            res.body.test.should.be.eq("aaa");
+            res.body.id.should.be.eq("www");
+            res.body.name.should.be.eq("ValidationParamController");
+        });
+
     });
 
     describe('json', function () {

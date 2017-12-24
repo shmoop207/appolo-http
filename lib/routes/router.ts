@@ -68,7 +68,7 @@ export class Router {
 
     protected static _invokeAction(req: IRequest, res: IResponse, next: NextFn) {
 
-        let controller: StaticController = appolo.inject.getObject<StaticController>(req.$route.route.controller, [req, res, req.$route.route],true);
+        let controller: StaticController = appolo.inject.getObject<StaticController>(req.$route.route.controller, [req, res, req.$route.route], true);
 
         if (!controller) {
             next(new HttpError(500, `failed to find controller ${req.$route.route.controller}`));
@@ -76,6 +76,7 @@ export class Router {
         }
 
         let route = req.$route.route;
+
 
         let fnName: string = route.actionName;
 
@@ -90,7 +91,7 @@ export class Router {
             route.actionName = fnName;
         }
 
-        return controller[fnName](req, res, route);
+        return controller[fnName](req, res, route, req.model);
     }
 
     protected static _checkValidation(req: IRequest, res: IResponse, next: NextFn) {

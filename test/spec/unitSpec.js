@@ -28,12 +28,21 @@ describe('Appolo Express Unit', () => {
             should.exist(manager.manager3);
             should.exist(manager.manager3.manager2);
         });
-        it("should have manager with inherit inherit", () => {
+        it("should have manager with inherit", () => {
             let manager = appolo.container.getObject('manager4');
             should.exist(manager);
             should.exist(manager.env);
             should.exist(manager.logger);
+            should.not.exist(manager.manager4);
             manager.env.test.should.be.eq("testing");
+        });
+        it.only("should have manager with valid inherit ", () => {
+            let manager = appolo.container.getObject('manager6');
+            should.exist(manager);
+            should.exist(manager.env);
+            should.exist(manager.logger);
+            manager.env.test.should.be.eq("testing");
+            should.not.exist(manager.manager3);
         });
         it("should have manager statics", function () {
             let manager = appolo.container.getObject('manager3');

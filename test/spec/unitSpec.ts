@@ -6,6 +6,7 @@ import {Manager4} from "../mock/server/manager/manager4";
 import {Util} from "../../lib/util/util";
 import * as Url from "url";
 import * as querystring from "querystring";
+import {Manager6} from "../mock/server/manager/manager6";
 
 let should = chai.should()
 
@@ -46,15 +47,28 @@ describe('Appolo Express Unit', () => {
 
         });
 
-        it("should have manager with inherit inherit", () => {
+        it("should have manager with inherit", () => {
 
             let manager = appolo.container.getObject<Manager4>('manager4');
 
             should.exist(manager);
             should.exist(manager.env);
             should.exist(manager.logger);
+            should.not.exist((manager as any).manager4);
+
             manager.env.test.should.be.eq("testing")
 
+        });
+
+        it.only("should have manager with valid inherit ", () => {
+
+            let manager = appolo.container.getObject<Manager6>('manager6');
+
+            should.exist(manager);
+            should.exist(manager.env);
+            should.exist(manager.logger);
+            manager.env.test.should.be.eq("testing");
+            should.not.exist((manager as any).manager3);
         });
 
         it("should have manager statics", function () {
@@ -89,7 +103,6 @@ describe('Appolo Express Unit', () => {
             env.type.should.be.eq("testing")
 
         })
-
 
 
     });
