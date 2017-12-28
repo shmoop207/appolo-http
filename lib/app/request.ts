@@ -1,7 +1,7 @@
 import    http = require('http');
 import    _ = require('lodash');
 import {IRouteInnerOptions, IRouteOptions} from "../interfaces/IRouteOptions";
-import {Url} from "url";
+import {Url, parse} from "url";
 import typeis = require('type-is');
 import {NextFn} from "./app";
 
@@ -29,6 +29,7 @@ interface AppRequest {
     protocol: string
     hostname: string
     secure: boolean
+    pathname: boolean
 
 }
 
@@ -54,7 +55,7 @@ proto.get = proto.header = function (name: string) {
     }
 };
 
-defineGetter(proto, 'protocol', function(){
+defineGetter(proto, 'protocol', function () {
     let protocol = this.connection.encrypted
         ? 'https'
         : 'http';
@@ -65,11 +66,15 @@ defineGetter(proto, 'protocol', function(){
     return headerArr[0].trim();
 });
 
-defineGetter(proto, 'secure', function() {
+defineGetter(proto, 'secure', function () {
     return this.protocol === 'https';
 });
 
-defineGetter(proto, 'hostname', function() {
+defineGetter(proto, 'path', function () {
+    return parse(this.url).pathname;
+});
+
+defineGetter(proto, 'hostname', function () {
 
     let host = this.headers['x-forwarded-host'];
 
@@ -84,7 +89,6 @@ defineGetter(proto, 'hostname', function() {
     return host.split(",")[0].trim();
 
 });
-
 
 
 function defineGetter(obj, name, getter) {
