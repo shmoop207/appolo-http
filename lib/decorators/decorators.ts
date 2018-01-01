@@ -29,12 +29,12 @@ function addDefinition(name: string, args: any[], type): void {
 
 function addDefinitionClass(name: string, args: any[]): (fn: Function) => void {
     return function (name: string, args: any[], fn: Function) {
-        let appoloDef = fn.prototype.__inject__;
-        if (!appoloDef || _.isArray(appoloDef)) {
-            addDefinition(name, args, fn)
-        } else {
-            appoloDef[name].apply(appoloDef, args)
-        }
+        //let appoloDef = fn.prototype.__inject__;
+        //if (!appoloDef || _.isArray(appoloDef)) {
+        addDefinition(name, args, fn)
+        //} else {
+        //   appoloDef[name].apply(appoloDef, args)
+        // }
     }.bind(null, name, args)
 }
 
@@ -59,11 +59,11 @@ export function define(id?: string): (fn: Function) => void {
 
         _.forEach(fn.prototype.__inject__, (item: any) => appoloDef[item.name].apply(appoloDef, item.args));
 
-        fn.prototype.__inject__ = appoloDef;
+        //fn.prototype.__inject__ = appoloDef;
 
-        fn.prototype.__param_inject__ = _.groupBy(fn.prototype.__param_inject__, "method");
+        let paramGroups = _.groupBy(fn.prototype.__param_inject__, "method");
 
-        _.forEach(fn.prototype.__param_inject__, (items: any[], method: string) => {
+        _.forEach(paramGroups, (items: any[], method: string) => {
             let oldFn = fn.prototype[method];
 
             fn.prototype[method] = function (...args: any[]) {
@@ -117,8 +117,8 @@ export function inject(inject?: string): (target: any, propertyKey: string, desc
 }
 
 
-export function injectFactoryMethod(factoryMethod: string| Function): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
-    if(typeof factoryMethod =="function"){
+export function injectFactoryMethod(factoryMethod: string | Function): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
+    if (typeof factoryMethod == "function") {
         factoryMethod = factoryMethod.name.charAt(0).toLowerCase() + factoryMethod.name.slice(1)
     }
 

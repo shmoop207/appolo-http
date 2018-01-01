@@ -2,9 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const chai = require("chai");
 const appolo = require("../../index");
+const sinonChai = require("sinon-chai");
 let should = chai.should();
+chai.use(sinonChai);
 describe('Appolo Express Unit', () => {
-    describe("basic test", () => {
+    describe.only("basic test", () => {
         beforeEach(async () => {
             return appolo.launcher.launch({
                 paths: ['config', 'server'],
@@ -43,6 +45,24 @@ describe('Appolo Express Unit', () => {
             should.exist(manager.logger);
             manager.env.test.should.be.eq("testing");
             should.not.exist(manager.manager3);
+        });
+        it("should have manager with valid inherit with define", () => {
+            let manager7 = appolo.container.getObject('manager7');
+            let manager8 = appolo.container.getObject('manager8');
+            should.exist(manager7);
+            should.exist(manager7.env);
+            should.exist(manager7.logger);
+            should.exist(manager7.manager4);
+            manager7.env.test.should.be.eq("testing");
+            manager7.name.should.be.eq("Manager7");
+            should.not.exist(manager7.manager3);
+            should.not.exist(manager7.manager6);
+            should.exist(manager8);
+            should.exist(manager8.manager6);
+            should.exist(manager8.manager4);
+            manager8.env.test.should.be.eq("testing");
+            manager8.name.should.be.eq("Manager8");
+            manager8.initCout.should.be.eq(2);
         });
         it("should have manager statics", function () {
             let manager = appolo.container.getObject('manager3');

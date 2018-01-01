@@ -25,7 +25,7 @@
     "npm": ">= 5.3.x"
   },
   "main": "./index.js",
-  "version": "2.0.21",
+  "version": "2.0.22",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -59,6 +59,8 @@
     "@types/node": "^8.0.51",
     "@types/qs": "^6.5.1",
     "@types/serve-static": "^1.13.1",
+    "@types/sinon": "^4.1.2",
+    "@types/sinon-chai": "^2.7.29",
     "@types/supertest": "^2.0.3",
     "@types/type-is": "^1.6.1",
     "autocannon": "^0.16.5",

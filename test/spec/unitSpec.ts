@@ -1,4 +1,5 @@
 import    chai = require('chai');
+import    sinon = require('sinon');
 import    appolo = require('../../index');
 import {Manager} from "../mock/server/manager/manager";
 import {Manager3} from "../mock/server/manager/manager3";
@@ -7,13 +8,17 @@ import {Util} from "../../lib/util/util";
 import * as Url from "url";
 import * as querystring from "querystring";
 import {Manager6} from "../mock/server/manager/manager6";
+import {Manager7} from "../mock/server/manager/manager7";
+import {Manager8} from "../mock/server/manager/manager8";
+import sinonChai = require("sinon-chai");
 
 let should = chai.should()
+chai.use(sinonChai);
 
 
 describe('Appolo Express Unit', () => {
 
-    describe("basic test", () => {
+    describe.only("basic test", () => {
 
         beforeEach(async () => {
             return appolo.launcher.launch({
@@ -69,6 +74,31 @@ describe('Appolo Express Unit', () => {
             should.exist(manager.logger);
             manager.env.test.should.be.eq("testing");
             should.not.exist((manager as any).manager3);
+        });
+
+        it("should have manager with valid inherit with define", () => {
+
+            let manager7 = appolo.container.getObject<Manager7>('manager7');
+            let manager8 = appolo.container.getObject<Manager8>('manager8');
+
+            should.exist(manager7);
+            should.exist(manager7.env);
+            should.exist(manager7.logger);
+            should.exist(manager7.manager4);
+            manager7.env.test.should.be.eq("testing");
+            manager7.name.should.be.eq("Manager7");
+
+
+            should.not.exist((manager7 as any).manager3);
+            should.not.exist((manager7 as any).manager6);
+
+            should.exist(manager8);
+            should.exist(manager8.manager6);
+            should.exist(manager8.manager4);
+            manager8.env.test.should.be.eq("testing");
+            manager8.name.should.be.eq("Manager8");
+            manager8.initCout.should.be.eq(2)
+
         });
 
         it("should have manager statics", function () {
