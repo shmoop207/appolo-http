@@ -76,7 +76,7 @@ export class Route<T extends IController> {
 
     public abstract(abstract: Partial<IRouteOptions>): this {
 
-        let items = _.pick(abstract, ["environments", "roles", "middleware", "validations", "convertToCamelCase", "method", "params"])
+        let items = _.pick(abstract, ["environments", "roles", "middleware", "validations", "convertToCamelCase", "method", "params"]);
 
         _.forEach(items, (item: any, key: string) => {
             this[key](item);
@@ -149,7 +149,13 @@ export class Route<T extends IController> {
         let arrMethod = order == "head" ? "unshift" : "push";
 
         if (_.isArray(middleware)) {
-            return this.middlewares(middleware)
+            return this.middlewares(middleware, order)
+        }
+
+        let middle: any = middleware;
+
+        if (_.isPlainObject(middle) && (middle.order && middle.middleware)) {
+            this.middleware(middle.middleware, middle.order)
         }
 
         this._route.route.middleware.push(middleware);

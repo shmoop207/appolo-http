@@ -18,7 +18,7 @@ chai.use(sinonChai);
 
 describe('Appolo Express Unit', () => {
 
-    describe.only("basic test", () => {
+    describe("basic test", () => {
 
         beforeEach(async () => {
             return appolo.launcher.launch({

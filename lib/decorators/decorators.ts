@@ -236,7 +236,22 @@ export function validationParam(validation: joi.Schema): (target: any, propertyK
 }
 
 export function abstract(route: Partial<IRouteOptions>): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
+
+    _.forEach(route, (value, key) => {
+        //we need to insert middlewares in reverse order
+        if (key == "middleware") {
+            route[key] = {middleware: _.isArray(value) ? value.reverse() : value, order: "head"} as any
+        }
+    })
+
+
     return defineRouteProperty([{name: "abstract", args: [route]}])
+}
+
+export function roles(role: string | string[]): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
+
+
+    return defineRouteProperty([{name: "roles", args: [role]}])
 }
 
 
