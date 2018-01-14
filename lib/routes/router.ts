@@ -45,7 +45,10 @@ export class Router {
 
         let middleware = routeInner.middlewareHandler || (routeInner.middlewareHandler = []);
 
-        if (!routeInner.route.path || (routeInner.route.environments && routeInner.route.environments.length && !_.includes(routeInner.route.environments, (appolo.environment.name || appolo.environment.type)))) {
+        if (!routeInner.route.path
+            || (routeInner.route.environments
+                && routeInner.route.environments.length
+                && !_.includes(routeInner.route.environments, (appolo.environment.name || appolo.environment.type)))) {
             return null;
         }
 

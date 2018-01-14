@@ -4,7 +4,7 @@ const tslib_1 = require("tslib");
 const app = require("../../../../index");
 let IndexController = class IndexController extends app.StaticController {
     hello(req, res, route) {
-        res.json({ hello: 'world' });
+        res.send('hello world');
     }
 };
 tslib_1.__decorate([

@@ -7,7 +7,23 @@ let child: ChildProcess, instance;
 
 (async function () {
 
-    child = exec('node ./benchmarks/mock/app.js');
+    switch (process.env.TYPE){
+        case "express":
+            child = exec('node ./benchmarks/express.js');
+            console.log("running express");
+            break;
+        case "fastify":
+            child = exec('node ./benchmarks/fastify.js');
+            console.log("running fastify");
+
+            break;
+        default:
+            console.log("running appolo-http");
+
+            child = exec('node ./benchmarks/mock/app.js');
+    }
+
+
 
     child.stdout.on('data', function (data) {
         run();

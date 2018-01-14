@@ -71,8 +71,8 @@ export class App {
             : url.parse(req.url);
 
         req.query = this._options.qsParser === "qs"
-            ? qs.parse(query)
-            : querystring.parse(query);
+            ? qs.parse(query as string)
+            : querystring.parse(query as string);
 
         req.pathName = pathname;
         req.originUrl = req.url;
@@ -106,7 +106,7 @@ export class App {
         this._handleMiddleware(req, res, 0, req.$route.middlewareHandler);
     }
 
-    private _findRoute(req: IRequest) {
+    private _findRoute(req: IRequest):{route: IRouteInnerOptions,match:RegExpExecArray} {
         let route, match;
         for (let i = 0; i < this._routesLength; i++) {
 

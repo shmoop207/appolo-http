@@ -7,7 +7,7 @@ export class IndexController extends app.StaticController {
 
     @app.path("/test/")
     public hello(req: app.IRequest, res: app.IResponse, route) {
-        res.json({hello: 'world'})
+        res.send('hello world')
     }
 }
 

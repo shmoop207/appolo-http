@@ -184,9 +184,9 @@ export class Route<T extends IController> {
             })(middleware);
 
             this._route.middlewareHandler[arrMethod](middleware as MiddlewareHandler);
-
-            return this;
         }
+
+        return this;
     }
 
     public middlewares(middlewares: string[] | MiddlewareHandler[] | IMiddlewareCtr[], order: "head" | "tail" = "tail"): this {

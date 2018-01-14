@@ -5,7 +5,19 @@ const Table = require('cli-table');
 const autocannon = require('autocannon');
 let child, instance;
 (async function () {
-    child = child_process_1.exec('node ./benchmarks/mock/app.js');
+    switch (process.env.TYPE) {
+        case "express":
+            child = child_process_1.exec('node ./benchmarks/express.js');
+            console.log("running express");
+            break;
+        case "fastify":
+            child = child_process_1.exec('node ./benchmarks/fastify.js');
+            console.log("running fastify");
+            break;
+        default:
+            console.log("running appolo-http");
+            child = child_process_1.exec('node ./benchmarks/mock/app.js');
+    }
     child.stdout.on('data', function (data) {
         run();
     });
