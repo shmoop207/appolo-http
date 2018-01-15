@@ -162,14 +162,14 @@ proto.gzip = function () {
 proto.jsonp = function (data: any) {
     let body = data;
 
-    if (this.method == "GET" && this.query["callback"]) {
+    if (this.req.method == "GET" && this.req.query["callback"]) {
         if (!this.getHeader('Content-Type')) {
             this.setHeader('X-Content-Type-Options', 'nosniff');
-            this.setHeader('Content-Type', 'application/json');
+            this.setHeader('Content-Type', 'text/javascript');
         }
 
-        let callback = this.query["callback"].replace(/[^\[\]\w$.]/g, '');
-        let body = JSON.stringify(data)
+        let callback = this.req.query["callback"].replace(/[^\[\]\w$.]/g, '');
+        body = JSON.stringify(data)
             .replace(/\u2028/g, '\\u2028')
             .replace(/\u2029/g, '\\u2029');
 
