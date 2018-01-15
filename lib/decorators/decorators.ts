@@ -216,7 +216,7 @@ export function middleware(middleware: string | MiddlewareHandler | IMiddlewareC
 }
 
 export function validation(key: string | { [index: string]: joi.Schema } | RouteModel, validation?: joi.Schema): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
-    if (key.constructor.prototype == RouteModel.constructor.prototype) {
+    if (key.constructor && key.constructor.prototype === RouteModel.constructor.prototype && (key as any).prototype && (key as any).prototype.__validations__) {
         key = (key as any).prototype.__validations__
     }
 

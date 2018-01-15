@@ -12,6 +12,7 @@ import {IRequest} from "../app/request";
 import {IController, IControllerCtr} from "../controller/IController";
 import {Util} from "../util/util";
 import {Methods} from "../common/enums/methods";
+import {RouteModel} from "./routeModel";
 
 let orderIndex = 0;
 
@@ -96,11 +97,15 @@ export class Route<T extends IController> {
         return this
     }
 
-    public validation(key: string | { [index: string]: joi.Schema }, validation?: joi.Schema): this {
+    public validation(key: string | { [index: string]: joi.Schema }|  RouteModel, validation?: joi.Schema): this {
         return this.validations(key, validation);
     }
 
-    public validations(key: string | { [index: string]: joi.Schema }, validation?: joi.Schema): this {
+    public validations(key: string | { [index: string]: joi.Schema }|  RouteModel, validation?: joi.Schema): this {
+
+        if (key.constructor && key.constructor.prototype === RouteModel.constructor.prototype && (key as any).prototype && (key as any).prototype.__validations__) {
+            key = (key as any).prototype.__validations__
+        }
 
         if (_.isObject(key)) {
 
