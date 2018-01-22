@@ -27,7 +27,6 @@ export class Router {
     constructor() {
 
         this._routes = [];
-
     }
 
     public initialize(routes?: IRouteOptions[]) {

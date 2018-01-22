@@ -211,7 +211,7 @@ export function method(method: 'get' | 'post' | 'delete' | 'patch' | 'head' | 'p
     return defineRouteProperty([{name: "method", args: [method]}])
 }
 
-export function middleware(middleware: string | MiddlewareHandler | IMiddlewareCtr | ((req: any, res: any, next: any) => void)): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
+export function middleware(middleware: string | string[] | MiddlewareHandler | MiddlewareHandler[] | IMiddlewareCtr | IMiddlewareCtr[] | ((req: any, res: any, next: any) => void) | ((req: any, res: any, next: any) => void)[]): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
     return defineRouteProperty([{name: "middleware", args: [middleware, "head"]}])
 }
 
