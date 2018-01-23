@@ -212,6 +212,11 @@ export function method(method: 'get' | 'post' | 'delete' | 'patch' | 'head' | 'p
 }
 
 export function middleware(middleware: string | string[] | MiddlewareHandler | MiddlewareHandler[] | IMiddlewareCtr | IMiddlewareCtr[] | ((req: any, res: any, next: any) => void) | ((req: any, res: any, next: any) => void)[]): (target: any, propertyKey: string, descriptor?: PropertyDescriptor) => void {
+
+    if(_.isArray(middleware)){
+        middleware = _(middleware).clone().reverse()
+    }
+
     return defineRouteProperty([{name: "middleware", args: [middleware, "head"]}])
 }
 
