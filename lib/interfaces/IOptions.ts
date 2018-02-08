@@ -1,4 +1,5 @@
 import appolo = require('appolo');
+import { ValidationOptions } from 'joi';
 
 export interface IOptions extends appolo.IOptions {
     startMessage?: string,
@@ -20,4 +21,5 @@ export interface IOptions extends appolo.IOptions {
         key: string
         cert: string
     }
+    validatorOptions?: ValidationOptions
 }

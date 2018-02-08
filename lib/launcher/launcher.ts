@@ -29,7 +29,12 @@ export class Launcher extends appolo.Launcher {
         urlParser: "fast",
         viewExt: "html",
         viewEngine: null,
-        viewFolder: "server/views"
+        viewFolder: "server/views",
+        validatorOptions: {
+            abortEarly: false,
+            allowUnknown: true,
+            stripUnknown: true
+        }
     };
 
     public async launch(config?: IOptions, callback?: (err?: any,app?:App) => void): Promise<App> {
@@ -55,7 +60,7 @@ export class Launcher extends appolo.Launcher {
 
             this.loadCustomConfigurations();
 
-            router.initialize();
+            router.initialize(null, this._options.validatorOptions);
 
             app.initialize(this._options);
 
