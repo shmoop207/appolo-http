@@ -9,7 +9,7 @@ describe('Appolo Express Unit', () => {
         afterEach(() => {
             appolo.launcher.reset();
         });
-        it.only('should remove unknown fields from model', async () => {
+        it('should remove unknown fields from model', async () => {
             await appolo.launcher.launch({
                 paths: ['config', 'server'],
                 environment: 'testing',
@@ -23,7 +23,7 @@ describe('Appolo Express Unit', () => {
             should.exist(res.body);
             res.body.model.should.be.deep.equal({ userName: 'jon' });
         });
-        it.only('should still keep unknown fields from model', async () => {
+        it('should still keep unknown fields from model', async () => {
             await appolo.launcher.launch({
                 paths: ['config', 'server'],
                 environment: 'testing',
@@ -43,7 +43,7 @@ describe('Appolo Express Unit', () => {
             should.exist(res.body);
             res.body.model.should.be.deep.equal({ userName: 'jon' });
         });
-        it.only('should still keep unknown fields from model', async () => {
+        it('should still keep unknown fields from model', async () => {
             await appolo.launcher.launch({
                 paths: ['config', 'server'],
                 environment: 'testing',

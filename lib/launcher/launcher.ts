@@ -94,7 +94,7 @@ export class Launcher extends appolo.Launcher {
 
         let dto = super.loadOptions(config);
 
-        return _.extend(this.Defaults, dto || {});
+        return _.merge(this.Defaults, dto || {});
     }
 
     protected bindProcessEvents() {
