@@ -15,6 +15,7 @@ import {IResponse} from "../app/response";
 import pathToRegexp = require('path-to-regexp');
 import {HttpError} from "../common/error/httpError";
 import {StaticController} from "../controller/staticController";
+import { ValidationOptions } from 'joi';
 
 
 export class Router {
@@ -23,15 +24,18 @@ export class Router {
     protected readonly actionSuffix: string = 'Action';
 
     protected _routes: IRouteInnerOptions[];
+    protected static _validatorOptions: ValidationOptions;
 
     constructor() {
 
         this._routes = [];
     }
 
-    public initialize(routes?: IRouteOptions[]) {
+    public initialize(routes: IRouteOptions[] = [], validatorOptions: ValidationOptions) {
 
-        this._routes.push.apply(this._routes, routes || []);
+        Router._validatorOptions = validatorOptions;
+
+        this._routes.push.apply(this._routes, routes);
 
         this._routes = _(this._routes).map(route => this._createRoute(route)).compact().value();
     }
@@ -98,17 +102,9 @@ export class Router {
 
     protected static _checkValidation(req: IRequest, res: IResponse, next: NextFn) {
 
-
         let data = _.extend({}, req.params, req.query, (req as any).body);
 
-        let options = {
-            abortEarly: false,
-            allowUnknown: true,
-            stripUnknown: true
-        };
-
-
-        joi.validate(data, req.$route.route.validations, options, function (e, params) {
+        joi.validate(data, req.$route.route.validations, Router._validatorOptions, function (e, params) {
 
             if (e) {
                 next(new HttpError(400, e.toString(), {
