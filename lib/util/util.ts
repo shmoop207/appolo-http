@@ -1,5 +1,3 @@
-import url = require('url');
-import querystring = require('querystring');
 import appolo = require('appolo');
 
 
@@ -9,6 +7,11 @@ export class Util extends appolo.Util {
     private static readonly UrlRegex: RegExp = /^(\/\/?(?!\/)[^?#\s]*)(\?[^#\s]*)?$/
 
     public static convertSnakeCaseToCamelCase(str: string) {
+
+        if (str && str[0] == "_") {
+            return str;
+        }
+
         return str.replace(/(\_\w)/g, function (m) {
             return m[1].toUpperCase();
         });
@@ -121,9 +124,9 @@ export class Util extends appolo.Util {
                 key = hash.substring(0, equalsIndex),
                 value = hash.substring(equalsIndex + 1);
 
-            let bracketEnd = key.length-1;
+            let bracketEnd = key.length - 1;
 
-            if (key.charCodeAt(bracketEnd) ==93) {
+            if (key.charCodeAt(bracketEnd) == 93) {
                 let bracketStart = key.indexOf("[");
 
                 let nestedKey = key.substring(0, bracketStart),
@@ -132,14 +135,14 @@ export class Util extends appolo.Util {
                 let arr = vars[nestedKey] || (vars[nestedKey] = []);
                 arr[nestedKeyValue === "" ? arr.length : nestedKeyValue] = Util.decodeParamSafe(value);
             } else {
-                vars[key] =  Util.decodeParamSafe(value);
+                vars[key] = Util.decodeParamSafe(value);
 
             }
         }
         return vars;
     }
 
-    public static decodeParamSafe(str: string):string{
+    public static decodeParamSafe(str: string): string {
         try {
             return decodeURIComponent(str);
         } catch (e) {
